@@ -1,0 +1,92 @@
+import React from 'react';
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  ScrollView,
+  Image,
+  Alert,
+} from 'react-native';
+
+const categories = [
+  { id: 1, name: 'SUITS', image: require('../assets/images/suits.jpg') },
+  { id: 2, name: 'SHIRTS', image: require('../assets/images/men shirt.jpg') },
+  { id: 3, name: 'BLAZERS', image: require('../assets/images/blazzers.webp') },
+  { id: 4, name: 'DRESS PANTS', image: require('../assets/images/dress pant.webp') },
+  { id: 5, name: 'LONG SLEEVES', image: require('../assets/images/long sleeve tee.jpg') },
+  { id: 6, name: 'SHORT SLEEVES', image: require('../assets/images/short sleeve.png') },
+  { id: 7, name: 'T-SHIRTS', image: require('../assets/images/Tee shirt.webp') },
+  { id: 8, name: 'LONG SLEEVE T-SHIRT', image: require('../assets/images/long sleeve tee.jpg') },
+  { id: 9, name: 'POLOS', image: require('../assets/images/polo.webp') },
+  { id: 10, name: 'LONG SLEEVE POLOS', image: require('../assets/images/long sleeve polo.jpg') },
+  { id: 11, name: 'JEANS', image: require('../assets/images/jeans.jpg') },
+  { id: 12, name: 'JEANS MEN', image: require('../assets/images/jeans.jpg') },
+];
+
+export default function ShopScreen({ navigation }) {
+  const handleCategoryPress = (categoryName) => {
+    switch (categoryName) {
+      case 'SUITS':
+        navigation.navigate('SuitsScreen');
+        break;
+      case 'SHIRTS':
+        navigation.navigate('ShirtsScreen');
+        break;
+      case 'BLAZERS':
+        navigation.navigate('BlazersScreen');
+        break;
+      default:
+        Alert.alert('Coming Soon', `${categoryName} category is under development.`);
+        break;
+    }
+  };
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.grid}>
+        {categories.map((category) => (
+          <TouchableOpacity
+            key={category.id}
+            style={styles.categoryCard}
+            onPress={() => handleCategoryPress(category.name)}
+          >
+            <Image source={category.image} style={styles.categoryImage} />
+            <Text style={styles.categoryText}>{category.name}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    </ScrollView>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    padding: 10,
+    backgroundColor: 'black',
+  },
+  grid: {
+   
+    justifyContent: 'space-between',
+  },
+  categoryCard: {
+    width: '100%',
+    marginTop:70,
+    borderRadius: 10,
+    overflow: 'hidden',
+    backgroundColor: '#fff',
+    elevation: 2,
+  },
+  categoryImage: {
+    width: '100%',
+    height: 400,
+    resizeMode: 'cover',
+  },
+  categoryText: {
+    paddingVertical: 10,
+    fontSize: 16,
+    fontWeight: '600',
+    textAlign: 'center',
+    color: '#333',
+  },
+});
