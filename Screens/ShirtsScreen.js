@@ -43,14 +43,27 @@ const shirts = [
 
 export default function ShirtsScreen({ navigation }) {
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.card}
-      onPress={() => navigation.navigate('ShirtDetailScreen', { shirt: item })}
-    >
+    <View style={styles.card}>
       <Image source={item.image} style={styles.image} />
       <Text style={styles.name}>{item.name}</Text>
       <Text style={styles.price}>${item.price}</Text>
-    </TouchableOpacity>
+      
+      <View style={styles.buttonRow}>
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('ProductDetailScreen', { item, category: 'shirt' })}
+          style={styles.detailsButton}
+        >
+          <Text style={styles.buttonText}>View Details</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity 
+          onPress={() => navigation.navigate('CustomizeShirtScreen', { shirt: item })}
+          style={styles.customizeButton}
+        >
+          <Text style={styles.buttonText}>Customize</Text>
+        </TouchableOpacity>
+      </View>
+    </View>
   );
 
   return (
@@ -114,5 +127,30 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingHorizontal: 10,
     paddingBottom: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 10,
+    paddingBottom: 10,
+    gap: 10,
+  },
+  detailsButton: {
+    flex: 1,
+    backgroundColor: '#6200ee',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  customizeButton: {
+    flex: 1,
+    backgroundColor: '#03dac6',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
   },
 });

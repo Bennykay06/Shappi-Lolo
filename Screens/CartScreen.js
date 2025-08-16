@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
-import { useCart } from '../Contexts/CartContext';
+import { useCart } from '../Context/CartContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function CartScreen({ navigation }) {
@@ -19,15 +19,54 @@ export default function CartScreen({ navigation }) {
     return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
   };
 
-  const renderCustomizationDetails = (selections) => {
+  const renderCustomizationDetails = (selections = {}) => {
+    const getLapelValue = () => {
+      if (selections.lapel === 1) return 'Notch Slim';
+      if (selections.lapel === 2) return 'Notch';
+      if (selections.lapel === 3) return 'Peak';
+      if (selections.lapel === 4) return 'Peak Wide';
+      return 'Notch';
+    };
+
+    const getButtonValue = () => {
+      if (selections.buttons === 1) return 'One Button';
+      if (selections.buttons === 2) return 'Two Buttons';
+      if (selections.buttons === 3) return 'Three Buttons';
+      return 'Two Buttons';
+    };
+
+    const getVentValue = () => {
+      if (selections.vents === 1) return 'Center Vent';
+      if (selections.vents === 2) return 'Side Vents';
+      return 'One Vent';
+    };
+
+    const getMonogramColorValue = () => {
+      if (selections.monogram?.color === 1) return 'White';
+      if (selections.monogram?.color === 2) return 'Black';
+      if (selections.monogram?.color === 3) return 'Navy';
+      if (selections.monogram?.color === 4) return 'Silver';
+      return 'Black';
+    };
+
+    const getFabricValue = () => {
+      if (selections.fabric === 1) return 'Navy Performance Blend';
+      if (selections.fabric === 2) return 'Charcoal Wool';
+      if (selections.fabric === 3) return 'Black Formal';
+      if (selections.fabric === 4) return 'Grey Business';
+      if (selections.fabric === 5) return 'Brown Heritage';
+      return 'Navy Performance Blend';
+    };
+
     const options = [
-      { label: 'FABRIC', value: selections.fabric || 'Navy Performance Blend' },
-      { label: 'LAPEL', value: selections.lapel === 4 ? 'Peak Wide' : 'Notch' },
+      { label: 'FABRIC', value: getFabricValue() },
+      { label: 'LAPEL', value: getLapelValue() },
       { label: 'Lining Fabric', value: 'Navy' },
-      { label: 'BUTTONS', value: selections.buttons === 2 ? 'Two Buttons' : 'One Button' },
-      { label: 'VENTS', value: selections.vents === 2 ? 'Two Vents' : 'One Vent' },
+      { label: 'BUTTONS', value: getButtonValue() },
+      { label: 'VENTS', value: getVentValue() },
       { label: 'SLEEVE BUTTONHOLES', value: selections.functionalButtonholes ? 'Yes' : 'No' },
       { label: 'MONOGRAM', value: selections.monogram?.enabled ? 'Yes' : 'No' },
+      { label: 'MONOGRAM COLOR', value: selections.monogram?.enabled ? getMonogramColorValue() : 'N/A' },
       { label: 'PANT PLEATS', value: selections.pleatedPants ? 'Yes' : 'No' },
       { label: 'PANT CUFFS', value: selections.cuffedHem ? 'Yes' : 'No' },
       { label: 'SUSPENDER BUTTONS', value: selections.suspenderButtons ? 'Yes' : 'No' },
@@ -98,7 +137,7 @@ export default function CartScreen({ navigation }) {
                 </TouchableOpacity>
 
                 {expandedItem === item.id && (
-                  renderCustomizationDetails(item.selections)
+                  renderCustomizationDetails(item.customizations || item.selections)
                 )}
               </View>
             )}

@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { CartProvider, useCart } from './Context/CartContext';
 
 // Auth Screens
 import LoginScreen from './Screens/LoginScreen';
@@ -12,17 +13,26 @@ import SignUpScreen from './Screens/SignUpScreen';
 // Main Screens
 import HomeScreen from './Screens/HomeScreen';
 import ShopScreen from './Screens/ShopScreen';
-import MeasurementsScreen from './Screens/CameraMeasurementScreen';
+import MeasurementsScreen from './Screens/MeasurementOptionsScreen';
+import CameraMeasurementScreen from './Screens/CameraMeasurementScreen';
+import ManualMeasurementScreen from './Screens/ManualMeasurementsScreen';
 import CartScreen from './Screens/CartScreen';
 import AccountScreen from './Screens/AccountScreen';
 
 // Category Screens
 import CategoryScreen from './Screens/CategoryScreen';
+import CategoryItemsScreen from './Screens/CategoryItemsScreen';
 import SuitsScreen from './Screens/SuitsScreen';
 import SuitDetailScreen from './Screens/SuitDetailScreen';
+import ShirtsScreen from './Screens/ShirtsScreen';
+import BlazersScreen from './Screens/BlazersScreen';
+import ProductDetailScreen from './Screens/ProductDetailScreen';
+import ProductDetails from './Screens/ProductDetails';
 import FavoritesScreen from './Screens/FavoritesScreen';
 import CheckoutScreen from './Screens/CheckOutScreen';
 import OrdersScreen from './Screens/OrdersScreen';
+import CustomizeSuitScreen from './Screens/CustomizeSuitScreen';
+import CustomizeShirtScreen from './Screens/CustomizeShirtScreen';
 
 const AuthStack = createStackNavigator();
 const MainStack = createStackNavigator();
@@ -30,6 +40,7 @@ const Tab = createBottomTabNavigator();
 const ShopStack = createStackNavigator();
 const SuitsStack = createStackNavigator();
 const AccountStack = createStackNavigator();
+const MeasurementsStack = createStackNavigator();
 
 // Suits Stack Navigator
 function SuitsStackNavigator() {
@@ -44,14 +55,48 @@ function SuitsStackNavigator() {
       <SuitsStack.Screen 
         name="SuitsMain" 
         component={SuitsScreen} 
-        options={{ title: 'PREMIUM SUITS' }}
+        options={{ headerShown: false }}
       />
       <SuitsStack.Screen 
         name="SuitDetail" 
         component={SuitDetailScreen} 
-        options={{ title: 'SUIT DETAILS' }}
+        options={{ headerShown: false }}
+      />
+      <SuitsStack.Screen 
+        name="CustomizeSuitScreen" 
+        component={CustomizeSuitScreen} 
+        options={{ headerShown: false }}
       />
     </SuitsStack.Navigator>
+  );
+}
+
+// Measurements Stack Navigator
+function MeasurementsStackNavigator() {
+  return (
+    <MeasurementsStack.Navigator
+      screenOptions={{
+        headerBackTitleVisible: false,
+        headerTintColor: '#6200ee',
+        headerTitleAlign: 'center',
+      }}
+    >
+      <MeasurementsStack.Screen 
+        name="MeasurementOptions" 
+        component={MeasurementsScreen} 
+        options={{ headerShown: false }}
+      />
+      <MeasurementsStack.Screen 
+        name="CameraMeasurement" 
+        component={CameraMeasurementScreen} 
+        options={{ headerShown: false }}
+      />
+      <MeasurementsStack.Screen 
+        name="ManualMeasurement" 
+        component={ManualMeasurementScreen} 
+        options={{ title: 'Manual Measurements' }}
+      />
+    </MeasurementsStack.Navigator>
   );
 }
 
@@ -100,11 +145,46 @@ function ShopStackNavigator() {
         options={{ headerShown: false }}
       />
       <ShopStack.Screen 
+        name="CategoryItems" 
+        component={CategoryItemsScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
         name="Category" 
         component={CategoryScreen}
         options={({ route }) => ({ 
           title: route.params?.categoryName || 'Category',
         })}
+      />
+      <ShopStack.Screen 
+        name="ShirtsScreen" 
+        component={ShirtsScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="BlazersScreen" 
+        component={BlazersScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="CustomizeSuitScreen" 
+        component={CustomizeSuitScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="CustomizeShirtScreen" 
+        component={CustomizeShirtScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="ProductDetailScreen" 
+        component={ProductDetailScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="ProductDetails" 
+        component={ProductDetails}
+        options={{ headerShown: false }}
       />
       <ShopStack.Screen 
         name="Suits" 
@@ -134,6 +214,9 @@ function CartStackNavigator() {
 }
 
 function MainTabNavigator() {
+  const { cartItems } = useCart();
+  const cartItemCount = cartItems.length;
+
   return (
     <Tab.Navigator
       screenOptions={({ route }) => ({
@@ -189,7 +272,7 @@ function MainTabNavigator() {
       />
       <Tab.Screen 
         name="MeasurementsTab" 
-        component={MeasurementsScreen}
+        component={MeasurementsStackNavigator}
         options={{ 
           title: 'Measure',
           tabBarTestID: 'measurements-tab',
@@ -201,7 +284,7 @@ function MainTabNavigator() {
         options={{ 
           title: 'Cart',
           tabBarTestID: 'cart-tab',
-          tabBarBadge: 3, // Example badge count
+          tabBarBadge: cartItemCount > 0 ? cartItemCount : undefined,
         }} 
       />
       <Tab.Screen 
@@ -236,28 +319,30 @@ function MainAppStack() {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <AuthStack.Navigator 
-        initialRouteName="Login"
-        screenOptions={{ 
-          headerShown: false,
-          gestureEnabled: false,
-        }}
-      >
-        <AuthStack.Screen 
-          name="Login" 
-          component={LoginScreen} 
-        />
-        <AuthStack.Screen 
-          name="SignUp" 
-          component={SignUpScreen} 
-        />
-        <AuthStack.Screen 
-          name="App" 
-          component={MainAppStack}
-          options={{ gestureEnabled: false }}
-        />
-      </AuthStack.Navigator>
-    </NavigationContainer>
+    <CartProvider>
+      <NavigationContainer>
+        <AuthStack.Navigator 
+          initialRouteName="App"
+          screenOptions={{ 
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        >
+          <AuthStack.Screen 
+            name="Login" 
+            component={LoginScreen} 
+          />
+          <AuthStack.Screen 
+            name="SignUp" 
+            component={SignUpScreen} 
+          />
+          <AuthStack.Screen 
+            name="App" 
+            component={MainAppStack}
+            options={{ gestureEnabled: false }}
+          />
+        </AuthStack.Navigator>
+      </NavigationContainer>
+    </CartProvider>
   );
 }

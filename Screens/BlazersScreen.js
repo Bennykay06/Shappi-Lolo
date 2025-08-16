@@ -22,17 +22,30 @@ const blazers = [
 
 const BlazersScreen = ({ navigation }) => {
   const renderItem = ({ item }) => (
-    <TouchableOpacity
-      style={styles.itemContainer}
-      onPress={() => navigation.navigate('BlazerDetailScreen', { blazer: item })}
-    >
+    <View style={styles.itemContainer}>
       <Image source={item.image} style={styles.image} />
       <View style={styles.infoContainer}>
         <Text style={styles.name}>{item.name}</Text>
         <Text style={styles.price}>${item.price.toFixed(2)}</Text>
         <Text style={styles.sizes}>Sizes: {item.sizes.join(', ')}</Text>
+        
+        <View style={styles.buttonRow}>
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('ProductDetailScreen', { item, category: 'blazer' })}
+            style={styles.detailsButton}
+          >
+            <Text style={styles.buttonText}>View Details</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('CustomizeSuitScreen', { item, category: 'blazer' })}
+            style={styles.customizeButton}
+          >
+            <Text style={styles.buttonText}>Customize</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-    </TouchableOpacity>
+    </View>
   );
 
   return (
@@ -104,6 +117,30 @@ const styles = StyleSheet.create({
   sizes: {
     fontSize: 12,
     color: '#666',
+    marginBottom: 10,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 10,
+  },
+  detailsButton: {
+    flex: 1,
+    backgroundColor: '#6200ee',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  customizeButton: {
+    flex: 1,
+    backgroundColor: '#03dac6',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: '#fff',
+    fontWeight: '600',
   },
 });
 

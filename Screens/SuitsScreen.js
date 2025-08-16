@@ -1,14 +1,14 @@
 // SuitsScreen.js
+import { Ionicons } from '@expo/vector-icons';
 import React from 'react';
 import {
-  View,
-  Text,
   FlatList,
-  TouchableOpacity,
   Image,
   StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 
 const suits = [
   {
@@ -50,7 +50,8 @@ const renderItem = ({ item }) => (
       </TouchableOpacity>
 
       <TouchableOpacity 
-        onPress={() => navigation.navigate('CustomizeSuit', { suit: item })}
+        onPress={() => navigation.navigate('CustomizeSuitScreen', { suit: item })}
+        // onPress={() => navigation.navigate('CustomizeSuitScreen')}
         style={styles.customizeButton}
       >
         <Text style={styles.buttonText}>Customize</Text>

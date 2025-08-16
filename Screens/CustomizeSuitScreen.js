@@ -1,56 +1,168 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput, Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { useCart } from '../Context/CartContext';
+import { Ionicons } from '@expo/vector-icons';
 
-const CustomizeScreen = () => {
+const CustomizeSuitScreen = ({ route }) => {
   const navigation = useNavigation();
+  const { addToCart } = useCart();
+  const { suit, item, category = 'suit' } = route.params || {};
+  const product = suit || item;
+  console.log('Customizing item:', product, 'Category:', category);
   
   // Track current step (1-7)
   const [currentStep, setCurrentStep] = useState(1);
   
-  // Store all user selections
-  const [selections, setSelections] = useState({
-    // Image selection steps
-    lapel: null,
-    buttons: null,
-    vents: null,
-    
-    // Monogram options
-    monogram: {
-      enabled: null,
-      initials: '',
-      location: null,
-      font: null,
-      color: null
-    },
-    
-    // Additional options
-    pleatedPants: null,
-    suspenderButtons: null,
-    cuffedHem: null,
-    vest: null,
-    functionalButtonholes: null,
-    phonePocket: null
-  });
+  // Store all user selections - dynamic based on category
+  const getInitialSelections = () => {
+    const base = {
+      fabric: null,
+      monogram: {
+        enabled: null,
+        initials: '',
+        location: null,
+        font: null,
+        color: null
+      }
+    };
 
-  // Customization options data
-  const customizationOptions = {
-    lapel: [
-      { id: 1, name: 'Notch Slim', desc: 'Modern versatile style', img: require('../assets/images/notch slim.jpg') },
-      { id: 2, name: 'Notch', desc: 'Classic formal look', img: require('../assets/images/notch.jpg') },
-      { id: 3, name: 'Peak', desc: 'Classic formal look', img: require('../assets/images/peak.jpg') },
-      { id: 4, name: 'Peak Wide', desc: 'Classic formal look', img: require('../assets/images/peak wide.jpg') }
-    ],
-    buttons: [
-      { id: 1, name: 'One Button', desc: 'Sleek minimalist style', img: require('../assets/images/one button.jpg') },
-      { id: 2, name: 'Two Buttons', desc: 'Traditional business', img: require('../assets/images/two buttons.jpg') },
-      { id: 3, name: 'Three Buttons', desc: 'Formal appearance', img: require('../assets/images/three buttons.jpg') }
-    ],
-    vents: [
-      { id: 1, name: 'Center Vent', desc: 'Standard comfort', img: require('../assets/images/one vent.jpg') },
-      { id: 2, name: 'Side Vents', desc: 'Modern tailored look', img: require('../assets/images/two vents.jpg') }
-    ]
+    // Add category-specific selections
+    if (category === 'suit') {
+      return {
+        ...base,
+        lapel: null,
+        buttons: null,
+        vents: null,
+        pleatedPants: null,
+        suspenderButtons: null,
+        cuffedHem: null,
+        vest: null,
+        functionalButtonholes: null,
+        phonePocket: null
+      };
+    } else if (category === 'shirt') {
+      return {
+        ...base,
+        collar: null,
+        cuffs: null,
+        fit: null,
+        pocketStyle: null,
+        hemStyle: null
+      };
+    } else if (category === 'blazer') {
+      return {
+        ...base,
+        lapel: null,
+        buttons: null,
+        vents: null,
+        lining: null,
+        pocketSquare: null
+      };
+    } else if (category === 'dress pants') {
+      return {
+        ...base,
+        fit: null,
+        pleats: null,
+        cuff: null,
+        waistAdjustment: null,
+        hemAdjustment: null
+      };
+    }
+    return base;
   };
+
+  const [selections, setSelections] = useState(getInitialSelections());
+
+  // Customization configurations by category
+  const customizationConfigs = {
+    suit: {
+      steps: 8,
+      options: {
+        fabric: [
+          { id: 1, name: 'Navy Performance Blend', desc: 'Classic professional', color: '#001f3f' },
+          { id: 2, name: 'Charcoal Wool', desc: 'Formal elegance', color: '#36454f' },
+          { id: 3, name: 'Black Formal', desc: 'Traditional formal', color: '#000000' },
+          { id: 4, name: 'Grey Business', desc: 'Modern professional', color: '#666666' },
+          { id: 5, name: 'Brown Heritage', desc: 'Casual sophistication', color: '#8b4513' }
+        ],
+        lapel: [
+          { id: 1, name: 'Notch Slim', desc: 'Modern versatile style', img: require('../assets/images/notch slim.jpg') },
+          { id: 2, name: 'Notch', desc: 'Classic formal look', img: require('../assets/images/notch.jpg') },
+          { id: 3, name: 'Peak', desc: 'Classic formal look', img: require('../assets/images/peak.jpg') },
+          { id: 4, name: 'Peak Wide', desc: 'Classic formal look', img: require('../assets/images/peak wide.jpg') }
+        ],
+        buttons: [
+          { id: 1, name: 'One Button', desc: 'Sleek minimalist style', img: require('../assets/images/one button.jpg') },
+          { id: 2, name: 'Two Buttons', desc: 'Traditional business', img: require('../assets/images/two buttons.jpg') },
+          { id: 3, name: 'Three Buttons', desc: 'Formal appearance', img: require('../assets/images/three buttons.jpg') }
+        ],
+        vents: [
+          { id: 1, name: 'Center Vent', desc: 'Standard comfort', img: require('../assets/images/one vent.jpg') },
+          { id: 2, name: 'Side Vents', desc: 'Modern tailored look', img: require('../assets/images/two vents.jpg') }
+        ]
+      }
+    },
+    shirt: {
+      steps: 6,
+      options: {
+        collar: [
+          { id: 1, name: 'Point Collar', desc: 'Classic formal style', img: require('../assets/images/men shirt.jpg') },
+          { id: 2, name: 'Spread Collar', desc: 'Modern professional', img: require('../assets/images/men shirt.jpg') },
+          { id: 3, name: 'Button Down', desc: 'Casual versatile', img: require('../assets/images/men shirt.jpg') }
+        ],
+        cuffs: [
+          { id: 1, name: 'One Button', desc: 'Classic everyday', img: require('../assets/images/men shirt.jpg') },
+          { id: 2, name: 'Two Button', desc: 'Traditional style', img: require('../assets/images/men shirt.jpg') },
+          { id: 3, name: 'French Cuffs', desc: 'Formal elegant', img: require('../assets/images/men shirt.jpg') }
+        ],
+        fit: [
+          { id: 1, name: 'Slim Fit', desc: 'Modern tailored', img: require('../assets/images/men shirt.jpg') },
+          { id: 2, name: 'Regular Fit', desc: 'Classic comfort', img: require('../assets/images/men shirt.jpg') },
+          { id: 3, name: 'Relaxed Fit', desc: 'Comfortable loose', img: require('../assets/images/men shirt.jpg') }
+        ]
+      }
+    },
+    blazer: {
+      steps: 6,
+      options: {
+        lapel: [
+          { id: 1, name: 'Notch Lapel', desc: 'Versatile classic', img: require('../assets/images/suits.jpg') },
+          { id: 2, name: 'Peak Lapel', desc: 'Formal statement', img: require('../assets/images/suits.jpg') }
+        ],
+        buttons: [
+          { id: 1, name: 'One Button', desc: 'Modern minimalist', img: require('../assets/images/suits.jpg') },
+          { id: 2, name: 'Two Buttons', desc: 'Traditional style', img: require('../assets/images/suits.jpg') }
+        ],
+        vents: [
+          { id: 1, name: 'No Vent', desc: 'Clean silhouette', img: require('../assets/images/suits.jpg') },
+          { id: 2, name: 'Center Vent', desc: 'Classic comfort', img: require('../assets/images/suits.jpg') },
+          { id: 3, name: 'Side Vents', desc: 'Modern tailored', img: require('../assets/images/suits.jpg') }
+        ]
+      }
+    },
+    'dress pants': {
+      steps: 5,
+      options: {
+        fit: [
+          { id: 1, name: 'Slim Fit', desc: 'Modern tailored', img: require('../assets/images/suits.jpg') },
+          { id: 2, name: 'Regular Fit', desc: 'Classic comfort', img: require('../assets/images/suits.jpg') },
+          { id: 3, name: 'Relaxed Fit', desc: 'Comfortable loose', img: require('../assets/images/suits.jpg') }
+        ],
+        pleats: [
+          { id: 1, name: 'Flat Front', desc: 'Clean modern look', img: require('../assets/images/suits.jpg') },
+          { id: 2, name: 'Single Pleat', desc: 'Traditional style', img: require('../assets/images/suits.jpg') },
+          { id: 3, name: 'Double Pleat', desc: 'Classic formal', img: require('../assets/images/suits.jpg') }
+        ],
+        cuff: [
+          { id: 1, name: 'No Cuff', desc: 'Modern clean', img: require('../assets/images/suits.jpg') },
+          { id: 2, name: 'Cuffed', desc: 'Traditional formal', img: require('../assets/images/suits.jpg') }
+        ]
+      }
+    }
+  };
+
+  const currentConfig = customizationConfigs[category] || customizationConfigs.suit;
 
   // Monogram customization options
   const monogramLocations = [
@@ -72,67 +184,211 @@ const CustomizeScreen = () => {
     { id: 4, name: 'Silver', color: '#dddddd' }
   ];
 
-  // Get configuration for current step
+  // Get configuration for current step - dynamic based on category
   const getCurrentOptions = () => {
-    switch(currentStep) {
-      case 1: return { 
-        title: 'Lapel Style', 
-        options: customizationOptions.lapel,
-        selected: selections.lapel,
-        type: 'image'
-      };
-      case 2: return { 
-        title: 'Button Arrangement', 
-        options: customizationOptions.buttons,
-        selected: selections.buttons,
-        type: 'image'
-      };
-      case 3: return { 
-        title: 'Vent Style', 
-        options: customizationOptions.vents,
-        selected: selections.vents,
-        type: 'image'
-      };
-      case 4: return {
-        title: 'Monogram',
-        type: 'monogram'
-      };
-      case 5: return {
-        title: 'Additional Options',
-        options: [
-          { id: 'pleatedPants', name: 'Do you want pleated pants?', price: 0 },
-          { id: 'suspenderButtons', name: 'Do you want suspender buttons?', price: 0 },
-          { id: 'cuffedHem', name: 'Do you want a cuffed hem?', price: 0 }
-        ],
-        type: 'yesno'
-      };
-      case 6: return {
-        title: 'Additional Options',
-        options: [
-          { id: 'vest', name: 'Would you like a vest?', price: 135 },
-          { id: 'functionalButtonholes', name: 'Would you like functional buttonholes?', price: 99 }
-        ],
-        type: 'yesno'
-      };
-      case 7: return {
-        title: 'Additional Options',
-        options: [
-          { id: 'phonePocket', name: 'Do you want a cell phone pocket?', price: 0 }
-        ],
-        type: 'yesno'
-      };
-      default: return { title: '', options: [], selected: null, type: '' };
+    if (category === 'suit') {
+      switch(currentStep) {
+        case 1: return { 
+          title: 'Fabric Color', 
+          options: currentConfig.options.fabric,
+          selected: selections.fabric,
+          type: 'color',
+          field: 'fabric'
+        };
+        case 2: return { 
+          title: 'Lapel Style', 
+          options: currentConfig.options.lapel,
+          selected: selections.lapel,
+          type: 'image',
+          field: 'lapel'
+        };
+        case 3: return { 
+          title: 'Button Arrangement', 
+          options: currentConfig.options.buttons,
+          selected: selections.buttons,
+          type: 'image',
+          field: 'buttons'
+        };
+        case 4: return { 
+          title: 'Vent Style', 
+          options: currentConfig.options.vents,
+          selected: selections.vents,
+          type: 'image',
+          field: 'vents'
+        };
+        case 5: return {
+          title: 'Monogram',
+          type: 'monogram'
+        };
+        case 6: return {
+          title: 'Additional Options',
+          options: [
+            { id: 'pleatedPants', name: 'Do you want pleated pants?', price: 0 },
+            { id: 'suspenderButtons', name: 'Do you want suspender buttons?', price: 0 },
+            { id: 'cuffedHem', name: 'Do you want a cuffed hem?', price: 0 }
+          ],
+          type: 'yesno'
+        };
+        case 7: return {
+          title: 'Additional Options',
+          options: [
+            { id: 'vest', name: 'Would you like a vest?', price: 135 },
+            { id: 'functionalButtonholes', name: 'Would you like functional buttonholes?', price: 99 }
+          ],
+          type: 'yesno'
+        };
+        case 8: return {
+          title: 'Additional Options',
+          options: [
+            { id: 'phonePocket', name: 'Do you want a cell phone pocket?', price: 0 }
+          ],
+          type: 'yesno'
+        };
+        default: return { title: '', options: [], selected: null, type: '' };
+      }
+    } else if (category === 'shirt') {
+      switch(currentStep) {
+        case 1: return { 
+          title: 'Collar Style', 
+          options: currentConfig.options.collar,
+          selected: selections.collar,
+          type: 'image',
+          field: 'collar'
+        };
+        case 2: return { 
+          title: 'Cuff Style', 
+          options: currentConfig.options.cuffs,
+          selected: selections.cuffs,
+          type: 'image',
+          field: 'cuffs'
+        };
+        case 3: return { 
+          title: 'Fit Style', 
+          options: currentConfig.options.fit,
+          selected: selections.fit,
+          type: 'image',
+          field: 'fit'
+        };
+        case 4: return {
+          title: 'Monogram',
+          type: 'monogram'
+        };
+        case 5: return {
+          title: 'Additional Options',
+          options: [
+            { id: 'pocketStyle', name: 'Do you want a chest pocket?', price: 0 },
+            { id: 'hemStyle', name: 'Do you want a curved hem?', price: 0 }
+          ],
+          type: 'yesno'
+        };
+        case 6: return {
+          title: 'Final Touches',
+          options: [
+            { id: 'extraLength', name: 'Do you need extra shirt length?', price: 15 }
+          ],
+          type: 'yesno'
+        };
+        default: return { title: '', options: [], selected: null, type: '' };
+      }
+    } else if (category === 'blazer') {
+      switch(currentStep) {
+        case 1: return { 
+          title: 'Lapel Style', 
+          options: currentConfig.options.lapel,
+          selected: selections.lapel,
+          type: 'image',
+          field: 'lapel'
+        };
+        case 2: return { 
+          title: 'Button Style', 
+          options: currentConfig.options.buttons,
+          selected: selections.buttons,
+          type: 'image',
+          field: 'buttons'
+        };
+        case 3: return { 
+          title: 'Vent Style', 
+          options: currentConfig.options.vents,
+          selected: selections.vents,
+          type: 'image',
+          field: 'vents'
+        };
+        case 4: return {
+          title: 'Monogram',
+          type: 'monogram'
+        };
+        case 5: return {
+          title: 'Additional Options',
+          options: [
+            { id: 'lining', name: 'Do you want custom lining?', price: 50 },
+            { id: 'pocketSquare', name: 'Do you want a pocket square pocket?', price: 25 }
+          ],
+          type: 'yesno'
+        };
+        case 6: return {
+          title: 'Final Touches',
+          options: [
+            { id: 'extraButtons', name: 'Do you want extra buttons provided?', price: 10 }
+          ],
+          type: 'yesno'
+        };
+        default: return { title: '', options: [], selected: null, type: '' };
+      }
+    } else if (category === 'dress pants') {
+      switch(currentStep) {
+        case 1: return { 
+          title: 'Fit Style', 
+          options: currentConfig.options.fit,
+          selected: selections.fit,
+          type: 'image',
+          field: 'fit'
+        };
+        case 2: return { 
+          title: 'Pleat Style', 
+          options: currentConfig.options.pleats,
+          selected: selections.pleats,
+          type: 'image',
+          field: 'pleats'
+        };
+        case 3: return { 
+          title: 'Cuff Style', 
+          options: currentConfig.options.cuff,
+          selected: selections.cuff,
+          type: 'image',
+          field: 'cuff'
+        };
+        case 4: return {
+          title: 'Monogram',
+          type: 'monogram'
+        };
+        case 5: return {
+          title: 'Additional Options',
+          options: [
+            { id: 'waistAdjustment', name: 'Do you need waist adjustment?', price: 20 },
+            { id: 'hemAdjustment', name: 'Do you need hem adjustment?', price: 15 }
+          ],
+          type: 'yesno'
+        };
+        default: return { title: '', options: [], selected: null, type: '' };
+      }
     }
+    return { title: '', options: [], selected: null, type: '' };
   };
 
   // Handle image selection
   const handleImageSelect = (id) => {
-    const field = 
-      currentStep === 1 ? 'lapel' :
-      currentStep === 2 ? 'buttons' :
-      'vents';
-    
-    setSelections(prev => ({ ...prev, [field]: id }));
+    const { field } = getCurrentOptions();
+    if (field) {
+      setSelections(prev => ({ ...prev, [field]: id }));
+    }
+  };
+
+  // Handle color selection
+  const handleColorSelect = (id) => {
+    const { field } = getCurrentOptions();
+    if (field) {
+      setSelections(prev => ({ ...prev, [field]: id }));
+    }
   };
 
   // Handle monogram selections
@@ -152,7 +408,7 @@ const CustomizeScreen = () => {
   const isNextDisabled = () => {
     const { type, options, selected } = getCurrentOptions();
     
-    if (type === 'image') return !selected;
+    if (type === 'image' || type === 'color') return !selected;
     
     if (type === 'monogram') {
       if (selections.monogram.enabled === null) return true;
@@ -174,12 +430,38 @@ const CustomizeScreen = () => {
 
   // Handle navigation to next step
   const handleNext = () => {
-    if (currentStep < 7) {
+    const maxSteps = currentConfig.steps;
+    if (currentStep < maxSteps) {
       setCurrentStep(currentStep + 1);
     } else {
-      // Submit all selections
-      console.log('Final selections:', selections);
-      navigation.navigate('Cart', { selections });
+      // Submit all selections and add to cart
+      const customizedItem = {
+        id: `${product?.id || category}_${Date.now()}`, // Unique ID for customized item
+        name: product?.name || `Custom ${category}`,
+        price: product?.price || 0,
+        selectedSize: product?.selectedSize || 'Default',
+        quantity: product?.quantity || 1,
+        image: product?.image,
+        customizations: selections,
+        category: category,
+        isCustomized: true
+      };
+      
+      addToCart(customizedItem);
+      Alert.alert(
+        `${category.charAt(0).toUpperCase() + category.slice(1)} Customized!`, 
+        `Your customized ${product?.name || category} has been added to cart.`,
+        [
+          {
+            text: 'Continue Shopping',
+            onPress: () => navigation.navigate('MainTabs', { screen: 'ShopTab' })
+          },
+          {
+            text: 'View Cart',
+            onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' })
+          }
+        ]
+      );
     }
   };
 
@@ -187,11 +469,19 @@ const CustomizeScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>{title}</Text>
+      {/* Header with Back Button */}
+      <View style={styles.headerContainer}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.header}>{title}</Text>
+        <View style={styles.placeholder} />
+      </View>
       
-      {/* Step indicators (1-7) */}
-      <View style={styles.stepsContainer}>
-        {[1, 2, 3, 4, 5, 6, 7].map((step) => (
+      <View style={styles.content}>
+        {/* Step indicators - dynamic based on category */}
+        <View style={styles.stepsContainer}>
+        {Array.from({ length: currentConfig.steps }, (_, i) => i + 1).map((step) => (
           <Text 
             key={step} 
             style={[
@@ -250,7 +540,49 @@ const CustomizeScreen = () => {
         </>
       )}
 
-      {/* Monogram screen (step 4) */}
+      {/* Color selection screen */}
+      {type === 'color' && (
+        <>
+          <View style={styles.divider} />
+
+          {/* Selected color preview */}
+          {selected && (
+            <>
+              <View style={[styles.selectedColorPreview, { backgroundColor: options.find(opt => opt.id === selected).color }]} />
+              <Text style={styles.optionName}>
+                {options.find(opt => opt.id === selected).name}
+              </Text>
+              <Text style={styles.optionDesc}>
+                {options.find(opt => opt.id === selected).desc}
+              </Text>
+            </>
+          )}
+
+          <View style={styles.divider} />
+
+          {/* Color options list */}
+          <ScrollView contentContainerStyle={styles.optionsContainer}>
+            {options.map((option) => (
+              <TouchableOpacity
+                key={option.id}
+                style={[
+                  styles.colorOptionButton,
+                  selected === option.id && styles.selectedOption
+                ]}
+                onPress={() => handleColorSelect(option.id)}
+              >
+                <View style={[styles.colorSwatch, { backgroundColor: option.color }]} />
+                <View style={styles.colorInfo}>
+                  <Text style={styles.optionText}>{option.name}</Text>
+                  <Text style={styles.optionSubtext}>{option.desc}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </>
+      )}
+
+      {/* Monogram screen (step 5) */}
       {type === 'monogram' && (
         <ScrollView contentContainerStyle={styles.monogramContainer}>
           {/* Monogram toggle */}
@@ -415,9 +747,10 @@ const CustomizeScreen = () => {
         disabled={isNextDisabled()}
       >
         <Text style={styles.nextButtonText}>
-          {currentStep === 7 ? 'DONE' : 'NEXT'}
+          {currentStep === currentConfig.steps ? 'DONE' : 'NEXT'}
         </Text>
       </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -425,14 +758,32 @@ const CustomizeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 20,
     backgroundColor: '#fff'
   },
+  headerContainer: {
+    paddingTop: 50,
+    paddingHorizontal: 15,
+    paddingBottom: 15,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#fff',
+    elevation: 4,
+  },
+  backButton: {
+    padding: 5,
+  },
   header: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginVertical: 10
+  },
+  placeholder: {
+    width: 34, // Same width as back button for centering
+  },
+  content: {
+    flex: 1,
+    padding: 20,
   },
   stepsContainer: {
     flexDirection: 'row',
@@ -503,6 +854,35 @@ const styles = StyleSheet.create({
   optionSubtext: {
     fontSize: 14,
     color: '#666'
+  },
+  // Color selection styles
+  selectedColorPreview: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    marginVertical: 10,
+    borderWidth: 2,
+    borderColor: '#ddd'
+  },
+  colorOptionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#eee',
+    borderRadius: 8
+  },
+  colorSwatch: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+    borderWidth: 2,
+    borderColor: '#ddd'
+  },
+  colorInfo: {
+    flex: 1
   },
   // Monogram styles
   monogramContainer: {
@@ -643,4 +1023,4 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CustomizeScreen;
+export default CustomizeSuitScreen;

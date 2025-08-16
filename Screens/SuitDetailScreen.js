@@ -9,7 +9,7 @@ import {
   Alert,
   ScrollView,
 } from 'react-native';
-import { useCart } from '../Contexts/CartContext';
+import { useCart } from '../Context/CartContext';
 import { Ionicons } from '@expo/vector-icons';
 
 export default function SuitDetailScreen({ route, navigation }) {
@@ -31,19 +31,14 @@ export default function SuitDetailScreen({ route, navigation }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
-  const handleAddToCart = () => {
-    const item = {
-      id: suit.id,
-      name: suit.name,
-      price: suit.price,
-      selectedSize,
-      quantity,
-      image: suit.image,
-    };
-
-    addToCart(item);
-    Alert.alert('Added to Cart', `${suit.name} (x${quantity}) added successfully.`);
-    navigation.navigate('MainTabs', { screen: 'CartTab' });
+  const handleCustomize = () => {
+    navigation.navigate('CustomizeSuitScreen', { 
+      suit: {
+        ...suit,
+        selectedSize,
+        quantity
+      }
+    });
   };
 
   return (
@@ -101,9 +96,9 @@ export default function SuitDetailScreen({ route, navigation }) {
           <Button title="+" onPress={() => setQuantity((q) => q + 1)} />
         </View>
 
-        {/* Add to Cart */}
-        <TouchableOpacity style={styles.button} onPress={handleAddToCart}>
-          <Text style={styles.buttonText}>Add to Cart</Text>
+        {/* Customize */}
+        <TouchableOpacity style={styles.button} onPress={handleCustomize}>
+          <Text style={styles.buttonText}>Customize</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

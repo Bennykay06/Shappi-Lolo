@@ -1,44 +1,34 @@
 import React from 'react';
 import {
-  View,
+  Image,
+  ScrollView,
+  StyleSheet,
   Text,
   TouchableOpacity,
-  StyleSheet,
-  ScrollView,
-  Image,
-  Alert,
+  View
 } from 'react-native';
 
 const categories = [
-  { id: 1, name: 'SUITS', image: require('../assets/images/suits.jpg') },
-  { id: 2, name: 'SHIRTS', image: require('../assets/images/men shirt.jpg') },
-  { id: 3, name: 'BLAZERS', image: require('../assets/images/blazzers.webp') },
-  { id: 4, name: 'DRESS PANTS', image: require('../assets/images/dress pant.webp') },
-  { id: 5, name: 'LONG SLEEVES', image: require('../assets/images/long sleeve tee.jpg') },
-  { id: 6, name: 'SHORT SLEEVES', image: require('../assets/images/short sleeve.png') },
-  { id: 7, name: 'T-SHIRTS', image: require('../assets/images/Tee shirt.webp') },
-  { id: 8, name: 'LONG SLEEVE T-SHIRT', image: require('../assets/images/long sleeve tee.jpg') },
-  { id: 9, name: 'POLOS', image: require('../assets/images/polo.webp') },
-  { id: 10, name: 'LONG SLEEVE POLOS', image: require('../assets/images/long sleeve polo.jpg') },
-  { id: 11, name: 'JEANS', image: require('../assets/images/jeans.jpg') },
-  { id: 12, name: 'JEANS MEN', image: require('../assets/images/jeans.jpg') },
+  { id: 1, name: 'SUITS', image: require('../assets/images/suits.jpg'), route: 'Suits' },
+  { id: 2, name: 'SHIRTS', image: require('../assets/images/men shirt.jpg'), route: 'ShirtsScreen' },
+  { id: 3, name: 'BLAZERS', image: require('../assets/images/blazzers.webp'), route: 'BlazersScreen' },
+  { id: 4, name: 'DRESS PANTS', image: require('../assets/images/dress pant.webp'), route: 'CategoryItems', categoryName: 'DRESS PANTS' },
+  { id: 5, name: 'LONG SLEEVES', image: require('../assets/images/long sleeve tee.jpg'), route: 'CategoryItems', categoryName: 'LONG SLEEVES' },
+  { id: 6, name: 'SHORT SLEEVES', image: require('../assets/images/short sleeve.png'), route: 'CategoryItems', categoryName: 'SHORT SLEEVES' },
+  { id: 7, name: 'T-SHIRTS', image: require('../assets/images/Tee shirt.webp'), route: 'CategoryItems', categoryName: 'T-SHIRTS' },
+  { id: 8, name: 'LONG SLEEVE T-SHIRT', image: require('../assets/images/long sleeve tee.jpg'), route: 'CategoryItems', categoryName: 'LONG SLEEVE T-SHIRT' },
+  { id: 9, name: 'POLOS', image: require('../assets/images/polo.webp'), route: 'CategoryItems', categoryName: 'POLOS' },
+  { id: 10, name: 'LONG SLEEVE POLOS', image: require('../assets/images/long sleeve polo.jpg'), route: 'CategoryItems', categoryName: 'LONG SLEEVE POLOS' },
+  { id: 11, name: 'JEANS', image: require('../assets/images/jeans.jpg'), route: 'CategoryItems', categoryName: 'JEANS' },
+  { id: 12, name: 'JEANS MEN', image: require('../assets/images/jeans.jpg'), route: 'CategoryItems', categoryName: 'JEANS MEN' },
 ];
 
 export default function ShopScreen({ navigation }) {
-  const handleCategoryPress = (categoryName) => {
-    switch (categoryName) {
-      case 'SUITS':
-        navigation.navigate('SuitsScreen');
-        break;
-      case 'SHIRTS':
-        navigation.navigate('ShirtsScreen');
-        break;
-      case 'BLAZERS':
-        navigation.navigate('BlazersScreen');
-        break;
-      default:
-        Alert.alert('Coming Soon', `${categoryName} category is under development.`);
-        break;
+  const handleCategoryPress = (category) => {
+    if (category.categoryName) {
+      navigation.navigate(category.route, { categoryName: category.categoryName });
+    } else {
+      navigation.navigate(category.route);
     }
   };
 
@@ -49,7 +39,7 @@ export default function ShopScreen({ navigation }) {
           <TouchableOpacity
             key={category.id}
             style={styles.categoryCard}
-            onPress={() => handleCategoryPress(category.name)}
+            onPress={() => handleCategoryPress(category)}
           >
             <Image source={category.image} style={styles.categoryImage} />
             <Text style={styles.categoryText}>{category.name}</Text>

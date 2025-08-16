@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TextInput, TouchableOpacity, Alert } from 'react-native';
 
-const ManualMeasurementScreen = () => {
+const ManualMeasurementScreen = ({ navigation }) => {
   const [measurements, setMeasurements] = useState({
     chest: '',
     waist: '',
@@ -11,7 +11,13 @@ const ManualMeasurementScreen = () => {
 
   const handleSave = () => {
     // Save logic here
-    Alert.alert('Measurements Saved');
+    Alert.alert(
+      'Measurements Saved',
+      'Your measurements have been saved successfully!',
+      [
+        { text: 'OK', onPress: () => navigation.goBack() }
+      ]
+    );
   };
 
   return (
