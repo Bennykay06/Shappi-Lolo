@@ -31,14 +31,33 @@ export default function SuitDetailScreen({ route, navigation }) {
   const [quantity, setQuantity] = useState(1);
   const { addToCart } = useCart();
 
-  const handleCustomize = () => {
-    navigation.navigate('CustomizeSuitScreen', { 
-      suit: {
-        ...suit,
-        selectedSize,
-        quantity
-      }
-    });
+
+  const handleAddToCart = () => {
+    const cartItem = {
+      id: `${suit.id}_${selectedSize}_${Date.now()}`,
+      name: suit.name,
+      price: suit.price,
+      selectedSize,
+      quantity,
+      image: suit.image,
+      isCustomized: false
+    };
+    
+    addToCart(cartItem);
+    Alert.alert(
+      'Added to Cart!',
+      `${suit.name} (Size: ${selectedSize}) has been added to your cart.`,
+      [
+        {
+          text: 'Continue Shopping',
+          onPress: () => navigation.goBack()
+        },
+        {
+          text: 'View Cart',
+          onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' })
+        }
+      ]
+    );
   };
 
   return (
@@ -96,9 +115,9 @@ export default function SuitDetailScreen({ route, navigation }) {
           <Button title="+" onPress={() => setQuantity((q) => q + 1)} />
         </View>
 
-        {/* Customize */}
-        <TouchableOpacity style={styles.button} onPress={handleCustomize}>
-          <Text style={styles.buttonText}>Customize</Text>
+        {/* Add to Cart Button */}
+        <TouchableOpacity style={styles.addToCartButton} onPress={handleAddToCart}>
+          <Text style={styles.buttonText}>Add to Cart</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
@@ -181,7 +200,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     paddingHorizontal: 10,
   },
-  button: {
+  addToCartButton: {
     marginTop: 30,
     backgroundColor: '#6200ee',
     paddingVertical: 15,

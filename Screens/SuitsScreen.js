@@ -16,21 +16,84 @@ const suits = [
     name: 'Classic Black Suit',
     price: 299,
     sizes: ['S', 'M', 'L'],
-    image: require('../assets/images/suits.jpg'),
+    image: require('../assets/images/pp1.jpg'),
   },
   {
     id: 2,
     name: 'Slim Fit Navy Suit',
     price: 349,
     sizes: ['M', 'L', 'XL'],
-    image: require('../assets/images/suits.jpg'),
+    image: require('../assets/images/pp2.jpg'),
   },
   {
     id: 3,
     name: 'Modern Grey Suit',
     price: 399,
     sizes: ['S', 'L'],
-    image: require('../assets/images/suits.jpg'),
+    image: require('../assets/images/pp3.jpg'),
+  },
+  {
+    id: 4,
+    name: 'Executive Charcoal Suit',
+    price: 449,
+    sizes: ['M', 'L', 'XL'],
+    image: require('../assets/images/pp4.jpg'),
+  },
+  {
+    id: 5,
+    name: 'Business Professional Suit',
+    price: 379,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/pp5.jpg'),
+  },
+  {
+    id: 6,
+    name: 'Formal Evening Suit',
+    price: 529,
+    sizes: ['M', 'L'],
+    image: require('../assets/images/pp6.jpg'),
+  },
+  {
+    id: 7,
+    name: 'Contemporary Fit Suit',
+    price: 329,
+    sizes: ['S', 'M', 'L'],
+    image: require('../assets/images/pp7.jpg'),
+  },
+  {
+    id: 8,
+    name: 'Wedding Special Suit',
+    price: 599,
+    sizes: ['M', 'L', 'XL'],
+    image: require('../assets/images/pp8.jpg'),
+  },
+  {
+    id: 9,
+    name: 'Casual Business Suit',
+    price: 289,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/pp9.jpg'),
+  },
+  {
+    id: 10,
+    name: 'Premium Tailored Suit',
+    price: 649,
+    sizes: ['M', 'L'],
+    image: require('../assets/images/pp10.jpg'),
+  },
+  {
+    id: 11,
+    name: 'Classic Three-Piece Suit',
+    price: 459,
+    sizes: ['S', 'M', 'L'],
+    image: require('../assets/images/pp11.jpg'),
+  },
+  {
+    id: 12,
+    name: 'Modern Slim Cut Suit',
+    price: 389,
+    sizes: ['M', 'L', 'XL'],
+    image: require('../assets/images/pp12.jpg'),
   },
 ];
 
@@ -51,7 +114,6 @@ const renderItem = ({ item }) => (
 
       <TouchableOpacity 
         onPress={() => navigation.navigate('CustomizeSuitScreen', { suit: item })}
-        // onPress={() => navigation.navigate('CustomizeSuitScreen')}
         style={styles.customizeButton}
       >
         <Text style={styles.buttonText}>Customize</Text>
