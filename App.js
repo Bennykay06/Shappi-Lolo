@@ -180,6 +180,11 @@ function AccountStackNavigator() {
         component={FavoritesScreen} 
         options={{ title: 'YOUR FAVORITES' }}
       />
+      <AccountStack.Screen 
+        name="MeasurementHistory" 
+        component={MeasurementHistoryScreen} 
+        options={{ headerShown: false }}
+      />
     </AccountStack.Navigator>
   );
 }

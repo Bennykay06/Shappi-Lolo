@@ -44,6 +44,10 @@ const AccountScreen = ({ navigation }) => {
     navigation.navigate('Support');
   };
 
+  const handleMeasurementHistory = () => {
+    navigation.navigate('MeasurementHistory');
+  };
+
   const handleLogout = () => {
     Alert.alert(
       'Logout',
@@ -116,6 +120,11 @@ const AccountScreen = ({ navigation }) => {
           icon="card-outline"
           title="Payment Methods"
           onPress={handlePaymentMethods}
+        />
+        <MenuItem
+          icon="resize-outline"
+          title="Measurement History"
+          onPress={handleMeasurementHistory}
         />
       </View>
 
