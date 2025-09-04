@@ -43,6 +43,13 @@ import CheckoutScreen from './Screens/CheckOutScreen';
 import OrdersScreen from './Screens/OrdersScreen';
 import CustomizeSuitScreen from './Screens/CustomizeSuitScreen';
 import CustomizeShirtScreen from './Screens/CustomizeShirtScreen';
+import CustomizeBlazersScreen from './Screens/CustomizeBlazersScreen';
+import CustomizePantsScreen from './Screens/CustomizePantsScreen';
+import AppointmentBookingScreen from './Screens/AppointmentBookingScreen';
+import AppointmentsListScreen from './Screens/AppointmentsListScreen';
+import BookedItemsScreen from './Screens/BookedItemsScreen';
+import OrderTrackingScreen from './Screens/OrderTrackingScreen';
+import BulkOrdersScreen from './Screens/BulkOrdersScreen';
 
 // Appointment Screens
 import AppointmentScreen from './Screens/AppointmentScreen';
@@ -185,6 +192,16 @@ function AccountStackNavigator() {
         component={MeasurementHistoryScreen} 
         options={{ headerShown: false }}
       />
+      <AccountStack.Screen 
+        name="AppointmentsList" 
+        component={AppointmentsListScreen} 
+        options={{ headerShown: false }}
+      />
+      <AccountStack.Screen 
+        name="BookedItems" 
+        component={BookedItemsScreen} 
+        options={{ headerShown: false }}
+      />
     </AccountStack.Navigator>
   );
 }
@@ -234,6 +251,16 @@ function ShopStackNavigator() {
       <ShopStack.Screen 
         name="CustomizeShirtScreen" 
         component={CustomizeShirtScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="CustomizeBlazersScreen" 
+        component={CustomizeBlazersScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="CustomizePantsScreen" 
+        component={CustomizePantsScreen}
         options={{ headerShown: false }}
       />
       <ShopStack.Screen 
@@ -396,6 +423,31 @@ function MainAppStack() {
       <MainStack.Screen 
         name="AppointmentConfirmation" 
         component={AppointmentConfirmationScreen} 
+        options={{ headerShown: false }}
+      />
+      <MainStack.Screen 
+        name="AppointmentBooking" 
+        component={AppointmentBookingScreen} 
+        options={{ headerShown: false }}
+      />
+      <MainStack.Screen 
+        name="AppointmentsList" 
+        component={AppointmentsListScreen} 
+        options={{ headerShown: false }}
+      />
+      <MainStack.Screen 
+        name="BookedItems" 
+        component={BookedItemsScreen} 
+        options={{ headerShown: false }}
+      />
+      <MainStack.Screen 
+        name="OrderTracking" 
+        component={OrderTrackingScreen} 
+        options={{ headerShown: false }}
+      />
+      <MainStack.Screen 
+        name="BulkOrders" 
+        component={BulkOrdersScreen} 
         options={{ headerShown: false }}
       />
     </MainStack.Navigator>

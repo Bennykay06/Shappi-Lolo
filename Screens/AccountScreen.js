@@ -48,6 +48,14 @@ const AccountScreen = ({ navigation }) => {
     navigation.navigate('MeasurementHistory');
   };
 
+  const handleAppointments = () => {
+    navigation.navigate('AppointmentsList');
+  };
+
+  const handleBookedItems = () => {
+    navigation.navigate('BookedItems');
+  };
+
   const handleLogout = () => {
     Alert.alert(
       'Logout',
@@ -125,6 +133,16 @@ const AccountScreen = ({ navigation }) => {
           icon="resize-outline"
           title="Measurement History"
           onPress={handleMeasurementHistory}
+        />
+        <MenuItem
+          icon="calendar-outline"
+          title="My Appointments"
+          onPress={handleAppointments}
+        />
+        <MenuItem
+          icon="bookmark-outline"
+          title="My Bookings"
+          onPress={handleBookedItems}
         />
       </View>
 

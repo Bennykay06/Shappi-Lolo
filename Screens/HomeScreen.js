@@ -7,218 +7,196 @@ import {
   Image,
   TouchableOpacity,
   Dimensions,
-  TextInput
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen({ navigation }) {
-  const [searchQuery, setSearchQuery] = useState('');
 
-  const handleSearch = () => {
-    if (searchQuery.trim()) {
-      navigation.navigate('CustomizeSuit', { searchQuery: searchQuery.trim() });
+  // MTailor's main services
+  const services = [
+    {
+      id: 1,
+      name: 'Book Appointment',
+      subtitle: 'Schedule measurement session',
+      image: require('../assets/images/sewing.png'),
+      description: 'Book a consultation with our expert tailors',
+      route: 'AppointmentBooking',
+      featured: true,
+      icon: 'calendar'
+    },
+    {
+      id: 2,
+      name: 'Track Your Order',
+      subtitle: 'Monitor outfit progress',
+      image: require('../assets/images/login.jpg'),
+      description: 'See real-time updates on your custom clothing',
+      route: 'OrderTracking',
+      featured: true,
+      icon: 'trending-up'
+    },
+    {
+      id: 3,
+      name: 'Bulk Orders',
+      subtitle: 'Group & event attire',
+      image: require('../assets/images/suits.jpg'),
+      description: 'Wedding parties, corporate events, funeral attire',
+      route: 'BulkOrders',
+      icon: 'people'
+    },
+    {
+      id: 4,
+      name: 'Custom Clothing',
+      subtitle: 'Browse our collection',
+      image: require('../assets/images/men shirt.jpg'),
+      description: 'Shirts, suits, pants, blazers & more',
+      route: 'ShopTab',
+      icon: 'shirt'
     }
-  };
+  ];
 
   return (
     <View style={styles.container}>
       <ScrollView showsVerticalScrollIndicator={false}>
-      {/* Hero Banner */}
-      <View style={styles.heroContainer}>
+      
+      {/* MTailor-style Header */}
+      <View style={styles.header}>
+        <Text style={styles.brandName}>MTailor</Text>
+        <Text style={styles.tagline}>Perfect fitting custom clothes</Text>
+      </View>
+
+      {/* Hero Section - Measurement Focus */}
+      <View style={styles.heroSection}>
+        <View style={styles.heroContent}>
+          <Text style={styles.heroTitle}>Get measured in 30 seconds</Text>
+          <Text style={styles.heroSubtitle}>
+            Using your phone's camera for measurements 20% more accurate than a professional tailor
+          </Text>
+          <TouchableOpacity 
+            style={styles.measureButton}
+            onPress={() => navigation.navigate('MainTabs', { screen: 'MeasurementsTab' })}
+          >
+            <Ionicons name="camera" size={20} color="white" style={{marginRight: 8}} />
+            <Text style={styles.measureButtonText}>Get Measured Now</Text>
+          </TouchableOpacity>
+        </View>
         <Image 
           source={require('../assets/images/login.jpg')} 
           style={styles.heroImage}
           resizeMode="cover"
         />
-        <View style={styles.heroOverlay}>
-          <Text style={styles.heroTitle}>CRAFTING YOUR SIGNATURE STYLE</Text>
-          <Text style={styles.heroSubtitle}>Premium Custom Tailoring for the Modern Gentleman</Text>
+      </View>
+
+      {/* MTailor-style Services */}
+      <View style={styles.categoriesSection}>
+        <Text style={styles.sectionTitle}>How can we help you today?</Text>
+        
+        {services.map((service) => (
+          <TouchableOpacity
+            key={service.id}
+            style={[styles.categoryCard, service.featured && styles.featuredCard]}
+            onPress={() => {
+              if (service.route === 'ShopTab') {
+                navigation.navigate('MainTabs', { screen: 'ShopTab' });
+              } else {
+                navigation.navigate(service.route);
+              }
+            }}
+          >
+            <Image source={service.image} style={styles.categoryImage} />
+            <View style={styles.categoryContent}>
+              <View style={styles.categoryInfo}>
+                <View style={styles.serviceHeader}>
+                  <Ionicons name={service.icon} size={24} color="#007AFF" style={styles.serviceIcon} />
+                  <Text style={styles.categoryName}>{service.name}</Text>
+                </View>
+                <Text style={styles.categorySubtitle}>{service.subtitle}</Text>
+                <Text style={styles.serviceDescription}>{service.description}</Text>
+              </View>
+              {service.featured && (
+                <View style={styles.featuredBadge}>
+                  <Text style={styles.featuredText}>POPULAR</Text>
+                </View>
+              )}
+            </View>
+          </TouchableOpacity>
+        ))}
+      </View>
+
+      {/* MTailor-style Process */}
+      <View style={styles.processSection}>
+        <Text style={styles.sectionTitle}>How it works</Text>
+        
+        <View style={styles.processStep}>
+          <View style={styles.stepIcon}>
+            <Ionicons name="camera" size={24} color="#007AFF" />
+          </View>
+          <View style={styles.stepContent}>
+            <Text style={styles.stepTitle}>1. Get Measured</Text>
+            <Text style={styles.stepDescription}>Use your phone to get measured in 30 seconds. No measuring tape required.</Text>
+          </View>
+        </View>
+        
+        <View style={styles.processStep}>
+          <View style={styles.stepIcon}>
+            <Ionicons name="shirt" size={24} color="#007AFF" />
+          </View>
+          <View style={styles.stepContent}>
+            <Text style={styles.stepTitle}>2. Customize</Text>
+            <Text style={styles.stepDescription}>Choose your style, fit, and fabric from hundreds of options.</Text>
+          </View>
+        </View>
+        
+        <View style={styles.processStep}>
+          <View style={styles.stepIcon}>
+            <Ionicons name="build" size={24} color="#007AFF" />
+          </View>
+          <View style={styles.stepContent}>
+            <Text style={styles.stepTitle}>3. We Make It</Text>
+            <Text style={styles.stepDescription}>Your custom clothing is made to your exact measurements and shipped to you.</Text>
+          </View>
         </View>
       </View>
 
-      {/* Welcome Section */}
-      <View style={styles.welcomeSection}>
-        <Text style={styles.sectionTitle}>Welcome to SHELL'S</Text>
-        <Text style={styles.sectionText}>
-          Where every stitch tells your story. Our master tailors create 
-          perfectly fitted garments that reflect your personality and lifestyle.
+      {/* MTailor-style Testimonials */}
+      <View style={styles.testimonialsSection}>
+        <Text style={styles.sectionTitle}>What customers are saying</Text>
+        
+        <View style={styles.testimonialCard}>
+          <View style={styles.testimonialHeader}>
+            <Text style={styles.testimonialRating}>⭐⭐⭐⭐⭐</Text>
+            <Text style={styles.testimonialDate}>2 days ago</Text>
+          </View>
+          <Text style={styles.testimonialText}>
+            "The fit is incredible! I've never had a shirt that fits this perfectly. The measurement process was so easy and accurate."
+          </Text>
+          <Text style={styles.testimonialAuthor}>Sarah M. - Custom Dress Shirt</Text>
+        </View>
+        
+        <View style={styles.testimonialCard}>
+          <View style={styles.testimonialHeader}>
+            <Text style={styles.testimonialRating}>⭐⭐⭐⭐⭐</Text>
+            <Text style={styles.testimonialDate}>1 week ago</Text>
+          </View>
+          <Text style={styles.testimonialText}>
+            "Better than any tailor I've been to. The app measured me perfectly and my suit fits like a glove."
+          </Text>
+          <Text style={styles.testimonialAuthor}>Mike T. - Custom Suit</Text>
+        </View>
+      </View>
+
+      {/* Guarantee Section */}
+      <View style={styles.guaranteeSection}>
+        <Text style={styles.guaranteeTitle}>Perfect fit guaranteed</Text>
+        <Text style={styles.guaranteeText}>
+          If you don't love your order, we'll refund 100% of your money. 
+          For 90 days after receiving your garment, you can have it remade or returned for free.
         </Text>
-        
-        {/* Quick Action Buttons */}
-        <View style={styles.quickActions}>
-          <TouchableOpacity 
-            style={styles.primaryButton}
-            onPress={() => navigation.navigate('Consultation')}
-          >
-            <Text style={styles.primaryButtonText}>Design Consultation</Text>
-          </TouchableOpacity>
-          <TouchableOpacity 
-            style={styles.secondaryButton}
-            onPress={() => navigation.navigate('Fitting')}
-          >
-            <Text style={styles.secondaryButtonText}>Book Fitting</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      {/* Search Bar */}
-      <View style={styles.searchSection}>
-        <TextInput
-          style={styles.searchInput}
-          placeholder="Search for customization options..."
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onSubmitEditing={handleSearch}
-          returnKeyType="search"
-        />
-        <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>🔍</Text>
-        </TouchableOpacity>
-      </View>
-
-      {/* Appointment Services */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Book Your Visit</Text>
-        
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.horizontalScroll}
-        >
-          <TouchableOpacity 
-            style={styles.serviceCard}
-            onPress={() => navigation.navigate('Consultation')}
-          >
-            <Image 
-              source={require('../assets/images/suits.jpg')}
-              style={styles.serviceImage}
-            />
-            <Text style={styles.serviceTitle}>Design Consultation</Text>
-            <Text style={styles.serviceDesc}>Free 60-min session to plan your perfect garment</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.serviceCard}
-            onPress={() => navigation.navigate('Fitting')}
-          >
-            <Image 
-              source={require('../assets/images/men shirt.jpg')}
-              style={styles.serviceImage}
-            />
-            <Text style={styles.serviceTitle}>Measurement & Fitting</Text>
-            <Text style={styles.serviceDesc}>Professional body measurements for perfect fit</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity 
-            style={styles.serviceCard}
-            onPress={() => navigation.navigate('Appointment')}
-          >
-            <Image 
-              source={require('../assets/images/sewing.png')}
-              style={styles.serviceImage}
-            />
-            <Text style={styles.serviceTitle}>General Appointment</Text>
-            <Text style={styles.serviceDesc}>Alterations, repairs, and follow-up visits</Text>
-          </TouchableOpacity>
-        </ScrollView>
-      </View>
-
-      {/* Customization Process */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Our Customization Process</Text>
-        
-        <View style={styles.processStep}>
-          <View style={styles.stepNumber}>
-            <Text style={styles.stepNumberText}>1</Text>
-          </View>
-          <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>Design Consultation</Text>
-            <Text style={styles.stepDescription}>Discuss your vision, style preferences, and fabric choices</Text>
-          </View>
-        </View>
-        
-        <View style={styles.processStep}>
-          <View style={styles.stepNumber}>
-            <Text style={styles.stepNumberText}>2</Text>
-          </View>
-          <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>Precise Measurements</Text>
-            <Text style={styles.stepDescription}>Professional measurement session for perfect fit</Text>
-          </View>
-        </View>
-        
-        <View style={styles.processStep}>
-          <View style={styles.stepNumber}>
-            <Text style={styles.stepNumberText}>3</Text>
-          </View>
-          <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>Expert Crafting</Text>
-            <Text style={styles.stepDescription}>Master tailors handcraft your garment with attention to detail</Text>
-          </View>
-        </View>
-        
-        <View style={styles.processStep}>
-          <View style={styles.stepNumber}>
-            <Text style={styles.stepNumberText}>4</Text>
-          </View>
-          <View style={styles.stepContent}>
-            <Text style={styles.stepTitle}>Final Fitting</Text>
-            <Text style={styles.stepDescription}>Perfect adjustments and delivery of your completed piece</Text>
-          </View>
-        </View>
-      </View>
-
-      {/* Customer Testimonials */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>What Our Clients Say</Text>
-        <ScrollView 
-          horizontal 
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.testimonialScroll}
-        >
-          <View style={styles.testimonialCard}>
-            <Text style={styles.testimonialText}>
-              "Exceptional craftsmanship! My suit fits perfectly and the attention to detail is remarkable."
-            </Text>
-            <Text style={styles.testimonialAuthor}>- Michael R.</Text>
-            <Text style={styles.testimonialRating}>⭐⭐⭐⭐⭐</Text>
-          </View>
-          
-          <View style={styles.testimonialCard}>
-            <Text style={styles.testimonialText}>
-              "Professional service from start to finish. The custom shirt exceeded my expectations."
-            </Text>
-            <Text style={styles.testimonialAuthor}>- James K.</Text>
-            <Text style={styles.testimonialRating}>⭐⭐⭐⭐⭐</Text>
-          </View>
-          
-          <View style={styles.testimonialCard}>
-            <Text style={styles.testimonialText}>
-              "Quality tailoring with modern convenience. Highly recommend Shell's for any formal wear needs."
-            </Text>
-            <Text style={styles.testimonialAuthor}>- David L.</Text>
-            <Text style={styles.testimonialRating}>⭐⭐⭐⭐⭐</Text>
-          </View>
-        </ScrollView>
-      </View>
-
-      {/* Style Tips */}
-      <View style={styles.section}>
-        <Text style={styles.sectionTitle}>Style Inspiration</Text>
-        <View style={styles.tipCard}>
-          <Text style={styles.tipTitle}>The Art of Layering</Text>
-          <Text style={styles.tipText}>
-            Master the balance between your suit jacket, waistcoat, and shirt for 
-            a polished look that transitions seamlessly from day to evening.
-          </Text>
-        </View>
-        <View style={styles.tipCard}>
-          <Text style={styles.tipTitle}>Fabric Selection Guide</Text>
-          <Text style={styles.tipText}>
-            Learn how to choose between wool, linen, and cotton blends based on 
-            season, occasion, and personal comfort preferences.
-          </Text>
+        <View style={styles.guaranteeFeatures}>
+          <Text style={styles.guaranteeFeature}>✓ Free shipping</Text>
+          <Text style={styles.guaranteeFeature}>✓ Free returns</Text>
+          <Text style={styles.guaranteeFeature}>✓ 90-day guarantee</Text>
         </View>
       </View>
       </ScrollView>
@@ -229,241 +207,258 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f8f8f8',
+    backgroundColor: '#ffffff',
   },
-  heroContainer: {
-    height: 300,
-    width: '100%',
-    position: 'relative',
+  header: {
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
   },
-  heroImage: {
-    width: '100%',
-    height: '70%',
-    paddingTop: 20
-  },
-  heroOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'rgba(0,0,0,0.6)',
-    padding: 20,
-  },
-  heroTitle: {
-    color: '#fff',
-    fontSize: 28,
+  brandName: {
+    fontSize: 32,
     fontWeight: 'bold',
-    marginBottom: 8,
+    color: '#007AFF',
     textAlign: 'center',
-  },
-  heroSubtitle: {
-    color: '#fff',
-    fontSize: 16,
-    textAlign: 'center',
-  },
-  welcomeSection: {
-    padding: 25,
-    backgroundColor: '#fff',
-    marginBottom: 15,
-    marginHorizontal: 10,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginTop: 20,
-  },
-  primaryButton: {
-    backgroundColor: '#2c3e50',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    flex: 0.48,
-    alignItems: 'center',
-  },
-  primaryButtonText: {
-    color: '#fff',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  secondaryButton: {
-    backgroundColor: 'transparent',
-    paddingVertical: 14,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-    borderWidth: 2,
-    borderColor: '#2c3e50',
-    flex: 0.48,
-    alignItems: 'center',
-  },
-  secondaryButtonText: {
-    color: '#2c3e50',
-    fontWeight: '600',
-    fontSize: 16,
-  },
-  section: {
-    padding: 20,
-    backgroundColor: '#fff',
-    marginBottom: 15,
-    marginHorizontal: 10,
-    borderRadius: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 4,
-  },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: 'bold',
-    marginBottom: 15,
-    color: '#333',
-  },
-  sectionText: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#666',
-  },
-  horizontalScroll: {
-    paddingRight: 20,
-  },
-  serviceCard: {
-    width: width * 0.6,
-    marginRight: 15,
-    borderRadius: 12,
-    overflow: 'hidden',
-    backgroundColor: '#fff',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-    elevation: 6,
-  },
-  serviceImage: {
-    width: '100%',
-    height: 150,
-  },
-  serviceTitle: {
-    padding: 15,
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#333',
-  },
-  serviceDesc: {
-    paddingHorizontal: 15,
-    paddingBottom: 15,
-    fontSize: 14,
-    color: '#666',
-  },
-  testimonialScroll: {
-    paddingRight: 20,
-  },
-  testimonialCard: {
-    width: width * 0.8,
-    marginRight: 15,
-    backgroundColor: '#f9f9f9',
-    borderRadius: 12,
-    padding: 20,
-    borderLeftWidth: 4,
-    borderLeftColor: '#2c3e50',
-  },
-  testimonialText: {
-    fontSize: 16,
-    lineHeight: 24,
-    color: '#444',
-    fontStyle: 'italic',
-    marginBottom: 12,
-  },
-  testimonialAuthor: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2c3e50',
     marginBottom: 4,
   },
-  testimonialRating: {
+  tagline: {
     fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
   },
-  tipCard: {
+  heroSection: {
+    flexDirection: 'row',
+    padding: 20,
     backgroundColor: '#f8f9fa',
-    borderRadius: 12,
-    padding: 18,
-    marginBottom: 15,
-    borderLeftWidth: 4,
-    borderLeftColor: '#2c3e50',
+    alignItems: 'center',
   },
-  tipTitle: {
-    fontSize: 18,
-    fontWeight: '600',
-    marginBottom: 8,
-    color: '#222',
+  heroContent: {
+    flex: 1,
+    paddingRight: 20,
   },
-  tipText: {
-    fontSize: 14,
-    lineHeight: 22,
-    color: '#555',
+  heroTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 12,
   },
-  searchSection: {
+  heroSubtitle: {
+    fontSize: 16,
+    color: '#666',
+    lineHeight: 24,
+    marginBottom: 20,
+  },
+  heroImage: {
+    width: 120,
+    height: 120,
+    borderRadius: 60,
+  },
+  measureButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 12,
+    paddingHorizontal: 24,
+    borderRadius: 25,
     flexDirection: 'row',
     alignItems: 'center',
-    marginHorizontal: 10,
-    marginBottom: 15,
-    backgroundColor: '#fff',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+  },
+  measureButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  categoriesSection: {
+    padding: 20,
+    backgroundColor: '#ffffff',
+  },
+  categoryCard: {
+    backgroundColor: 'white',
     borderRadius: 12,
-    paddingHorizontal: 15,
+    marginBottom: 20,
+    overflow: 'hidden',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
+    shadowOpacity: 0.1,
     shadowRadius: 8,
     elevation: 4,
+    position: 'relative',
   },
-  searchInput: {
+  featuredCard: {
+    borderWidth: 2,
+    borderColor: '#007AFF',
+  },
+  categoryImage: {
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+  categoryContent: {
+    padding: 16,
+  },
+  categoryInfo: {
     flex: 1,
-    paddingVertical: 15,
+  },
+  categoryName: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 6,
+  },
+  categorySubtitle: {
     fontSize: 16,
+    color: '#666',
+    marginBottom: 8,
+  },
+  categoryAccuracy: {
+    fontSize: 14,
+    color: '#007AFF',
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  categoryPrice: {
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#333',
   },
-  searchButton: {
-    padding: 10,
+  featuredBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: '#FF3B30',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
   },
-  searchButtonText: {
-    fontSize: 20,
+  featuredText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  processSection: {
+    padding: 20,
+    backgroundColor: '#f8f9fa',
   },
   processStep: {
     flexDirection: 'row',
     alignItems: 'flex-start',
     marginBottom: 20,
   },
-  stepNumber: {
-    width: 30,
-    height: 30,
-    borderRadius: 15,
-    backgroundColor: '#2c3e50',
+  stepIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    backgroundColor: 'white',
     alignItems: 'center',
     justifyContent: 'center',
-    marginRight: 15,
-  },
-  stepNumberText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
+    marginRight: 16,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
   stepContent: {
     flex: 1,
+    paddingTop: 8,
+  },
+  sectionTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: '#333',
   },
   stepTitle: {
-    fontSize: 16,
-    fontWeight: '600',
+    fontSize: 18,
+    fontWeight: 'bold',
     color: '#333',
-    marginBottom: 4,
+    marginBottom: 8,
   },
   stepDescription: {
+    fontSize: 16,
+    color: '#666',
+    lineHeight: 22,
+  },
+  testimonialsSection: {
+    padding: 20,
+    backgroundColor: '#ffffff',
+  },
+  testimonialCard: {
+    backgroundColor: '#f8f9fa',
+    borderRadius: 12,
+    padding: 20,
+    marginBottom: 16,
+    borderLeftWidth: 4,
+    borderLeftColor: '#007AFF',
+  },
+  testimonialHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  testimonialRating: {
+    fontSize: 16,
+  },
+  testimonialDate: {
+    fontSize: 14,
+    color: '#999',
+  },
+  testimonialText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+    marginBottom: 12,
+  },
+  testimonialAuthor: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#666',
+  },
+  guaranteeSection: {
+    padding: 20,
+    backgroundColor: '#e8f4fd',
+    margin: 20,
+    borderRadius: 12,
+  },
+  guaranteeTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#007AFF',
+    textAlign: 'center',
+    marginBottom: 12,
+  },
+  guaranteeText: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 16,
+  },
+  guaranteeFeatures: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  guaranteeFeature: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#007AFF',
+  },
+  serviceHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  serviceIcon: {
+    marginRight: 8,
+  },
+  serviceDescription: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 12,
     lineHeight: 20,
   },
 });

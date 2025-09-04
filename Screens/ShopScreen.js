@@ -7,20 +7,62 @@ import {
   TouchableOpacity,
   View
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
+// MTailor-style simplified categories
 const categories = [
-  { id: 1, name: 'SUITS', image: require('../assets/images/suits.jpg'), route: 'Suits' },
-  { id: 2, name: 'SHIRTS', image: require('../assets/images/men shirt.jpg'), route: 'ShirtsScreen' },
-  { id: 3, name: 'BLAZERS', image: require('../assets/images/blazzers.webp'), route: 'BlazersScreen' },
-  { id: 4, name: 'DRESS PANTS', image: require('../assets/images/dress pant.webp'), route: 'CategoryItems', categoryName: 'DRESS PANTS' },
-  { id: 5, name: 'LONG SLEEVES', image: require('../assets/images/long sleeve tee.jpg'), route: 'CategoryItems', categoryName: 'LONG SLEEVES' },
-  { id: 6, name: 'SHORT SLEEVES', image: require('../assets/images/short sleeve.png'), route: 'CategoryItems', categoryName: 'SHORT SLEEVES' },
-  { id: 7, name: 'T-SHIRTS', image: require('../assets/images/Tee shirt.webp'), route: 'CategoryItems', categoryName: 'T-SHIRTS' },
-  { id: 8, name: 'LONG SLEEVE T-SHIRT', image: require('../assets/images/long sleeve tee.jpg'), route: 'CategoryItems', categoryName: 'LONG SLEEVE T-SHIRT' },
-  { id: 9, name: 'POLOS', image: require('../assets/images/polo.webp'), route: 'CategoryItems', categoryName: 'POLOS' },
-  { id: 10, name: 'LONG SLEEVE POLOS', image: require('../assets/images/long sleeve polo.jpg'), route: 'CategoryItems', categoryName: 'LONG SLEEVE POLOS' },
-  { id: 11, name: 'JEANS', image: require('../assets/images/jeans.jpg'), route: 'CategoryItems', categoryName: 'JEANS' },
-  { id: 12, name: 'JEANS MEN', image: require('../assets/images/jeans.jpg'), route: 'CategoryItems', categoryName: 'JEANS MEN' },
+  { 
+    id: 1, 
+    name: 'Custom Dress Shirts', 
+    image: require('../assets/images/imgq1.jpg'), 
+    route: 'ShirtsScreen',
+    price: 'Starting at $79',
+    subtitle: 'Perfect fit, every time',
+    popular: true,
+    description: '16 measurements for the perfect fit',
+    height: 320
+  },
+  { 
+    id: 2, 
+    name: 'Custom Suits', 
+    image: require('../assets/images/suits.jpg'), 
+    route: 'Suits',
+    price: 'Starting at $399',
+    subtitle: 'Tailored to perfection',
+    description: 'Professional grade tailoring',
+    height: 380
+  },
+  { 
+    id: 3, 
+    name: 'Custom Jeans', 
+    image: require('../assets/images/jeans.jpg'), 
+    route: 'CategoryItems', 
+    categoryName: 'JEANS',
+    price: 'Starting at $99',
+    subtitle: 'Your perfect fit',
+    description: 'Precision fit technology',
+    height: 320
+  },
+  { 
+    id: 4, 
+    name: 'Custom Blazers', 
+    image: require('../assets/images/blazzers.webp'), 
+    route: 'CustomizeBlazersScreen',
+    price: 'Starting at $299',
+    subtitle: 'Business ready',
+    description: 'Expert craftsmanship',
+    height: 320
+  },
+  { 
+    id: 5, 
+    name: 'Custom Pants', 
+    image: require('../assets/images/dress pant.webp'), 
+    route: 'CustomizePantsScreen',
+    price: 'Starting at $149',
+    subtitle: 'Perfect fit, every time',
+    description: 'Precision tailored to your measurements',
+    height: 320
+  },
 ];
 
 export default function ShopScreen({ navigation }) {
@@ -32,51 +74,214 @@ export default function ShopScreen({ navigation }) {
     }
   };
 
+  const handleBuyNow = (category) => {
+    navigation.navigate('ProductDetailScreen', { 
+      product: {
+        id: category.id,
+        name: category.name,
+        price: category.price,
+        image: category.image,
+        description: category.description,
+        subtitle: category.subtitle
+      }
+    });
+  };
+
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.grid}>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Custom Clothing</Text>
+        <Text style={styles.headerSubtitle}>Made to your measurements</Text>
+      </View>
+      
+      <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={false}>
         {categories.map((category) => (
-          <TouchableOpacity
+          <View
             key={category.id}
-            style={styles.categoryCard}
-            onPress={() => handleCategoryPress(category)}
+            style={[
+              styles.categoryCard, 
+              category.popular && styles.popularCard,
+              { height: category.height }
+            ]}
           >
             <Image source={category.image} style={styles.categoryImage} />
-            <Text style={styles.categoryText}>{category.name}</Text>
-          </TouchableOpacity>
+            <View style={styles.cardOverlay}>
+              {category.popular && (
+                <View style={styles.popularBadge}>
+                  <Text style={styles.popularText}>MOST POPULAR</Text>
+                </View>
+              )}
+              <View style={styles.cardContent}>
+                <Text style={styles.categoryName}>{category.name}</Text>
+                <Text style={styles.categorySubtitle}>{category.subtitle}</Text>
+                <Text style={styles.categoryDescription}>{category.description}</Text>
+                <Text style={styles.categoryPrice}>{category.price}</Text>
+                
+                <View style={styles.buttonContainer}>
+                  <TouchableOpacity 
+                    style={styles.buyNowButton}
+                    onPress={() => handleBuyNow(category)}
+                  >
+                    <Text style={styles.buyNowButtonText}>Buy Now</Text>
+                    <Ionicons name="bag" size={14} color="white" />
+                  </TouchableOpacity>
+                  
+                  <TouchableOpacity 
+                    style={styles.customizeButton}
+                    onPress={() => handleCategoryPress(category)}
+                  >
+                    <Text style={styles.customizeButtonText}>Customize</Text>
+                    <Ionicons name="arrow-forward" size={14} color="#007AFF" />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
+          </View>
         ))}
-      </View>
-    </ScrollView>
+        
+        <View style={styles.bottomPadding} />
+      </ScrollView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-    backgroundColor: 'black',
+    flex: 1,
+    backgroundColor: 'white',
   },
-  grid: {
-   
-    justifyContent: 'space-between',
+  header: {
+    paddingTop: 60,
+    paddingHorizontal: 20,
+    paddingBottom: 20,
+    backgroundColor: '#ffffff',
+    borderBottomWidth: 1,
+    borderBottomColor: '#f0f0f0',
+  },
+  headerTitle: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#333',
+    textAlign: 'center',
+    marginBottom: 4,
+  },
+  headerSubtitle: {
+    fontSize: 16,
+    color: '#666',
+    textAlign: 'center',
+  },
+  scrollView: {
+    flex: 1,
   },
   categoryCard: {
-    width: '100%',
-    marginTop:70,
-    borderRadius: 10,
+    marginHorizontal: 20,
+    marginBottom: 20,
+    borderRadius: 16,
     overflow: 'hidden',
-    backgroundColor: '#fff',
-    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.15,
+    shadowRadius: 12,
+    elevation: 8,
+    position: 'relative',
+  },
+  popularCard: {
+    borderWidth: 3,
+    borderColor: '#007AFF',
   },
   categoryImage: {
     width: '100%',
-    height: 400,
+    height: '100%',
     resizeMode: 'cover',
   },
-  categoryText: {
-    paddingVertical: 10,
+  cardOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    background: 'linear-gradient(transparent, rgba(0,0,0,0.8))',
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    padding: 12,
+  },
+  popularBadge: {
+    position: 'absolute',
+    top: -60,
+    right: 0,
+    backgroundColor: '#FF3B30',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
+  },
+  popularText: {
+    color: 'white',
+    fontSize: 12,
+    fontWeight: 'bold',
+  },
+  cardContent: {
+    alignItems: 'flex-start',
+  },
+  categoryName: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    color: 'white',
+    marginBottom: 4,
+  },
+  categorySubtitle: {
+    fontSize: 14,
+    color: 'rgba(255,255,255,0.9)',
+    marginBottom: 6,
+  },
+  categoryDescription: {
+    fontSize: 12,
+    color: 'rgba(255,255,255,0.8)',
+    marginBottom: 8,
+  },
+  categoryPrice: {
     fontSize: 16,
-    fontWeight: '600',
-    textAlign: 'center',
-    color: '#333',
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    marginBottom: 10,
+  },
+  buttonContainer: {
+    flexDirection: 'row',
+    gap: 10,
+    width: '100%',
+  },
+  buyNowButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+  },
+  buyNowButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginRight: 6,
+  },
+  customizeButton: {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    borderWidth: 1,
+    borderColor: '#007AFF',
+  },
+  customizeButtonText: {
+    color: '#007AFF',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginRight: 6,
+  },
+  bottomPadding: {
+    height: 40,
   },
 });
