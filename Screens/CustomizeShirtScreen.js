@@ -7,9 +7,10 @@ import { useCart } from '../Context/CartContext';
 const CustomizeShirtScreen = ({ route }) => {
   const navigation = useNavigation();
   const { addToCart } = useCart();
-  const { shirt, item } = route.params || {};
+  const { shirt, item, viewOnly } = route.params || {};
   const product = shirt || item;
   console.log('Customizing shirt:', product);
+  console.log('View only mode:', viewOnly);
   
   // Track current step (1-7 for shirts)
   const [currentStep, setCurrentStep] = useState(1);
@@ -388,6 +389,81 @@ const CustomizeShirtScreen = ({ route }) => {
       );
     }
   };
+
+  // Handle adding pre-made shirt to cart (view only mode)
+  const handleAddToCart = (shirtOption) => {
+    const productToAdd = {
+      id: `${shirtOption.id}_${Date.now()}`,
+      name: shirtOption.name,
+      price: parseFloat(shirtOption.price?.replace('$', '') || '79'),
+      selectedSize: 'Default',
+      quantity: 1,
+      image: shirtOption.img,
+      category: 'shirt',
+      isCustomized: false
+    };
+    
+    addToCart(productToAdd);
+    Alert.alert(
+      'Added to Cart!', 
+      `${shirtOption.name} has been added to your cart.`,
+      [
+        {
+          text: 'Continue Shopping',
+          onPress: () => navigation.navigate('MainTabs', { screen: 'ShopTab' })
+        },
+        {
+          text: 'View Cart',
+          onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' })
+        }
+      ]
+    );
+  };
+
+  // If in view only mode, show shirts without customization
+  if (viewOnly) {
+    return (
+      <View style={styles.container}>
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+            <Ionicons name="arrow-back" size={24} color="black" />
+          </TouchableOpacity>
+          <View style={styles.headerContent}>
+            <Text style={styles.header}>Custom Dress Shirts</Text>
+            <Text style={styles.subtitle}>View details and add to cart</Text>
+          </View>
+          <View style={styles.placeholder} />
+        </View>
+        
+        <ScrollView style={styles.content} contentContainerStyle={styles.optionsContainer}>
+          {shirtOptions.fabric.map((shirtOption) => (
+            <View key={shirtOption.id} style={styles.viewOnlyOption}>
+              <Image source={shirtOption.img} style={styles.viewOnlyImage} />
+              <View style={styles.viewOnlyInfo}>
+                <View style={styles.viewOnlyHeader}>
+                  <Text style={styles.viewOnlyName}>{shirtOption.name}</Text>
+                  {shirtOption.popular && (
+                    <View style={styles.popularBadge}>
+                      <Text style={styles.popularText}>POPULAR</Text>
+                    </View>
+                  )}
+                </View>
+                <Text style={styles.viewOnlyDesc}>{shirtOption.desc}</Text>
+                <Text style={styles.viewOnlyPrice}>{shirtOption.price}</Text>
+                <TouchableOpacity 
+                  style={styles.addToCartButton}
+                  onPress={() => handleAddToCart(shirtOption)}
+                >
+                  <Text style={styles.addToCartButtonText}>Add to Cart</Text>
+                  <Ionicons name="bag" size={16} color="white" />
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      </View>
+    );
+  }
 
   const { title, subtitle, options, selected, type } = getCurrentOptions();
 
@@ -1288,7 +1364,72 @@ const styles = StyleSheet.create({
     marginRight: 15,
     borderWidth: 1,
     borderColor: '#ccc'
-  }
+  },
+  // View only mode styles
+  viewOnlyOption: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: '#eee',
+    borderRadius: 12,
+    backgroundColor: 'white',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 3,
+  },
+  viewOnlyImage: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
+    borderRadius: 8,
+    marginRight: 16,
+  },
+  viewOnlyInfo: {
+    flex: 1,
+  },
+  viewOnlyHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 6,
+  },
+  viewOnlyName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    flex: 1,
+  },
+  viewOnlyDesc: {
+    fontSize: 14,
+    color: '#666',
+    marginBottom: 8,
+  },
+  viewOnlyPrice: {
+    fontSize: 16,
+    color: '#4CAF50',
+    fontWeight: 'bold',
+    marginBottom: 12,
+  },
+  addToCartButton: {
+    backgroundColor: '#007AFF',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    borderRadius: 20,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'flex-start',
+  },
+  addToCartButtonText: {
+    color: 'white',
+    fontSize: 14,
+    fontWeight: 'bold',
+    marginRight: 6,
+  },
 });
 
 export default CustomizeShirtScreen;

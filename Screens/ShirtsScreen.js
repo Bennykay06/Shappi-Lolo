@@ -153,7 +153,9 @@ const shirts = [
   },
 ];
 
-export default function ShirtsScreen({ navigation }) {
+export default function ShirtsScreen({ navigation, route }) {
+  const { viewOnly } = route.params || {};
+  
   const renderItem = ({ item }) => (
     <View style={styles.card}>
       <Image source={item.image} style={styles.image} />
@@ -161,19 +163,21 @@ export default function ShirtsScreen({ navigation }) {
       <Text style={styles.price}>${item.price}</Text>
       
       <View style={styles.buttonRow}>
-        <TouchableOpacity 
-          onPress={() => navigation.navigate('ProductDetailScreen', { item, category: 'shirt' })}
-          style={styles.detailsButton}
-        >
-          <Text style={styles.buttonText}>View Details</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity 
-          onPress={() => navigation.navigate('CustomizeShirtScreen', { shirt: item })}
-          style={styles.customizeButton}
-        >
-          <Text style={styles.buttonText}>Customize</Text>
-        </TouchableOpacity>
+        {viewOnly ? (
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('ProductDetailScreen', { product: item, category: 'shirt' })}
+            style={styles.detailsButtonFull}
+          >
+            <Text style={styles.buttonText}>View Details</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('CustomizeShirtScreen', { shirt: item })}
+            style={styles.customizeButtonFull}
+          >
+            <Text style={styles.buttonText}>Customize</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   );
@@ -254,8 +258,22 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     alignItems: 'center',
   },
+  detailsButtonFull: {
+    width: '100%',
+    backgroundColor: '#6200ee',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
   customizeButton: {
     flex: 1,
+    backgroundColor: '#03dac6',
+    padding: 10,
+    borderRadius: 6,
+    alignItems: 'center',
+  },
+  customizeButtonFull: {
+    width: '100%',
     backgroundColor: '#03dac6',
     padding: 10,
     borderRadius: 6,

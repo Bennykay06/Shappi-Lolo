@@ -1,261 +1,244 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { useCart } from '../Context/CartContext';
 
-const CustomizePantsScreen = ({ route }) => {
+const CustomizeJeansScreen = ({ route }) => {
   const navigation = useNavigation();
   const { addToCart } = useCart();
-  const { pants, item } = route.params || {};
-  const product = pants || item;
-  console.log('Customizing pants:', product);
+  const { jeans, item } = route.params || {};
+  const product = jeans || item;
+  console.log('Customizing jeans:', product);
   
-  // MTailor-style pants customization - 6 step process
+  // Jeans customization - 5 step process
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 6;
+  const totalSteps = 5;
   
   const [selections, setSelections] = useState({
-    fabric: null,
+    wash: null,
     fit: null,
-    waist: null,
+    rise: null,
     length: null,
-    details: null,
-    finishing: null
+    details: null
   });
 
-  // MTailor's pants customization options
-  const pantsOptions = {
-    fabric: [
+  // Jeans customization options
+  const jeansOptions = {
+    wash: [
       { 
         id: 1, 
-        name: 'Wool Blend', 
-        desc: 'Classic business - wrinkle resistant and durable', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        price: '$149',
-        type: 'wool',
+        name: 'Classic Blue', 
+        desc: 'Traditional indigo wash - versatile and timeless', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        price: '$89',
+        type: 'indigo',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Cotton Chino', 
-        desc: 'Versatile casual - perfect for everyday wear', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        price: '$129',
-        type: 'cotton',
+        name: 'Light Wash', 
+        desc: 'Faded casual look - perfect for weekend wear', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        price: '$89',
+        type: 'light',
         popular: true
       },
       { 
         id: 3, 
-        name: 'Stretch Denim', 
-        desc: 'Modern comfort - flexible and stylish', 
+        name: 'Dark Wash', 
+        desc: 'Deep indigo - sophisticated and professional', 
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
-        price: '$139',
-        type: 'denim'
+        price: '$99',
+        type: 'dark'
       },
       { 
         id: 4, 
-        name: 'Performance Fabric', 
-        desc: 'Athletic comfort - moisture-wicking technology', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        price: '$159',
-        type: 'performance'
+        name: 'Black', 
+        desc: 'Sleek black finish - modern and edgy', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        price: '$99',
+        type: 'black'
       },
       { 
         id: 5, 
-        name: 'Linen Blend', 
-        desc: 'Summer comfort - breathable and lightweight', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        price: '$169',
-        type: 'linen'
+        name: 'Distressed', 
+        desc: 'Pre-worn look - casual and trendy', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        price: '$109',
+        type: 'distressed'
       }
     ],
     fit: [
       { 
         id: 1, 
-        name: 'Slim Fit', 
-        desc: 'Modern tailored - fitted through hip and thigh', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        measurements: 'Fitted silhouette',
+        name: 'Skinny Fit', 
+        desc: 'Ultra-slim throughout - modern tapered silhouette', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        measurements: 'Tight fit',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Classic Fit', 
-        desc: 'Traditional comfort - relaxed through hip and thigh', 
+        name: 'Slim Fit', 
+        desc: 'Fitted through thigh with slight taper - contemporary style', 
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
-        measurements: 'Comfortable fit'
+        measurements: 'Fitted silhouette',
+        popular: true
       },
       { 
         id: 3, 
-        name: 'Athletic Fit', 
-        desc: 'Room for muscle - accommodates larger thighs', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        measurements: 'Extra room in thigh'
+        name: 'Straight Fit', 
+        desc: 'Classic straight leg - timeless and versatile', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        measurements: 'Straight through leg'
+      },
+      { 
+        id: 4, 
+        name: 'Relaxed Fit', 
+        desc: 'Comfortable through hip and thigh - easy wear', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        measurements: 'Roomy fit'
       }
     ],
-    waist: [
+    rise: [
       { 
         id: 1, 
-        name: 'Flat Front', 
-        desc: 'Clean modern look - no pleats', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Low Rise', 
+        desc: 'Sits below waist - modern casual style', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
         style: 'modern',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Single Pleat', 
-        desc: 'Traditional style - one pleat for comfort', 
+        name: 'Mid Rise', 
+        desc: 'Sits at natural waist - balanced comfort', 
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
-        style: 'classic'
+        style: 'balanced'
       },
       { 
         id: 3, 
-        name: 'Double Pleat', 
-        desc: 'Formal traditional - two pleats for extra room', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        style: 'formal'
+        name: 'High Rise', 
+        desc: 'Sits above waist - retro-inspired look', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        style: 'retro'
       }
     ],
     length: [
       { 
         id: 1, 
-        name: 'No Break', 
-        desc: 'Modern length - hem just touches shoe', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Cropped', 
+        desc: 'Above ankle length - modern and fresh', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
         style: 'modern',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Quarter Break', 
-        desc: 'Slight bend - classic professional length', 
+        name: 'Regular', 
+        desc: 'Standard length - classic fit', 
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
         style: 'classic'
       },
       { 
         id: 3, 
-        name: 'Half Break', 
-        desc: 'Traditional length - moderate fold at shoe', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        style: 'traditional'
+        name: 'Long', 
+        desc: 'Extended length - for taller builds', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
+        style: 'extended'
       }
     ],
     details: [
       { 
         id: 1, 
-        name: 'Side Pockets', 
-        desc: 'Standard pockets - clean and functional', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Classic 5-Pocket', 
+        desc: 'Traditional jean styling - front and back pockets', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg'),
         popular: true
       },
       { 
         id: 2, 
-        name: 'Back Pockets', 
-        desc: 'Added back pockets - extra functionality', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg')
-      },
-      { 
-        id: 3, 
         name: 'Coin Pocket', 
-        desc: 'Small coin pocket - traditional detail', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg')
-      }
-    ],
-    finishing: [
-      { 
-        id: 1, 
-        name: 'Hemmed', 
-        desc: 'Standard hem - clean finished edge', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Cuffed', 
-        desc: 'Traditional cuff - formal appearance', 
+        desc: 'Additional small pocket - vintage detail', 
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg')
       },
       { 
         id: 3, 
-        name: 'Raw Edge', 
-        desc: 'Unfinished hem - casual contemporary', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg')
+        name: 'No Back Pockets', 
+        desc: 'Clean minimal look - streamlined silhouette', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg')
+      },
+      { 
+        id: 4, 
+        name: 'Cargo Pockets', 
+        desc: 'Extra utility pockets - functional style', 
+        img: require('../assets/images/jeans.jpg'),
+        preview: require('../assets/images/jeans.jpg')
       }
     ]
   };
 
-  // MTailor's exact customization flow - Get configuration for current step
+  // Get configuration for current step
   const getCurrentOptions = () => {
     switch(currentStep) {
       case 1: return { 
-        title: 'Choose Your Fabric', 
-        subtitle: 'Select from wool, cotton, denim, and performance fabrics',
-        options: pantsOptions.fabric,
-        selected: selections.fabric,
+        title: 'Choose Your Wash', 
+        subtitle: 'Select your preferred denim wash and color',
+        options: jeansOptions.wash,
+        selected: selections.wash,
         type: 'fabric',
-        field: 'fabric'
+        field: 'wash'
       };
       case 2: return { 
         title: 'Select Fit Style', 
         subtitle: 'Choose your preferred fit through hip and thigh',
-        options: pantsOptions.fit,
+        options: jeansOptions.fit,
         selected: selections.fit,
         type: 'image',
         field: 'fit'
       };
       case 3: return { 
-        title: 'Choose Waist Style', 
-        subtitle: 'Select flat front or pleated style',
-        options: pantsOptions.waist,
-        selected: selections.waist,
+        title: 'Choose Rise', 
+        subtitle: 'Select where the waistline sits on your body',
+        options: jeansOptions.rise,
+        selected: selections.rise,
         type: 'image',
-        field: 'waist'
+        field: 'rise'
       };
       case 4: return { 
         title: 'Select Length', 
-        subtitle: 'Choose your preferred hem length and break',
-        options: pantsOptions.length,
+        subtitle: 'Choose your preferred inseam length',
+        options: jeansOptions.length,
         selected: selections.length,
         type: 'image',
         field: 'length'
       };
       case 5: return { 
         title: 'Choose Details', 
-        subtitle: 'Select pocket configuration and additional details',
-        options: pantsOptions.details,
+        subtitle: 'Select pocket configuration and styling details',
+        options: jeansOptions.details,
         selected: selections.details,
         type: 'image',
         field: 'details'
-      };
-      case 6: return { 
-        title: 'Select Finishing', 
-        subtitle: 'Choose your hem finishing style',
-        options: pantsOptions.finishing,
-        selected: selections.finishing,
-        type: 'image',
-        field: 'finishing'
       };
       default: return null;
     }
@@ -281,41 +264,40 @@ const CustomizePantsScreen = ({ route }) => {
   };
 
   const handleAddToCart = () => {
-    if (!selections.fabric || !selections.fit || !selections.waist || !selections.length || !selections.details || !selections.finishing) {
+    if (!selections.wash || !selections.fit || !selections.rise || !selections.length || !selections.details) {
       Alert.alert('Incomplete Selection', 'Please complete all customization steps.');
       return;
     }
 
-    const customPants = {
+    const customJeans = {
       id: Date.now().toString(),
-      name: 'Custom Pants',
-      price: parseFloat(selections.fabric?.price?.replace('$', '') || '149'),
-      image: selections.fabric?.img,
+      name: 'Custom Jeans',
+      price: parseFloat(selections.wash?.price?.replace('$', '') || '89'),
+      image: selections.wash?.img,
       quantity: 1,
       customizations: selections,
-      type: 'pants'
+      type: 'jeans'
     };
 
-    addToCart(customPants);
-    Alert.alert('Success', 'Custom pants added to cart!', [
-      { text: 'Continue Shopping', onPress: () => navigation.goBack() },
+    addToCart(customJeans);
+    Alert.alert('Success', 'Custom jeans added to cart!', [
+      { text: 'Continue Shopping', onPress: () => navigation.navigate('MainTabs', { screen: 'ShopTab', params: { screen: 'ShopMain' } }) },
       { text: 'View Cart', onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' }) }
     ]);
   };
-
 
   const currentConfig = getCurrentOptions();
   if (!currentConfig) return null;
 
   return (
     <View style={styles.container}>
-      {/* MTailor-style Header */}
+      {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Custom Pants</Text>
+          <Text style={styles.headerTitle}>Custom Jeans</Text>
           <Text style={styles.stepCounter}>Step {currentStep} of {totalSteps}</Text>
         </View>
         <View style={styles.placeholder} />
@@ -381,7 +363,7 @@ const CustomizePantsScreen = ({ route }) => {
         </View>
       </ScrollView>
 
-      {/* MTailor-style Navigation Footer */}
+      {/* Navigation Footer */}
       <View style={styles.footer}>
         <View style={styles.navigationButtons}>
           {currentStep > 1 && (
@@ -636,4 +618,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default CustomizePantsScreen;
+export default CustomizeJeansScreen;

@@ -25,7 +25,7 @@ export default function ProductDetailScreen({ route }) {
     const cartItem = {
       id: product.id,
       name: product.name,
-      price: parseFloat(product.price.replace(/[^0-9.]/g, '')), // Extract numeric price
+      price: typeof product.price === 'number' ? product.price : parseFloat(product.price.replace(/[^0-9.]/g, '')), // Handle both number and string prices
       image: product.image,
       quantity: quantity,
       type: 'ready-made'
@@ -59,7 +59,7 @@ export default function ProductDetailScreen({ route }) {
         <View style={styles.detailsContainer}>
           <Text style={styles.productName}>{product.name}</Text>
           <Text style={styles.productSubtitle}>{product.subtitle}</Text>
-          <Text style={styles.productPrice}>{product.price}</Text>
+          <Text style={styles.productPrice}>{typeof product.price === 'number' ? `$${product.price}` : product.price}</Text>
           <Text style={styles.productDescription}>{product.description || 'Premium quality garment made with the finest materials and craftsmanship.'}</Text>
           
           {/* Quantity Selector */}
@@ -136,8 +136,8 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 300,
-    resizeMode: 'cover',
+    height: 500,
+    resizeMode: 'contain',
   },
   detailsContainer: {
     padding: 20,

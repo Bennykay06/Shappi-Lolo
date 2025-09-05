@@ -45,6 +45,11 @@ import CustomizeSuitScreen from './Screens/CustomizeSuitScreen';
 import CustomizeShirtScreen from './Screens/CustomizeShirtScreen';
 import CustomizeBlazersScreen from './Screens/CustomizeBlazersScreen';
 import CustomizePantsScreen from './Screens/CustomizePantsScreen';
+import CustomizeJeansScreen from './Screens/CustomizeJeansScreen';
+import PantsScreen from './Screens/PantsScreen';
+import JeansScreen from './Screens/JeansScreen';
+import AfricaWearScreen from './Screens/AfricaWearScreen';
+import ClothingStoreScreen from './Screens/ClothingStoreScreen';
 import AppointmentBookingScreen from './Screens/AppointmentBookingScreen';
 import AppointmentsListScreen from './Screens/AppointmentsListScreen';
 import BookedItemsScreen from './Screens/BookedItemsScreen';
@@ -264,6 +269,11 @@ function ShopStackNavigator() {
         options={{ headerShown: false }}
       />
       <ShopStack.Screen 
+        name="CustomizeJeansScreen" 
+        component={CustomizeJeansScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
         name="ProductDetailScreen" 
         component={ProductDetailScreen}
         options={{ headerShown: false }}
@@ -276,6 +286,31 @@ function ShopStackNavigator() {
       <ShopStack.Screen 
         name="Suits" 
         component={SuitsStackNavigator}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="SuitsScreen" 
+        component={SuitsScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="PantsScreen" 
+        component={PantsScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="JeansScreen" 
+        component={JeansScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="AfricaWearScreen" 
+        component={AfricaWearScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="ClothingStoreScreen" 
+        component={ClothingStoreScreen}
         options={{ headerShown: false }}
       />
     </ShopStack.Navigator>

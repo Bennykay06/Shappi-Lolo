@@ -1,542 +1,529 @@
-import { Ionicons } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Alert, Image, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image, TextInput, Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../Context/CartContext';
+import { Ionicons } from '@expo/vector-icons';
 
 const CustomizeBlazersScreen = ({ route }) => {
   const navigation = useNavigation();
   const { addToCart } = useCart();
-  const { blazer, item } = route.params || {};
+  const { blazer, item, category = 'blazer' } = route.params || {};
   const product = blazer || item;
-  console.log('Customizing blazer:', product);
+  console.log('Customizing item:', product, 'Category:', category);
   
-  // MTailor-style blazer customization - 6 step process
+  // Track current step (1-7)
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 6;
   
-  const [selections, setSelections] = useState({
-    fabric: null,
-    lapel: null,
-    buttons: null,
-    vents: null,
-    pockets: null,
-    monogram: null
-  });
+  // Store all user selections - dynamic based on category
+  const getInitialSelections = () => {
+    const base = {
+      fabric: null,
+      monogram: {
+        enabled: null,
+        initials: '',
+        location: null,
+        font: null,
+        color: null
+      }
+    };
 
-  // Monogram text input
-  const [monogramText, setMonogramText] = useState('');
-  const [monogramLocation, setMonogramLocation] = useState(null);
-  const [monogramFont, setMonogramFont] = useState(null);
-  const [monogramColor, setMonogramColor] = useState(null);
-
-  // MTailor's blazer customization options - suit-style comprehensive
-  const blazerOptions = {
-    fabric: [
-      { 
-        id: 1, 
-        name: 'Navy Wool', 
-        desc: 'Classic business essential - versatile and professional', 
-        img: require('../assets/images/blazzers.webp'),
-        preview: require('../assets/images/suits.jpg'),
-        price: '$299',
-        type: 'wool',
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Charcoal Wool', 
-        desc: 'Sophisticated formal - perfect for evening events', 
-        img: require('../assets/images/suits.jpg'),
-        preview: require('../assets/images/blazzers.webp'),
-        price: '$299',
-        type: 'wool',
-        popular: true
-      },
-      { 
-        id: 3, 
-        name: 'Light Grey Wool', 
-        desc: 'Modern professional - ideal for spring/summer', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        price: '$319',
-        type: 'wool'
-      },
-      { 
-        id: 4, 
-        name: 'Cotton Blend', 
-        desc: 'Casual comfort - breathable and flexible', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        price: '$279',
-        type: 'cotton'
-      },
-      { 
-        id: 5, 
-        name: 'Linen Blend', 
-        desc: 'Summer lightweight - perfect for warm weather', 
-        img: require('../assets/images/men shirt.jpg'),
-        preview: require('../assets/images/men shirt.jpg'),
-        price: '$339',
-        type: 'linen'
-      },
-      { 
-        id: 6, 
-        name: 'Velvet', 
-        desc: 'Luxury evening wear - sophisticated texture', 
-        img: require('../assets/images/polo.webp'),
-        preview: require('../assets/images/polo.webp'),
-        price: '$399',
-        type: 'velvet'
-      }
-    ],
-    lapel: [
-      { 
-        id: 1, 
-        name: 'Notch Slim', 
-        desc: 'Modern versatile style - classic business', 
-        img: require('../assets/images/notch slim.jpg'),
-        preview: require('../assets/images/notch slim.jpg'),
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Notch', 
-        desc: 'Classic formal look - traditional style', 
-        img: require('../assets/images/notch.jpg'),
-        preview: require('../assets/images/notch.jpg'),
-        popular: true
-      },
-      { 
-        id: 3, 
-        name: 'Peak', 
-        desc: 'Classic formal look - sophisticated elegance', 
-        img: require('../assets/images/peak.jpg'),
-        preview: require('../assets/images/peak.jpg')
-      },
-      { 
-        id: 4, 
-        name: 'Peak Wide', 
-        desc: 'Bold statement style - formal occasions', 
-        img: require('../assets/images/peak wide.jpg'),
-        preview: require('../assets/images/peak wide.jpg')
-      }
-    ],
-    buttons: [
-      { 
-        id: 1, 
-        name: 'Two Button', 
-        desc: 'Traditional business - clean contemporary lines', 
-        img: require('../assets/images/two buttons.jpg'),
-        preview: require('../assets/images/two buttons.jpg'),
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'One Button', 
-        desc: 'Sleek minimalist style - modern elegance', 
-        img: require('../assets/images/one button.jpg'),
-        preview: require('../assets/images/one button.jpg'),
-        popular: true
-      },
-      { 
-        id: 3, 
-        name: 'Three Button', 
-        desc: 'Formal appearance - traditional style', 
-        img: require('../assets/images/three buttons.jpg'),
-        preview: require('../assets/images/three buttons.jpg')
-      }
-    ],
-    vents: [
-      { 
-        id: 1, 
-        name: 'Center Vent', 
-        desc: 'Standard comfort - classic American style', 
-        img: require('../assets/images/one vent.jpg'),
-        preview: require('../assets/images/one vent.jpg'),
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Side Vents', 
-        desc: 'Modern tailored look - British style mobility', 
-        img: require('../assets/images/two vents.jpg'),
-        preview: require('../assets/images/two vents.jpg'),
-        popular: true
-      }
-    ],
-    pockets: [
-      { 
-        id: 1, 
-        name: 'Jetted', 
-        desc: 'Formal minimal - sleek hidden openings', 
-        img: require('../assets/images/jetted pockect.jpg'),
-        preview: require('../assets/images/jetted pockect.jpg'),
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Flap', 
-        desc: 'Traditional business - covered and protected', 
-        img: require('../assets/images/flapped pocket.jpg'),
-        preview: require('../assets/images/flapped pocket.jpg'),
-        popular: true
-      },
-      { 
-        id: 3, 
-        name: 'Patch', 
-        desc: 'Casual style - relaxed and informal', 
-        img: require('../assets/images/patch pocket.jpg'),
-        preview: require('../assets/images/patch pocket.jpg')
-      }
-    ]
+    // Add blazer-specific selections
+    return {
+      ...base,
+      lapel: null,
+      buttons: null,
+      vents: null,
+      pockets: null, // Added for blazers
+      lining: null,
+      pocketSquare: null
+    };
   };
+
+  const [selections, setSelections] = useState(getInitialSelections());
+
+  // Customization configurations - using suit format for blazer
+  const customizationConfigs = {
+    blazer: {
+      steps: 7, // fabric, lapel, buttons, vents, pockets, monogram, additional
+      options: {
+        fabric: [
+          { id: 1, name: 'Navy Performance Blend', desc: 'Classic professional', color: '#001f3f' },
+          { id: 2, name: 'Charcoal Wool', desc: 'Formal elegance', color: '#36454f' },
+          { id: 3, name: 'Black Formal', desc: 'Traditional formal', color: '#000000' },
+          { id: 4, name: 'Grey Business', desc: 'Modern professional', color: '#666666' },
+          { id: 5, name: 'Brown Heritage', desc: 'Casual sophistication', color: '#8b4513' }
+        ],
+        lapel: [
+          { id: 1, name: 'Notch Slim', desc: 'Modern versatile style', img: require('../assets/images/notch slim.jpg') },
+          { id: 2, name: 'Notch', desc: 'Classic formal look', img: require('../assets/images/notch.jpg') },
+          { id: 3, name: 'Peak', desc: 'Classic formal look', img: require('../assets/images/peak.jpg') },
+          { id: 4, name: 'Peak Wide', desc: 'Classic formal look', img: require('../assets/images/peak wide.jpg') }
+        ],
+        buttons: [
+          { id: 1, name: 'One Button', desc: 'Sleek minimalist style', img: require('../assets/images/one button.jpg') },
+          { id: 2, name: 'Two Buttons', desc: 'Traditional business', img: require('../assets/images/two buttons.jpg') },
+          { id: 3, name: 'Three Buttons', desc: 'Formal appearance', img: require('../assets/images/three buttons.jpg') }
+        ],
+        vents: [
+          { id: 1, name: 'Center Vent', desc: 'Standard comfort', img: require('../assets/images/one vent.jpg') },
+          { id: 2, name: 'Side Vents', desc: 'Modern tailored look', img: require('../assets/images/two vents.jpg') }
+        ],
+        pockets: [
+          { id: 1, name: 'Jetted', desc: 'Formal minimal', img: require('../assets/images/jetted pockect.jpg') },
+          { id: 2, name: 'Flap', desc: 'Traditional business', img: require('../assets/images/flapped pocket.jpg') },
+          { id: 3, name: 'Patch', desc: 'Casual style', img: require('../assets/images/patch pocket.jpg') }
+        ]
+      }
+    }
+  };
+
+  const currentConfig = customizationConfigs['blazer'];
 
   // Monogram customization options
   const monogramLocations = [
-    { id: 1, name: 'Inside Pocket', desc: 'Hidden personal touch' },
-    { id: 2, name: 'Lower Left', desc: 'Subtle exterior placement' },
-    { id: 3, name: 'Inside Collar', desc: 'Traditional location' }
+    { id: 1, name: 'Chest' },
+    { id: 2, name: 'Cuff' },
+    { id: 3, name: 'Inside Jacket' }
   ];
 
   const monogramFonts = [
-    { id: 1, name: 'Classic', sample: 'AB', desc: 'Traditional serif style' },
-    { id: 2, name: 'Modern', sample: 'AB', desc: 'Clean contemporary' },
-    { id: 3, name: 'Script', sample: 'AB', desc: 'Elegant cursive' }
+    { id: 1, name: 'Classic', sample: 'DA' },
+    { id: 2, name: 'Modern', sample: 'DA' },
+    { id: 3, name: 'Script', sample: 'DA' }
   ];
 
-  const monogramColors = [
-    { id: 1, name: 'Navy', color: '#001f3f' },
-    { id: 2, name: 'Gold', color: '#FFD700' },
-    { id: 3, name: 'Silver', color: '#C0C0C0' },
-    { id: 4, name: 'Black', color: '#000000' }
+  const threadColors = [
+    { id: 1, name: 'White', color: '#ffffff' },
+    { id: 2, name: 'Black', color: '#000000' },
+    { id: 3, name: 'Navy', color: '#001f3f' },
+    { id: 4, name: 'Silver', color: '#dddddd' }
   ];
 
-  // MTailor's exact customization flow - Get configuration for current step
+  // Get configuration for current step - blazer customization
   const getCurrentOptions = () => {
     switch(currentStep) {
       case 1: return { 
-        title: 'Choose Your Fabric', 
-        subtitle: 'Select from wool, cotton, linen, and luxury options',
-        options: blazerOptions.fabric,
+        title: 'Fabric Color', 
+        options: currentConfig.options.fabric,
         selected: selections.fabric,
-        type: 'fabric',
+        type: 'color',
         field: 'fabric'
       };
       case 2: return { 
-        title: 'Select Lapel Style', 
-        subtitle: 'Choose your preferred lapel design',
-        options: blazerOptions.lapel,
+        title: 'Lapel Style', 
+        options: currentConfig.options.lapel,
         selected: selections.lapel,
         type: 'image',
         field: 'lapel'
       };
       case 3: return { 
-        title: 'Choose Button Style', 
-        subtitle: 'Select number and arrangement of buttons',
-        options: blazerOptions.buttons,
+        title: 'Button Arrangement', 
+        options: currentConfig.options.buttons,
         selected: selections.buttons,
         type: 'image',
         field: 'buttons'
       };
       case 4: return { 
-        title: 'Select Vent Style', 
-        subtitle: 'Choose back vent configuration',
-        options: blazerOptions.vents,
+        title: 'Vent Style', 
+        options: currentConfig.options.vents,
         selected: selections.vents,
         type: 'image',
         field: 'vents'
       };
       case 5: return { 
-        title: 'Choose Pocket Style', 
-        subtitle: 'Select pocket design and placement',
-        options: blazerOptions.pockets,
+        title: 'Pocket Style', 
+        options: currentConfig.options.pockets,
         selected: selections.pockets,
         type: 'image',
         field: 'pockets'
       };
-      case 6: return { 
-        title: 'Add Monogram (Optional)', 
-        subtitle: 'Personalize your blazer with custom monogramming',
-        options: null,
-        selected: selections.monogram,
-        type: 'monogram',
-        field: 'monogram'
+      case 6: return {
+        title: 'Monogram',
+        type: 'monogram'
       };
-      default: return null;
+      case 7: return {
+        title: 'Additional Options',
+        options: [
+          { id: 'lining', name: 'Do you want custom lining?', price: 50 },
+          { id: 'pocketSquare', name: 'Do you want a pocket square pocket?', price: 25 }
+        ],
+        type: 'yesno'
+      };
+      default: return { title: '', options: [], selected: null, type: '' };
     }
   };
 
-  const handleSelection = (option, field) => {
+  // Handle image selection
+  const handleImageSelect = (id) => {
+    const { field } = getCurrentOptions();
+    if (field) {
+      setSelections(prev => ({ ...prev, [field]: id }));
+    }
+  };
+
+  // Handle color selection
+  const handleColorSelect = (id) => {
+    const { field } = getCurrentOptions();
+    if (field) {
+      setSelections(prev => ({ ...prev, [field]: id }));
+    }
+  };
+
+  // Handle monogram selections
+  const handleMonogramSelect = (field, value) => {
     setSelections(prev => ({
       ...prev,
-      [field]: option
+      monogram: { ...prev.monogram, [field]: value }
     }));
   };
 
-  const handleMonogramComplete = () => {
-    if (monogramText.trim()) {
-      const monogramData = {
-        text: monogramText.trim(),
-        location: monogramLocation,
-        font: monogramFont,
-        color: monogramColor
-      };
-      setSelections(prev => ({
-        ...prev,
-        monogram: monogramData
-      }));
-    }
+  // Handle yes/no selections
+  const handleYesNoSelect = (id, value) => {
+    setSelections(prev => ({ ...prev, [id]: value }));
   };
 
-  const nextStep = () => {
-    if (currentStep === 6 && monogramText.trim()) {
-      handleMonogramComplete();
+  // Check if next button should be disabled
+  const isNextDisabled = () => {
+    const { type, options, selected } = getCurrentOptions();
+    
+    if (type === 'image' || type === 'color') return !selected;
+    
+    if (type === 'monogram') {
+      if (selections.monogram.enabled === null) return true;
+      if (selections.monogram.enabled) {
+        return !selections.monogram.initials || 
+               !selections.monogram.location || 
+               !selections.monogram.font || 
+               !selections.monogram.color;
+      }
+      return false;
     }
-    if (currentStep < totalSteps) {
+    
+    if (type === 'yesno') {
+      return options.some(opt => selections[opt.id] === null);
+    }
+    
+    return false;
+  };
+
+  // Handle navigation to next step
+  const handleNext = () => {
+    const maxSteps = currentConfig.steps;
+    if (currentStep < maxSteps) {
       setCurrentStep(currentStep + 1);
+    } else {
+      // Submit all selections and add to cart
+      const customizedItem = {
+        id: `${product?.id || 'blazer'}_${Date.now()}`, // Unique ID for customized item
+        name: product?.name || 'Custom Blazer',
+        price: product?.price || 0,
+        selectedSize: product?.selectedSize || 'Default',
+        quantity: product?.quantity || 1,
+        image: product?.image,
+        customizations: selections,
+        category: 'blazer',
+        isCustomized: true
+      };
+      
+      addToCart(customizedItem);
+      Alert.alert(
+        'Blazer Customized!', 
+        `Your customized ${product?.name || 'blazer'} has been added to cart.`,
+        [
+          {
+            text: 'Continue Shopping',
+            onPress: () => navigation.navigate('ShopMain')
+          },
+          {
+            text: 'View Cart',
+            onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' })
+          }
+        ]
+      );
     }
   };
 
-  const prevStep = () => {
-    if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
-    }
-  };
 
-  const isStepComplete = () => {
-    const currentConfig = getCurrentOptions();
-    if (currentConfig.type === 'monogram') {
-      return true; // Monogram is optional
-    }
-    return currentConfig.selected !== null;
-  };
-
-  const handleAddToCart = () => {
-    if (!selections.fabric || !selections.lapel || !selections.buttons || !selections.vents || !selections.pockets) {
-      Alert.alert('Incomplete Selection', 'Please complete all required customization steps.');
-      return;
-    }
-
-    if (currentStep === 6 && monogramText.trim()) {
-      handleMonogramComplete();
-    }
-
-    const customBlazer = {
-      id: Date.now().toString(),
-      name: 'Custom Blazer',
-      price: parseFloat(selections.fabric?.price?.replace('$', '') || '299'),
-      image: selections.fabric?.img,
-      quantity: 1,
-      customizations: {
-        ...selections,
-        monogram: monogramText.trim() ? {
-          text: monogramText.trim(),
-          location: monogramLocation,
-          font: monogramFont,
-          color: monogramColor
-        } : null
-      },
-      type: 'blazer'
-    };
-
-    addToCart(customBlazer);
-    Alert.alert('Success', 'Custom blazer added to cart!', [
-      { text: 'Continue Shopping', onPress: () => navigation.goBack() },
-      { text: 'View Cart', onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' }) }
-    ]);
-  };
-
-  const currentConfig = getCurrentOptions();
-  if (!currentConfig) return null;
+  const { title, options, selected, type } = getCurrentOptions();
 
   return (
     <View style={styles.container}>
-      {/* MTailor-style Header */}
-      <View style={styles.header}>
+      {/* Header with Back Button */}
+      <View style={styles.headerContainer}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-          <Ionicons name="arrow-back" size={24} color="#333" />
+          <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
-        <View style={styles.headerContent}>
-          <Text style={styles.headerTitle}>Custom Blazer</Text>
-          <Text style={styles.stepCounter}>Step {currentStep} of {totalSteps}</Text>
-        </View>
+        <Text style={styles.header}>{title}</Text>
         <View style={styles.placeholder} />
       </View>
-
-      {/* Progress Bar */}
-      <View style={styles.progressContainer}>
-        <View style={[styles.progressBar, { width: `${(currentStep / totalSteps) * 100}%` }]} />
+      
+      <View style={styles.content}>
+        {/* Step indicators - dynamic based on category */}
+        <View style={styles.stepsContainer}>
+        {Array.from({ length: currentConfig.steps }, (_, i) => i + 1).map((step) => (
+          <Text 
+            key={step} 
+            style={[
+              styles.stepNumber,
+              currentStep === step && styles.activeStep,
+              step < currentStep && styles.completedStep
+            ]}
+          >
+            {step}
+          </Text>
+        ))}
       </View>
 
-      <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-        {/* Step Title */}
-        <View style={styles.stepHeader}>
-          <Text style={styles.stepTitle}>{currentConfig.title}</Text>
-          <Text style={styles.stepSubtitle}>{currentConfig.subtitle}</Text>
-        </View>
+      {/* Image selection screens (steps 1-3) */}
+      {type === 'image' && (
+        <>
+          <View style={styles.divider} />
 
-        {/* Monogram Step */}
-        {currentConfig.type === 'monogram' ? (
-          <View style={styles.monogramContainer}>
-            <View style={styles.monogramSection}>
-              <Text style={styles.monogramSectionTitle}>Monogram Text (2-3 characters)</Text>
-              <TextInput
-                style={styles.monogramInput}
-                value={monogramText}
-                onChangeText={setMonogramText}
-                placeholder="Enter initials (e.g., JD)"
-                maxLength={3}
-                autoCapitalize="characters"
+          {/* Selected option preview */}
+          {selected && (
+            <>
+              <Image 
+                source={options.find(opt => opt.id === selected).img}
+                style={styles.previewImage}
               />
-            </View>
+              <Text style={styles.optionName}>
+                {options.find(opt => opt.id === selected).name}
+              </Text>
+              <Text style={styles.optionDesc}>
+                {options.find(opt => opt.id === selected).desc}
+              </Text>
+            </>
+          )}
 
-            {monogramText.trim() && (
-              <>
-                <View style={styles.monogramSection}>
-                  <Text style={styles.monogramSectionTitle}>Choose Location</Text>
-                  <View style={styles.monogramOptions}>
-                    {monogramLocations.map((location) => (
-                      <TouchableOpacity
-                        key={location.id}
-                        style={[
-                          styles.monogramOption,
-                          monogramLocation?.id === location.id && styles.selectedMonogramOption
-                        ]}
-                        onPress={() => setMonogramLocation(location)}
-                      >
-                        <Text style={[
-                          styles.monogramOptionText,
-                          monogramLocation?.id === location.id && styles.selectedMonogramOptionText
-                        ]}>
-                          {location.name}
-                        </Text>
-                        <Text style={styles.monogramOptionDesc}>{location.desc}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
+          <View style={styles.divider} />
 
-                <View style={styles.monogramSection}>
-                  <Text style={styles.monogramSectionTitle}>Choose Font</Text>
-                  <View style={styles.monogramOptions}>
-                    {monogramFonts.map((font) => (
-                      <TouchableOpacity
-                        key={font.id}
-                        style={[
-                          styles.monogramOption,
-                          monogramFont?.id === font.id && styles.selectedMonogramOption
-                        ]}
-                        onPress={() => setMonogramFont(font)}
-                      >
-                        <Text style={[
-                          styles.monogramOptionText,
-                          monogramFont?.id === font.id && styles.selectedMonogramOptionText
-                        ]}>
-                          {font.name}
-                        </Text>
-                        <Text style={styles.monogramOptionDesc}>{font.desc}</Text>
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-
-                <View style={styles.monogramSection}>
-                  <Text style={styles.monogramSectionTitle}>Choose Thread Color</Text>
-                  <View style={styles.colorOptions}>
-                    {monogramColors.map((colorOption) => (
-                      <TouchableOpacity
-                        key={colorOption.id}
-                        style={[
-                          styles.colorOption,
-                          { backgroundColor: colorOption.color },
-                          monogramColor?.id === colorOption.id && styles.selectedColorOption
-                        ]}
-                        onPress={() => setMonogramColor(colorOption)}
-                      >
-                        {monogramColor?.id === colorOption.id && (
-                          <Ionicons name="checkmark" size={16} color="white" />
-                        )}
-                      </TouchableOpacity>
-                    ))}
-                  </View>
-                </View>
-              </>
-            )}
-          </View>
-        ) : (
-          /* Options Grid */
-          <View style={styles.optionsContainer}>
-            {currentConfig.options.map((option) => (
+          {/* Options list */}
+          <ScrollView contentContainerStyle={styles.optionsContainer}>
+            {options.map((option) => (
               <TouchableOpacity
                 key={option.id}
                 style={[
-                  styles.optionCard,
-                  currentConfig.selected?.id === option.id && styles.selectedOption,
-                  option.popular && styles.popularOption
+                  styles.optionButton,
+                  selected === option.id && styles.selectedOption
                 ]}
-                onPress={() => handleSelection(option, currentConfig.field)}
+                onPress={() => handleImageSelect(option.id)}
               >
-                {option.popular && (
-                  <View style={styles.popularBadge}>
-                    <Text style={styles.popularText}>POPULAR</Text>
-                  </View>
-                )}
-                
                 <Image source={option.img} style={styles.optionImage} />
-                
-                <View style={styles.optionContent}>
-                  <Text style={styles.optionName}>{option.name}</Text>
-                  <Text style={styles.optionDesc}>{option.desc}</Text>
-                  
-                  {option.price && (
-                    <Text style={styles.optionPrice}>{option.price}</Text>
-                  )}
-
-                  {currentConfig.selected?.id === option.id && (
-                    <View style={styles.selectedIndicator}>
-                      <Ionicons name="checkmark-circle" size={20} color="#007AFF" />
-                      <Text style={styles.selectedText}>Selected</Text>
-                    </View>
-                  )}
+                <View>
+                  <Text style={styles.optionText}>{option.name}</Text>
+                  <Text style={styles.optionSubtext}>{option.desc}</Text>
                 </View>
               </TouchableOpacity>
             ))}
-          </View>
-        )}
-      </ScrollView>
+          </ScrollView>
+        </>
+      )}
 
-      {/* MTailor-style Navigation Footer */}
-      <View style={styles.footer}>
-        <View style={styles.navigationButtons}>
-          {currentStep > 1 && (
-            <TouchableOpacity onPress={prevStep} style={styles.prevButton}>
-              <Ionicons name="arrow-back" size={16} color="#666" />
-              <Text style={styles.prevButtonText}>Previous</Text>
-            </TouchableOpacity>
+      {/* Color selection screen */}
+      {type === 'color' && (
+        <>
+          <View style={styles.divider} />
+
+          {/* Selected color preview */}
+          {selected && (
+            <>
+              <View style={[styles.selectedColorPreview, { backgroundColor: options.find(opt => opt.id === selected).color }]} />
+              <Text style={styles.optionName}>
+                {options.find(opt => opt.id === selected).name}
+              </Text>
+              <Text style={styles.optionDesc}>
+                {options.find(opt => opt.id === selected).desc}
+              </Text>
+            </>
           )}
-          
-          <View style={styles.spacer} />
-          
-          {currentStep < totalSteps ? (
-            <TouchableOpacity 
-              onPress={nextStep} 
-              style={[styles.nextButton, !isStepComplete() && styles.disabledButton]}
-              disabled={!isStepComplete()}
-            >
-              <Text style={styles.nextButtonText}>Next Step</Text>
-              <Ionicons name="arrow-forward" size={16} color="white" />
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity 
-              onPress={handleAddToCart} 
-              style={styles.addToCartButton}
-            >
-              <Ionicons name="bag-add" size={16} color="white" style={{marginRight: 8}} />
-              <Text style={styles.addToCartText}>Add to Cart</Text>
-            </TouchableOpacity>
+
+          <View style={styles.divider} />
+
+          {/* Color options list */}
+          <ScrollView contentContainerStyle={styles.optionsContainer}>
+            {options.map((option) => (
+              <TouchableOpacity
+                key={option.id}
+                style={[
+                  styles.colorOptionButton,
+                  selected === option.id && styles.selectedOption
+                ]}
+                onPress={() => handleColorSelect(option.id)}
+              >
+                <View style={[styles.colorSwatch, { backgroundColor: option.color }]} />
+                <View style={styles.colorInfo}>
+                  <Text style={styles.optionText}>{option.name}</Text>
+                  <Text style={styles.optionSubtext}>{option.desc}</Text>
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </>
+      )}
+
+      {/* Monogram screen (step 5) */}
+      {type === 'monogram' && (
+        <ScrollView contentContainerStyle={styles.monogramContainer}>
+          {/* Monogram toggle */}
+          <View style={styles.yesnoOption}>
+            <Text style={styles.yesnoQuestion}>Do you want a monogram (initials)?</Text>
+            <View style={styles.yesnoButtons}>
+              <TouchableOpacity
+                style={[
+                  styles.yesnoButton,
+                  selections.monogram.enabled === false && styles.selectedYesNo
+                ]}
+                onPress={() => handleMonogramSelect('enabled', false)}
+              >
+                <Text style={[
+                  styles.yesnoButtonText,
+                  selections.monogram.enabled === false && styles.selectedYesNoText
+                ]}>NO</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[
+                  styles.yesnoButton,
+                  selections.monogram.enabled === true && styles.selectedYesNo
+                ]}
+                onPress={() => handleMonogramSelect('enabled', true)}
+              >
+                <Text style={[
+                  styles.yesnoButtonText,
+                  selections.monogram.enabled === true && styles.selectedYesNoText
+                ]}>YES</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+
+          {selections.monogram.enabled && (
+            <>
+              {/* Initials input */}
+              <View style={styles.monogramSection}>
+                <Text style={styles.sectionTitle}>Add your initials (2 or 3 letters)</Text>
+                <TextInput
+                  style={styles.initialsInput}
+                  maxLength={3}
+                  value={selections.monogram.initials}
+                  onChangeText={text => handleMonogramSelect('initials', text.toUpperCase())}
+                  placeholder="DA"
+                />
+              </View>
+
+              {/* Location selection */}
+              <View style={styles.monogramSection}>
+                <Text style={styles.sectionTitle}>Select a monogram location</Text>
+                <Text style={styles.chooseOne}>CHOOSE ONE</Text>
+                <View style={styles.optionsRow}>
+                  {monogramLocations.map(location => (
+                    <TouchableOpacity
+                      key={location.id}
+                      style={[
+                        styles.monogramOption,
+                        selections.monogram.location === location.id && styles.selectedMonogramOption
+                      ]}
+                      onPress={() => handleMonogramSelect('location', location.id)}
+                    >
+                      <Text>{location.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {/* Font selection */}
+              <View style={styles.monogramSection}>
+                <Text style={styles.sectionTitle}>Select a monogram font</Text>
+                <View style={styles.fontOptions}>
+                  {monogramFonts.map(font => (
+                    <TouchableOpacity
+                      key={font.id}
+                      style={[
+                        styles.fontOption,
+                        selections.monogram.font === font.id && styles.selectedFontOption
+                      ]}
+                      onPress={() => handleMonogramSelect('font', font.id)}
+                    >
+                      <Text style={styles.fontSample}>{font.sample}</Text>
+                      <Text style={styles.fontName}>{font.name}</Text>
+                    </TouchableOpacity>
+                  ))}
+                </View>
+              </View>
+
+              {/* Thread color selection */}
+              <View style={styles.monogramSection}>
+                <Text style={styles.sectionTitle}>Select a thread color (view your fabric)</Text>
+                <Text style={styles.chooseOne}>CHOOSE ONE</Text>
+                <View style={styles.colorOptions}>
+                  {threadColors.map(color => (
+                    <TouchableOpacity
+                      key={color.id}
+                      style={[
+                        styles.colorOption,
+                        { backgroundColor: color.color },
+                        selections.monogram.color === color.id && styles.selectedColorOption
+                      ]}
+                      onPress={() => handleMonogramSelect('color', color.id)}
+                    />
+                  ))}
+                </View>
+              </View>
+            </>
           )}
-        </View>
+        </ScrollView>
+      )}
+
+      {/* Yes/No options screens (steps 5-7) */}
+      {type === 'yesno' && (
+        <ScrollView contentContainerStyle={styles.yesnoContainer}>
+          {options.map((option) => (
+            <View key={option.id} style={styles.yesnoOption}>
+              <Text style={styles.yesnoQuestion}>
+                {option.name}{option.price > 0 ? ` (+$${option.price})` : ''}
+              </Text>
+              <View style={styles.yesnoButtons}>
+                <TouchableOpacity
+                  style={[
+                    styles.yesnoButton,
+                    selections[option.id] === false && styles.selectedYesNo
+                  ]}
+                  onPress={() => handleYesNoSelect(option.id, false)}
+                >
+                  <Text style={[
+                    styles.yesnoButtonText,
+                    selections[option.id] === false && styles.selectedYesNoText
+                  ]}>NO</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={[
+                    styles.yesnoButton,
+                    selections[option.id] === true && styles.selectedYesNo
+                  ]}
+                  onPress={() => handleYesNoSelect(option.id, true)}
+                >
+                  <Text style={[
+                    styles.yesnoButtonText,
+                    selections[option.id] === true && styles.selectedYesNoText
+                  ]}>YES</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          ))}
+        </ScrollView>
+      )}
+
+      {/* Navigation button */}
+      <TouchableOpacity
+        style={[
+          styles.nextButton,
+          isNextDisabled() && styles.disabledButton
+        ]}
+        onPress={handleNext}
+        disabled={isNextDisabled()}
+      >
+        <Text style={styles.nextButtonText}>
+          {currentStep === currentConfig.steps ? 'DONE' : 'NEXT'}
+        </Text>
+      </TouchableOpacity>
       </View>
     </View>
   );
@@ -545,273 +532,263 @@ const CustomizeBlazersScreen = ({ route }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#ffffff',
+    backgroundColor: '#fff'
   },
-  header: {
+  headerContainer: {
+    paddingTop: 50,
+    paddingHorizontal: 15,
+    paddingBottom: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    paddingTop: 60,
-    paddingHorizontal: 20,
-    paddingBottom: 16,
-    backgroundColor: '#ffffff',
-    borderBottomWidth: 1,
-    borderBottomColor: '#f0f0f0',
+    backgroundColor: '#fff',
+    elevation: 4,
   },
   backButton: {
-    padding: 8,
+    padding: 5,
   },
-  headerContent: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  headerTitle: {
-    fontSize: 18,
+  header: {
+    fontSize: 20,
     fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
-  },
-  stepCounter: {
-    fontSize: 14,
-    color: '#666',
+    textAlign: 'center',
   },
   placeholder: {
-    width: 40,
-  },
-  progressContainer: {
-    height: 3,
-    backgroundColor: '#f0f0f0',
-    marginHorizontal: 20,
-  },
-  progressBar: {
-    height: 3,
-    backgroundColor: '#007AFF',
-    borderRadius: 1.5,
+    width: 34, // Same width as back button for centering
   },
   content: {
     flex: 1,
-    paddingHorizontal: 20,
+    padding: 20,
   },
-  stepHeader: {
-    paddingVertical: 24,
-    alignItems: 'center',
+  stepsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    marginVertical: 15
   },
-  stepTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 8,
-    textAlign: 'center',
-  },
-  stepSubtitle: {
+  stepNumber: {
     fontSize: 16,
-    color: '#666',
-    textAlign: 'center',
-    lineHeight: 22,
+    marginHorizontal: 8,
+    color: '#ccc',
+    fontWeight: 'bold'
   },
-  optionsContainer: {
-    paddingBottom: 100,
+  activeStep: {
+    color: '#000',
+    fontSize: 18
   },
-  optionCard: {
-    backgroundColor: 'white',
-    borderRadius: 12,
-    marginBottom: 20,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 8,
-    elevation: 4,
-    borderWidth: 2,
-    borderColor: 'transparent',
-    position: 'relative',
+  completedStep: {
+    color: '#666'
   },
-  selectedOption: {
-    borderColor: '#007AFF',
-    shadowColor: '#007AFF',
-    shadowOpacity: 0.3,
+  divider: {
+    height: 1,
+    backgroundColor: '#eee',
+    marginVertical: 10
   },
-  popularOption: {
-    borderColor: '#FF3B30',
-  },
-  popularBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    zIndex: 1,
-  },
-  popularText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
-  },
-  optionImage: {
+  previewImage: {
     width: '100%',
     height: 200,
-    resizeMode: 'cover',
-  },
-  optionContent: {
-    padding: 16,
+    resizeMode: 'contain',
+    marginVertical: 10
   },
   optionName: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 6,
+    fontWeight: '600',
+    textAlign: 'center'
   },
   optionDesc: {
     fontSize: 16,
+    textAlign: 'center',
     color: '#666',
-    lineHeight: 22,
-    marginBottom: 12,
+    marginBottom: 10
   },
-  optionPrice: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#4CAF50',
-    marginBottom: 8,
+  optionsContainer: {
+    paddingBottom: 20
   },
-  selectedIndicator: {
+  optionButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 8,
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#eee',
+    borderRadius: 8
   },
-  selectedText: {
-    marginLeft: 6,
+  selectedOption: {
+    borderColor: '#000',
+    backgroundColor: '#f8f8f8'
+  },
+  optionImage: {
+    width: 60,
+    height: 60,
+    resizeMode: 'contain',
+    marginRight: 15
+  },
+  optionText: {
     fontSize: 16,
-    color: '#007AFF',
-    fontWeight: '600',
+    fontWeight: '500'
   },
+  optionSubtext: {
+    fontSize: 14,
+    color: '#666'
+  },
+  // Color selection styles
+  selectedColorPreview: {
+    width: '100%',
+    height: 150,
+    borderRadius: 8,
+    marginVertical: 10,
+    borderWidth: 2,
+    borderColor: '#ddd'
+  },
+  colorOptionButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 12,
+    marginBottom: 10,
+    borderWidth: 1,
+    borderColor: '#eee',
+    borderRadius: 8
+  },
+  colorSwatch: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+    marginRight: 15,
+    borderWidth: 2,
+    borderColor: '#ddd'
+  },
+  colorInfo: {
+    flex: 1
+  },
+  // Monogram styles
   monogramContainer: {
-    paddingBottom: 100,
+    padding: 20,
+    paddingBottom: 40
   },
   monogramSection: {
-    marginBottom: 32,
+    marginBottom: 25
   },
-  monogramSectionTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 16,
-  },
-  monogramInput: {
-    borderWidth: 2,
-    borderColor: '#f0f0f0',
-    borderRadius: 8,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    fontSize: 18,
-    textAlign: 'center',
-    textTransform: 'uppercase',
-  },
-  monogramOptions: {
-    flexDirection: 'column',
-  },
-  monogramOption: {
-    borderWidth: 2,
-    borderColor: '#f0f0f0',
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 12,
-  },
-  selectedMonogramOption: {
-    borderColor: '#007AFF',
-    backgroundColor: '#f8f9ff',
-  },
-  monogramOptionText: {
+  sectionTitle: {
     fontSize: 16,
-    fontWeight: 'bold',
-    color: '#333',
-    marginBottom: 4,
+    fontWeight: '500',
+    marginBottom: 10
   },
-  selectedMonogramOptionText: {
-    color: '#007AFF',
-  },
-  monogramOptionDesc: {
+  chooseOne: {
     fontSize: 14,
     color: '#666',
+    marginBottom: 15,
+    fontStyle: 'italic'
+  },
+  initialsInput: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    fontSize: 16,
+    width: 80,
+    textAlign: 'center',
+    textTransform: 'uppercase'
+  },
+  optionsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  monogramOption: {
+    borderWidth: 1,
+    borderColor: '#ccc',
+    padding: 12,
+    borderRadius: 5,
+    width: '30%',
+    alignItems: 'center'
+  },
+  selectedMonogramOption: {
+    borderColor: '#000',
+    backgroundColor: '#f5f5f5'
+  },
+  fontOptions: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    marginTop: 10
+  },
+  fontOption: {
+    alignItems: 'center',
+    width: '30%'
+  },
+  selectedFontOption: {
+    backgroundColor: '#f5f5f5',
+    borderRadius: 5,
+    padding: 5
+  },
+  fontSample: {
+    fontSize: 24,
+    marginBottom: 5,
+    fontFamily: 'serif'
+  },
+  fontName: {
+    fontSize: 14
   },
   colorOptions: {
     flexDirection: 'row',
-    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginTop: 10
   },
   colorOption: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    marginRight: 16,
-    marginBottom: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderWidth: 3,
-    borderColor: 'transparent',
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: '#ccc'
   },
   selectedColorOption: {
-    borderColor: '#007AFF',
+    borderWidth: 2,
+    borderColor: '#000'
   },
-  footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    backgroundColor: 'white',
-    paddingHorizontal: 20,
-    paddingTop: 16,
-    paddingBottom: 32,
-    borderTopWidth: 1,
-    borderTopColor: '#f0f0f0',
+  // Yes/No styles
+  yesnoContainer: {
+    paddingVertical: 20
   },
-  navigationButtons: {
+  yesnoOption: {
+    marginBottom: 25
+  },
+  yesnoQuestion: {
+    fontSize: 18,
+    marginBottom: 10,
+    fontWeight: '500'
+  },
+  yesnoButtons: {
     flexDirection: 'row',
-    alignItems: 'center',
+    justifyContent: 'space-around'
   },
-  prevButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  yesnoButton: {
     paddingVertical: 12,
-    paddingHorizontal: 16,
+    paddingHorizontal: 40,
+    borderWidth: 1,
+    borderColor: '#ccc',
+    borderRadius: 5
   },
-  prevButtonText: {
-    marginLeft: 6,
+  selectedYesNo: {
+    backgroundColor: '#000',
+    borderColor: '#000'
+  },
+  yesnoButtonText: {
     fontSize: 16,
-    color: '#666',
+    fontWeight: 'bold'
   },
-  spacer: {
-    flex: 1,
+  selectedYesNoText: {
+    color: '#fff'
   },
+  // Next button
   nextButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#007AFF',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
+    backgroundColor: '#000',
+    padding: 16,
     borderRadius: 8,
-  },
-  nextButtonText: {
-    marginRight: 6,
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
-  },
-  addToCartButton: {
-    flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: '#4CAF50',
-    paddingVertical: 16,
-    paddingHorizontal: 24,
-    borderRadius: 8,
-  },
-  addToCartText: {
-    fontSize: 16,
-    color: 'white',
-    fontWeight: 'bold',
+    marginTop: 10
   },
   disabledButton: {
-    backgroundColor: '#ccc',
+    opacity: 0.5
+  },
+  nextButtonText: {
+    color: '#fff',
+    fontSize: 18,
+    fontWeight: 'bold'
   },
 });
 

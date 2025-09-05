@@ -26,7 +26,7 @@ const categories = [
     id: 2, 
     name: 'Custom Suits', 
     image: require('../assets/images/suits.jpg'), 
-    route: 'Suits',
+    route: 'SuitsScreen',
     price: 'Starting at $399',
     subtitle: 'Tailored to perfection',
     description: 'Professional grade tailoring',
@@ -36,8 +36,7 @@ const categories = [
     id: 3, 
     name: 'Custom Jeans', 
     image: require('../assets/images/jeans.jpg'), 
-    route: 'CategoryItems', 
-    categoryName: 'JEANS',
+    route: 'JeansScreen',
     price: 'Starting at $99',
     subtitle: 'Your perfect fit',
     description: 'Precision fit technology',
@@ -47,7 +46,7 @@ const categories = [
     id: 4, 
     name: 'Custom Blazers', 
     image: require('../assets/images/blazzers.webp'), 
-    route: 'CustomizeBlazersScreen',
+    route: 'BlazersScreen',
     price: 'Starting at $299',
     subtitle: 'Business ready',
     description: 'Expert craftsmanship',
@@ -57,10 +56,30 @@ const categories = [
     id: 5, 
     name: 'Custom Pants', 
     image: require('../assets/images/dress pant.webp'), 
-    route: 'CustomizePantsScreen',
+    route: 'PantsScreen',
     price: 'Starting at $149',
     subtitle: 'Perfect fit, every time',
     description: 'Precision tailored to your measurements',
+    height: 320
+  },
+  { 
+    id: 6, 
+    name: 'African Wear', 
+    image: require('../assets/images/jeans.jpg'), 
+    route: 'AfricaWearScreen',
+    price: 'Starting at $69',
+    subtitle: 'Traditional & modern styles',
+    description: 'Authentic African fashion',
+    height: 320
+  },
+  { 
+    id: 7, 
+    name: 'Clothing Store', 
+    image: require('../assets/images/men short.jpg'), 
+    route: 'ClothingStoreScreen',
+    price: 'Starting at $29',
+    subtitle: 'Everyday essentials',
+    description: 'Casual to semi-formal wear',
     height: 320
   },
 ];
@@ -75,16 +94,16 @@ export default function ShopScreen({ navigation }) {
   };
 
   const handleBuyNow = (category) => {
-    navigation.navigate('ProductDetailScreen', { 
-      product: {
-        id: category.id,
-        name: category.name,
-        price: category.price,
-        image: category.image,
-        description: category.description,
-        subtitle: category.subtitle
-      }
-    });
+    if (category.categoryName) {
+      navigation.navigate(category.route, { 
+        categoryName: category.categoryName,
+        viewOnly: true 
+      });
+    } else {
+      navigation.navigate(category.route, { 
+        viewOnly: true 
+      });
+    }
   };
 
   return (

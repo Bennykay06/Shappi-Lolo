@@ -11,7 +11,7 @@ const CustomizeSuitScreen = ({ route }) => {
   const product = suit || item;
   console.log('Customizing item:', product, 'Category:', category);
   
-  // Track current step (1-7)
+  // Track current step (1-6)
   const [currentStep, setCurrentStep] = useState(1);
   
   // Store all user selections - dynamic based on category
@@ -27,57 +27,23 @@ const CustomizeSuitScreen = ({ route }) => {
       }
     };
 
-    // Add category-specific selections
-    if (category === 'suit') {
-      return {
-        ...base,
-        lapel: null,
-        buttons: null,
-        vents: null,
-        pleatedPants: null,
-        suspenderButtons: null,
-        cuffedHem: null,
-        vest: null,
-        functionalButtonholes: null,
-        phonePocket: null
-      };
-    } else if (category === 'shirt') {
-      return {
-        ...base,
-        collar: null,
-        cuffs: null,
-        fit: null,
-        pocketStyle: null,
-        hemStyle: null
-      };
-    } else if (category === 'blazer') {
-      return {
-        ...base,
-        lapel: null,
-        buttons: null,
-        vents: null,
-        lining: null,
-        pocketSquare: null
-      };
-    } else if (category === 'dress pants') {
-      return {
-        ...base,
-        fit: null,
-        pleats: null,
-        cuff: null,
-        waistAdjustment: null,
-        hemAdjustment: null
-      };
-    }
-    return base;
+    // Add suit-specific selections
+    return {
+      ...base,
+      lapel: null,
+      buttons: null,
+      vents: null,
+      lining: null,
+      pocketSquare: null
+    };
   };
 
   const [selections, setSelections] = useState(getInitialSelections());
 
-  // Customization configurations by category
+  // Customization configurations - using same format as blazer
   const customizationConfigs = {
     suit: {
-      steps: 8,
+      steps: 6, // fabric, lapel, buttons, vents, monogram, additional
       options: {
         fabric: [
           { id: 1, name: 'Navy Performance Blend', desc: 'Classic professional', color: '#001f3f' },
@@ -102,67 +68,10 @@ const CustomizeSuitScreen = ({ route }) => {
           { id: 2, name: 'Side Vents', desc: 'Modern tailored look', img: require('../assets/images/two vents.jpg') }
         ]
       }
-    },
-    shirt: {
-      steps: 6,
-      options: {
-        collar: [
-          { id: 1, name: 'Point Collar', desc: 'Classic formal style', img: require('../assets/images/men shirt.jpg') },
-          { id: 2, name: 'Spread Collar', desc: 'Modern professional', img: require('../assets/images/men shirt.jpg') },
-          { id: 3, name: 'Button Down', desc: 'Casual versatile', img: require('../assets/images/men shirt.jpg') }
-        ],
-        cuffs: [
-          { id: 1, name: 'One Button', desc: 'Classic everyday', img: require('../assets/images/men shirt.jpg') },
-          { id: 2, name: 'Two Button', desc: 'Traditional style', img: require('../assets/images/men shirt.jpg') },
-          { id: 3, name: 'French Cuffs', desc: 'Formal elegant', img: require('../assets/images/men shirt.jpg') }
-        ],
-        fit: [
-          { id: 1, name: 'Slim Fit', desc: 'Modern tailored', img: require('../assets/images/men shirt.jpg') },
-          { id: 2, name: 'Regular Fit', desc: 'Classic comfort', img: require('../assets/images/men shirt.jpg') },
-          { id: 3, name: 'Relaxed Fit', desc: 'Comfortable loose', img: require('../assets/images/men shirt.jpg') }
-        ]
-      }
-    },
-    blazer: {
-      steps: 6,
-      options: {
-        lapel: [
-          { id: 1, name: 'Notch Lapel', desc: 'Versatile classic', img: require('../assets/images/suits.jpg') },
-          { id: 2, name: 'Peak Lapel', desc: 'Formal statement', img: require('../assets/images/suits.jpg') }
-        ],
-        buttons: [
-          { id: 1, name: 'One Button', desc: 'Modern minimalist', img: require('../assets/images/suits.jpg') },
-          { id: 2, name: 'Two Buttons', desc: 'Traditional style', img: require('../assets/images/suits.jpg') }
-        ],
-        vents: [
-          { id: 1, name: 'No Vent', desc: 'Clean silhouette', img: require('../assets/images/suits.jpg') },
-          { id: 2, name: 'Center Vent', desc: 'Classic comfort', img: require('../assets/images/suits.jpg') },
-          { id: 3, name: 'Side Vents', desc: 'Modern tailored', img: require('../assets/images/suits.jpg') }
-        ]
-      }
-    },
-    'dress pants': {
-      steps: 5,
-      options: {
-        fit: [
-          { id: 1, name: 'Slim Fit', desc: 'Modern tailored', img: require('../assets/images/suits.jpg') },
-          { id: 2, name: 'Regular Fit', desc: 'Classic comfort', img: require('../assets/images/suits.jpg') },
-          { id: 3, name: 'Relaxed Fit', desc: 'Comfortable loose', img: require('../assets/images/suits.jpg') }
-        ],
-        pleats: [
-          { id: 1, name: 'Flat Front', desc: 'Clean modern look', img: require('../assets/images/suits.jpg') },
-          { id: 2, name: 'Single Pleat', desc: 'Traditional style', img: require('../assets/images/suits.jpg') },
-          { id: 3, name: 'Double Pleat', desc: 'Classic formal', img: require('../assets/images/suits.jpg') }
-        ],
-        cuff: [
-          { id: 1, name: 'No Cuff', desc: 'Modern clean', img: require('../assets/images/suits.jpg') },
-          { id: 2, name: 'Cuffed', desc: 'Traditional formal', img: require('../assets/images/suits.jpg') }
-        ]
-      }
     }
   };
 
-  const currentConfig = customizationConfigs[category] || customizationConfigs.suit;
+  const currentConfig = customizationConfigs['suit'];
 
   // Monogram customization options
   const monogramLocations = [
@@ -184,195 +93,51 @@ const CustomizeSuitScreen = ({ route }) => {
     { id: 4, name: 'Silver', color: '#dddddd' }
   ];
 
-  // Get configuration for current step - dynamic based on category
+  // Get configuration for current step - suit customization
   const getCurrentOptions = () => {
-    if (category === 'suit') {
-      switch(currentStep) {
-        case 1: return { 
-          title: 'Fabric Color', 
-          options: currentConfig.options.fabric,
-          selected: selections.fabric,
-          type: 'color',
-          field: 'fabric'
-        };
-        case 2: return { 
-          title: 'Lapel Style', 
-          options: currentConfig.options.lapel,
-          selected: selections.lapel,
-          type: 'image',
-          field: 'lapel'
-        };
-        case 3: return { 
-          title: 'Button Arrangement', 
-          options: currentConfig.options.buttons,
-          selected: selections.buttons,
-          type: 'image',
-          field: 'buttons'
-        };
-        case 4: return { 
-          title: 'Vent Style', 
-          options: currentConfig.options.vents,
-          selected: selections.vents,
-          type: 'image',
-          field: 'vents'
-        };
-        case 5: return {
-          title: 'Monogram',
-          type: 'monogram'
-        };
-        case 6: return {
-          title: 'Additional Options',
-          options: [
-            { id: 'pleatedPants', name: 'Do you want pleated pants?', price: 0 },
-            { id: 'suspenderButtons', name: 'Do you want suspender buttons?', price: 0 },
-            { id: 'cuffedHem', name: 'Do you want a cuffed hem?', price: 0 }
-          ],
-          type: 'yesno'
-        };
-        case 7: return {
-          title: 'Additional Options',
-          options: [
-            { id: 'vest', name: 'Would you like a vest?', price: 135 },
-            { id: 'functionalButtonholes', name: 'Would you like functional buttonholes?', price: 99 }
-          ],
-          type: 'yesno'
-        };
-        case 8: return {
-          title: 'Additional Options',
-          options: [
-            { id: 'phonePocket', name: 'Do you want a cell phone pocket?', price: 0 }
-          ],
-          type: 'yesno'
-        };
-        default: return { title: '', options: [], selected: null, type: '' };
-      }
-    } else if (category === 'shirt') {
-      switch(currentStep) {
-        case 1: return { 
-          title: 'Collar Style', 
-          options: currentConfig.options.collar,
-          selected: selections.collar,
-          type: 'image',
-          field: 'collar'
-        };
-        case 2: return { 
-          title: 'Cuff Style', 
-          options: currentConfig.options.cuffs,
-          selected: selections.cuffs,
-          type: 'image',
-          field: 'cuffs'
-        };
-        case 3: return { 
-          title: 'Fit Style', 
-          options: currentConfig.options.fit,
-          selected: selections.fit,
-          type: 'image',
-          field: 'fit'
-        };
-        case 4: return {
-          title: 'Monogram',
-          type: 'monogram'
-        };
-        case 5: return {
-          title: 'Additional Options',
-          options: [
-            { id: 'pocketStyle', name: 'Do you want a chest pocket?', price: 0 },
-            { id: 'hemStyle', name: 'Do you want a curved hem?', price: 0 }
-          ],
-          type: 'yesno'
-        };
-        case 6: return {
-          title: 'Final Touches',
-          options: [
-            { id: 'extraLength', name: 'Do you need extra shirt length?', price: 15 }
-          ],
-          type: 'yesno'
-        };
-        default: return { title: '', options: [], selected: null, type: '' };
-      }
-    } else if (category === 'blazer') {
-      switch(currentStep) {
-        case 1: return { 
-          title: 'Lapel Style', 
-          options: currentConfig.options.lapel,
-          selected: selections.lapel,
-          type: 'image',
-          field: 'lapel'
-        };
-        case 2: return { 
-          title: 'Button Style', 
-          options: currentConfig.options.buttons,
-          selected: selections.buttons,
-          type: 'image',
-          field: 'buttons'
-        };
-        case 3: return { 
-          title: 'Vent Style', 
-          options: currentConfig.options.vents,
-          selected: selections.vents,
-          type: 'image',
-          field: 'vents'
-        };
-        case 4: return {
-          title: 'Monogram',
-          type: 'monogram'
-        };
-        case 5: return {
-          title: 'Additional Options',
-          options: [
-            { id: 'lining', name: 'Do you want custom lining?', price: 50 },
-            { id: 'pocketSquare', name: 'Do you want a pocket square pocket?', price: 25 }
-          ],
-          type: 'yesno'
-        };
-        case 6: return {
-          title: 'Final Touches',
-          options: [
-            { id: 'extraButtons', name: 'Do you want extra buttons provided?', price: 10 }
-          ],
-          type: 'yesno'
-        };
-        default: return { title: '', options: [], selected: null, type: '' };
-      }
-    } else if (category === 'dress pants') {
-      switch(currentStep) {
-        case 1: return { 
-          title: 'Fit Style', 
-          options: currentConfig.options.fit,
-          selected: selections.fit,
-          type: 'image',
-          field: 'fit'
-        };
-        case 2: return { 
-          title: 'Pleat Style', 
-          options: currentConfig.options.pleats,
-          selected: selections.pleats,
-          type: 'image',
-          field: 'pleats'
-        };
-        case 3: return { 
-          title: 'Cuff Style', 
-          options: currentConfig.options.cuff,
-          selected: selections.cuff,
-          type: 'image',
-          field: 'cuff'
-        };
-        case 4: return {
-          title: 'Monogram',
-          type: 'monogram'
-        };
-        case 5: return {
-          title: 'Additional Options',
-          options: [
-            { id: 'waistAdjustment', name: 'Do you need waist adjustment?', price: 20 },
-            { id: 'hemAdjustment', name: 'Do you need hem adjustment?', price: 15 }
-          ],
-          type: 'yesno'
-        };
-        default: return { title: '', options: [], selected: null, type: '' };
-      }
+    switch(currentStep) {
+      case 1: return { 
+        title: 'Fabric Color', 
+        options: currentConfig.options.fabric,
+        selected: selections.fabric,
+        type: 'color',
+        field: 'fabric'
+      };
+      case 2: return { 
+        title: 'Lapel Style', 
+        options: currentConfig.options.lapel,
+        selected: selections.lapel,
+        type: 'image',
+        field: 'lapel'
+      };
+      case 3: return { 
+        title: 'Button Arrangement', 
+        options: currentConfig.options.buttons,
+        selected: selections.buttons,
+        type: 'image',
+        field: 'buttons'
+      };
+      case 4: return { 
+        title: 'Vent Style', 
+        options: currentConfig.options.vents,
+        selected: selections.vents,
+        type: 'image',
+        field: 'vents'
+      };
+      case 5: return {
+        title: 'Monogram',
+        type: 'monogram'
+      };
+      case 6: return {
+        title: 'Additional Options',
+        options: [
+          { id: 'lining', name: 'Do you want custom lining?', price: 50 },
+          { id: 'pocketSquare', name: 'Do you want a pocket square pocket?', price: 25 }
+        ],
+        type: 'yesno'
+      };
+      default: return { title: '', options: [], selected: null, type: '' };
     }
-    return { title: '', options: [], selected: null, type: '' };
   };
 
   // Handle image selection
@@ -436,25 +201,25 @@ const CustomizeSuitScreen = ({ route }) => {
     } else {
       // Submit all selections and add to cart
       const customizedItem = {
-        id: `${product?.id || category}_${Date.now()}`, // Unique ID for customized item
-        name: product?.name || `Custom ${category}`,
+        id: `${product?.id || 'suit'}_${Date.now()}`, // Unique ID for customized item
+        name: product?.name || 'Custom Suit',
         price: product?.price || 0,
         selectedSize: product?.selectedSize || 'Default',
         quantity: product?.quantity || 1,
         image: product?.image,
         customizations: selections,
-        category: category,
+        category: 'suit',
         isCustomized: true
       };
       
       addToCart(customizedItem);
       Alert.alert(
-        `${category.charAt(0).toUpperCase() + category.slice(1)} Customized!`, 
-        `Your customized ${product?.name || category} has been added to cart.`,
+        'Suit Customized!', 
+        `Your customized ${product?.name || 'suit'} has been added to cart.`,
         [
           {
             text: 'Continue Shopping',
-            onPress: () => navigation.navigate('MainTabs', { screen: 'ShopTab' })
+            onPress: () => navigation.navigate('ShopMain')
           },
           {
             text: 'View Cart',
@@ -464,6 +229,7 @@ const CustomizeSuitScreen = ({ route }) => {
       );
     }
   };
+
 
   const { title, options, selected, type } = getCurrentOptions();
 
@@ -495,7 +261,7 @@ const CustomizeSuitScreen = ({ route }) => {
         ))}
       </View>
 
-      {/* Image selection screens (steps 1-3) */}
+      {/* Image selection screens */}
       {type === 'image' && (
         <>
           <View style={styles.divider} />
@@ -582,7 +348,7 @@ const CustomizeSuitScreen = ({ route }) => {
         </>
       )}
 
-      {/* Monogram screen (step 5) */}
+      {/* Monogram screen */}
       {type === 'monogram' && (
         <ScrollView contentContainerStyle={styles.monogramContainer}>
           {/* Monogram toggle */}
@@ -693,7 +459,7 @@ const CustomizeSuitScreen = ({ route }) => {
         </ScrollView>
       )}
 
-      {/* Yes/No options screens (steps 5-7) */}
+      {/* Yes/No options screens */}
       {type === 'yesno' && (
         <ScrollView contentContainerStyle={styles.yesnoContainer}>
           {options.map((option) => (
@@ -701,11 +467,6 @@ const CustomizeSuitScreen = ({ route }) => {
               <Text style={styles.yesnoQuestion}>
                 {option.name}{option.price > 0 ? ` (+$${option.price})` : ''}
               </Text>
-              {option.id === 'phonePocket' && (
-                <TouchableOpacity>
-                  <Text style={styles.learnMore}>To learn about this additional pocket, tap here</Text>
-                </TouchableOpacity>
-              )}
               <View style={styles.yesnoButtons}>
                 <TouchableOpacity
                   style={[
@@ -978,11 +739,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     fontWeight: '500'
   },
-  learnMore: {
-    color: '#0066cc',
-    marginBottom: 15,
-    textDecorationLine: 'underline'
-  },
   yesnoButtons: {
     flexDirection: 'row',
     justifyContent: 'space-around'
@@ -1020,7 +776,7 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     fontWeight: 'bold'
-  }
+  },
 });
 
 export default CustomizeSuitScreen;

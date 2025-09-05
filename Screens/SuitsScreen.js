@@ -97,28 +97,31 @@ const suits = [
   },
 ];
 
-export default function SuitsScreen({ navigation }) {
+export default function SuitsScreen({ navigation, route }) {
+  const { viewOnly } = route.params || {};
 const renderItem = ({ item }) => (
   <View style={styles.card}>
     <Image source={item.image} style={styles.image} />
     <Text style={styles.name}>{item.name}</Text>
     <Text style={styles.price}>${item.price}</Text>
 
-    <View style={styles.buttonRow}>
-      <TouchableOpacity 
-        onPress={() => navigation.navigate('SuitDetail', { suit: item })}
-        style={styles.detailsButton}
-      >
-        <Text style={styles.buttonText}>View Details</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity 
-        onPress={() => navigation.navigate('CustomizeSuitScreen', { suit: item })}
-        style={styles.customizeButton}
-      >
-        <Text style={styles.buttonText}>Customize</Text>
-      </TouchableOpacity>
-    </View>
+      <View style={styles.buttonRow}>
+        {viewOnly ? (
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('ProductDetailScreen', { product: item, category: 'suit' })}
+            style={styles.detailsButtonFull}
+          >
+            <Text style={styles.buttonText}>View Details</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('CustomizeSuitScreen', { suit: item })}
+            style={styles.customizeButtonFull}
+          >
+            <Text style={styles.buttonText}>Customize</Text>
+          </TouchableOpacity>
+        )}
+      </View>
   </View>
 );
 
@@ -199,8 +202,22 @@ detailsButton: {
   borderRadius: 6,
   alignItems: 'center',
 },
+detailsButtonFull: {
+  width: '100%',
+  backgroundColor: '#6200ee',
+  padding: 10,
+  borderRadius: 6,
+  alignItems: 'center',
+},
 customizeButton: {
   flex: 1,
+  backgroundColor: '#03dac6',
+  padding: 10,
+  borderRadius: 6,
+  alignItems: 'center',
+},
+customizeButtonFull: {
+  width: '100%',
   backgroundColor: '#03dac6',
   padding: 10,
   borderRadius: 6,

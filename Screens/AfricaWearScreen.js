@@ -2,26 +2,54 @@ import React from 'react';
 import { View, FlatList, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const blazers = [
+const africaWear = [
   {
     id: '1',
-    name: 'Premium Navy Blazer',
-    price: 199.99,
-    sizes: ['S', 'M', 'L'],
-    image: require('../assets/images/blazzers.webp'),
+    name: 'Traditional Dashiki',
+    price: 89.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual dashiki image
   },
   {
     id: '2',
-    name: 'Classic Black Blazer',
-    price: 179.99,
-    sizes: ['M', 'L', 'XL'],
-    image: require('../assets/images/blazzers.webp'),
+    name: 'Ankara Print Shirt',
+    price: 75.99,
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual ankara image
   },
-  // Add more blazers as needed
+  {
+    id: '3',
+    name: 'Kente Cloth Vest',
+    price: 125.99,
+    sizes: ['S', 'M', 'L'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual kente image
+  },
+  {
+    id: '4',
+    name: 'Agbada Robe',
+    price: 199.99,
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual agbada image
+  },
+  {
+    id: '5',
+    name: 'Boubou Grand Robe',
+    price: 179.99,
+    sizes: ['L', 'XL', 'XXL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual boubou image
+  },
+  {
+    id: '6',
+    name: 'Kitenge Shirt',
+    price: 69.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual kitenge image
+  }
 ];
 
-const BlazersScreen = ({ navigation, route }) => {
+const AfricaWearScreen = ({ navigation, route }) => {
   const { viewOnly } = route.params || {};
+  
   const renderItem = ({ item }) => (
     <View style={styles.itemContainer}>
       <Image source={item.image} style={styles.image} />
@@ -33,14 +61,14 @@ const BlazersScreen = ({ navigation, route }) => {
         <View style={styles.buttonRow}>
           {viewOnly ? (
             <TouchableOpacity 
-              onPress={() => navigation.navigate('ProductDetailScreen', { product: item, category: 'blazer' })}
+              onPress={() => navigation.navigate('ProductDetailScreen', { product: item, category: 'africa-wear' })}
               style={styles.detailsButtonFull}
             >
               <Text style={styles.buttonText}>View Details</Text>
             </TouchableOpacity>
           ) : (
             <TouchableOpacity 
-              onPress={() => navigation.navigate('CustomizeBlazersScreen', { item, category: 'blazer' })}
+              onPress={() => navigation.navigate('CustomizeAfricaWearScreen', { item, category: 'africa-wear' })}
               style={styles.customizeButtonFull}
             >
               <Text style={styles.buttonText}>Customize</Text>
@@ -53,13 +81,16 @@ const BlazersScreen = ({ navigation, route }) => {
 
   return (
     <View style={styles.container}>
-      {/* Back Button */}
-      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
-        <Ionicons name="arrow-back" size={28} color="#000" />
-      </TouchableOpacity>
+      {/* Header */}
+      <View style={styles.header}>
+        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <Ionicons name="arrow-back" size={24} color="black" />
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>African Wear</Text>
+      </View>
 
       <FlatList
-        data={blazers}
+        data={africaWear}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}
@@ -73,19 +104,24 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#f8f8f8',
   },
-  backButton: {
-    position: 'absolute',
-    top: 40,
-    left: 16,
-    zIndex: 10,
+  header: {
+    paddingTop: 50,
+    paddingHorizontal: 15,
+    paddingBottom: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
     backgroundColor: '#fff',
-    padding: 8,
-    borderRadius: 20,
-    elevation: 3,
+    elevation: 4,
+  },
+  backButton: {
+    marginRight: 10,
+  },
+  headerTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
   },
   listContent: {
     padding: 16,
-    paddingTop: 80, // To make space for the back button
   },
   itemContainer: {
     backgroundColor: 'white',
@@ -100,7 +136,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: '100%',
-    height: 500,
+    height: 300,
     resizeMode: 'cover',
   },
   infoContainer: {
@@ -161,4 +197,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BlazersScreen;
+export default AfricaWearScreen;

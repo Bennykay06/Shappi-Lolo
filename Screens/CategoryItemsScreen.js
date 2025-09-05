@@ -256,7 +256,7 @@ const categoryData = {
 };
 
 export default function CategoryItemsScreen({ route, navigation }) {
-  const { categoryName } = route.params;
+  const { categoryName, viewOnly } = route.params;
   const items = categoryData[categoryName] || [];
   const { addToCart } = useCart();
   const [selectedSizes, setSelectedSizes] = useState({});
@@ -338,36 +338,40 @@ export default function CategoryItemsScreen({ route, navigation }) {
         </View>
         
         <View style={styles.buttonRow}>
-          <TouchableOpacity 
-            style={styles.detailsButton}
-            onPress={() => navigation.navigate('ProductDetailScreen', { item })}
-          >
-            <Text style={styles.buttonText}>View Details</Text>
-          </TouchableOpacity>
-          
-          {isCustomizable ? (
+          {viewOnly ? (
             <TouchableOpacity 
-              style={styles.customizeButton}
-              onPress={() => {
-                if (categoryName === 'SHIRTS') {
-                  navigation.navigate('CustomizeShirtScreen', { shirt: item });
-                } else {
-                  navigation.navigate('CustomizeSuitScreen', { 
-                    item, 
-                    category: getCategoryParam(categoryName) 
-                  });
-                }
-              }}
+              style={styles.detailsButtonFull}
+              onPress={() => navigation.navigate('ProductDetailScreen', { product: item })}
             >
-              <Text style={styles.buttonText}>Customize</Text>
+              <Text style={styles.buttonText}>View Details</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity 
-              style={styles.addToCartButton}
-              onPress={() => handleAddToCart(item)}
-            >
-              <Text style={styles.buttonText}>Add to Cart</Text>
-            </TouchableOpacity>
+            <>
+              {isCustomizable ? (
+                <TouchableOpacity 
+                  style={styles.customizeButtonFull}
+                  onPress={() => {
+                    if (categoryName === 'SHIRTS') {
+                      navigation.navigate('CustomizeShirtScreen', { shirt: item });
+                    } else {
+                      navigation.navigate('CustomizeSuitScreen', { 
+                        item, 
+                        category: getCategoryParam(categoryName) 
+                      });
+                    }
+                  }}
+                >
+                  <Text style={styles.buttonText}>Customize</Text>
+                </TouchableOpacity>
+              ) : (
+                <TouchableOpacity 
+                  style={styles.addToCartButtonFull}
+                  onPress={() => handleAddToCart(item)}
+                >
+                  <Text style={styles.buttonText}>Add to Cart</Text>
+                </TouchableOpacity>
+              )}
+            </>
           )}
         </View>
       </View>
@@ -513,6 +517,13 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
   },
+  detailsButtonFull: {
+    width: '100%',
+    backgroundColor: '#6200ee',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
   addToCartButton: {
     flex: 1,
     backgroundColor: '#03dac6',
@@ -523,6 +534,20 @@ const styles = StyleSheet.create({
   customizeButton: {
     flex: 1,
     backgroundColor: '#ff6b35',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  customizeButtonFull: {
+    width: '100%',
+    backgroundColor: '#ff6b35',
+    padding: 12,
+    borderRadius: 8,
+    alignItems: 'center',
+  },
+  addToCartButtonFull: {
+    width: '100%',
+    backgroundColor: '#03dac6',
     padding: 12,
     borderRadius: 8,
     alignItems: 'center',
