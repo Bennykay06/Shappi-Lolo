@@ -16,7 +16,7 @@ const suits = [
     name: 'Classic Black Suit',
     price: 299,
     sizes: ['S', 'M', 'L'],
-    image: require('../assets/images/pp1.jpg'),
+    image: require('../assets/images/pp11.jpg'),
   },
   {
     id: 2,
@@ -86,7 +86,7 @@ const suits = [
     name: 'Classic Three-Piece Suit',
     price: 459,
     sizes: ['S', 'M', 'L'],
-    image: require('../assets/images/pp11.jpg'),
+    image: require('../assets/images/pp1.jpg'),
   },
   {
     id: 12,

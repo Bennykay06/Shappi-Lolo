@@ -13,7 +13,7 @@ const CustomizeJeansScreen = ({ route }) => {
   
   // Jeans customization - 5 step process
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 5;
+  const totalSteps = 4;
   
   const [selections, setSelections] = useState({
     wash: null,
@@ -34,7 +34,8 @@ const CustomizeJeansScreen = ({ route }) => {
         preview: require('../assets/images/jeans.jpg'),
         price: '$89',
         type: 'indigo',
-        popular: true
+        popular: true,
+        color: '#4169E1'
       },
       { 
         id: 2, 
@@ -44,7 +45,8 @@ const CustomizeJeansScreen = ({ route }) => {
         preview: require('../assets/images/jeans.jpg'),
         price: '$89',
         type: 'light',
-        popular: true
+        popular: true,
+        color: '#87CEEB'
       },
       { 
         id: 3, 
@@ -53,7 +55,8 @@ const CustomizeJeansScreen = ({ route }) => {
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
         price: '$99',
-        type: 'dark'
+        type: 'dark',
+        color: '#191970'
       },
       { 
         id: 4, 
@@ -62,7 +65,8 @@ const CustomizeJeansScreen = ({ route }) => {
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
         price: '$99',
-        type: 'black'
+        type: 'black',
+        color: '#000000'
       },
       { 
         id: 5, 
@@ -71,7 +75,8 @@ const CustomizeJeansScreen = ({ route }) => {
         img: require('../assets/images/jeans.jpg'),
         preview: require('../assets/images/jeans.jpg'),
         price: '$109',
-        type: 'distressed'
+        type: 'distressed',
+        color: '#696969'
       }
     ],
     fit: [
@@ -79,35 +84,39 @@ const CustomizeJeansScreen = ({ route }) => {
         id: 1, 
         name: 'Skinny Fit', 
         desc: 'Ultra-slim throughout - modern tapered silhouette', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
+        img: require('../assets/images/skinny-jeans.jpg'),
+        preview: require('../assets/images/skinny-jeans.jpg'),
         measurements: 'Tight fit',
-        popular: true
+        popular: true,
+        fitType: 'SKINNY'
       },
       { 
         id: 2, 
         name: 'Slim Fit', 
         desc: 'Fitted through thigh with slight taper - contemporary style', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
+        img: require('../assets/images/slim-jeans.jpg'),
+        preview: require('../assets/images/slim-jeans.jpg'),
         measurements: 'Fitted silhouette',
-        popular: true
+        popular: true,
+        fitType: 'SLIM'
       },
       { 
         id: 3, 
         name: 'Straight Fit', 
         desc: 'Classic straight leg - timeless and versatile', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        measurements: 'Straight through leg'
+        img: require('../assets/images/straight-jeans.jpg'),
+        preview: require('../assets/images/straight-jeans.jpg'),
+        measurements: 'Straight through leg',
+        fitType: 'STRAIGHT'
       },
       { 
         id: 4, 
         name: 'Relaxed Fit', 
         desc: 'Comfortable through hip and thigh - easy wear', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        measurements: 'Roomy fit'
+        img: require('../assets/images/relaxed-jeans.jpg'),
+        preview: require('../assets/images/relaxed-jeans.jpg'),
+        measurements: 'Roomy fit',
+        fitType: 'RELAXED'
       }
     ],
     rise: [
@@ -115,84 +124,64 @@ const CustomizeJeansScreen = ({ route }) => {
         id: 1, 
         name: 'Low Rise', 
         desc: 'Sits below waist - modern casual style', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
+        img: require('../assets/images/low-rise.png'),
+        preview: require('../assets/images/low-rise.png'),
         style: 'modern',
-        popular: true
+        popular: true,
+        riseType: 'LOW'
       },
       { 
         id: 2, 
         name: 'Mid Rise', 
         desc: 'Sits at natural waist - balanced comfort', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        style: 'balanced'
+        img: require('../assets/images/mid-rise.png'),
+        preview: require('../assets/images/mid-rise.png'),
+        style: 'balanced',
+        riseType: 'MID'
       },
       { 
         id: 3, 
         name: 'High Rise', 
         desc: 'Sits above waist - retro-inspired look', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        style: 'retro'
-      }
-    ],
-    length: [
-      { 
-        id: 1, 
-        name: 'Cropped', 
-        desc: 'Above ankle length - modern and fresh', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        style: 'modern',
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Regular', 
-        desc: 'Standard length - classic fit', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        style: 'classic'
-      },
-      { 
-        id: 3, 
-        name: 'Long', 
-        desc: 'Extended length - for taller builds', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        style: 'extended'
+        img: require('../assets/images/high-rise.png'),
+        preview: require('../assets/images/high-rise.png'),
+        style: 'retro',
+        riseType: 'HIGH'
       }
     ],
     details: [
       { 
         id: 1, 
         name: 'Classic 5-Pocket', 
-        desc: 'Traditional jean styling - front and back pockets', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        popular: true
+        desc: 'Two front, two back, plus coin pocket - traditional styling', 
+        img: require('../assets/images/slim-jeans.jpg'),
+        preview: require('../assets/images/slim-jeans.jpg'),
+        popular: true,
+        pocketType: 'CLASSIC'
       },
       { 
         id: 2, 
-        name: 'Coin Pocket', 
-        desc: 'Additional small pocket - vintage detail', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg')
+        name: '4-Pocket Style', 
+        desc: 'Two front and two back pockets - no coin pocket', 
+        img: require('../assets/images/slim-jeans.jpg'),
+        preview: require('../assets/images/slim-jeans.jpg'),
+        pocketType: 'FOUR_POCKET'
       },
       { 
         id: 3, 
-        name: 'No Back Pockets', 
-        desc: 'Clean minimal look - streamlined silhouette', 
+        name: 'Minimalist', 
+        desc: 'Front pockets only - clean streamlined look', 
         img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg')
+        preview: require('../assets/images/jeans.jpg'),
+        pocketType: 'MINIMAL'
       },
       { 
         id: 4, 
-        name: 'Cargo Pockets', 
-        desc: 'Extra utility pockets - functional style', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg')
+        name: 'Cargo Style', 
+        desc: 'Multiple utility pockets - maximum functionality', 
+        img: require('../assets/images/cargo-style.jpg'),
+        preview: require('../assets/images/cargo-style.jpg'),
+        pocketType: 'CARGO'
       }
     ]
   };
@@ -225,14 +214,6 @@ const CustomizeJeansScreen = ({ route }) => {
         field: 'rise'
       };
       case 4: return { 
-        title: 'Select Length', 
-        subtitle: 'Choose your preferred inseam length',
-        options: jeansOptions.length,
-        selected: selections.length,
-        type: 'image',
-        field: 'length'
-      };
-      case 5: return { 
         title: 'Choose Details', 
         subtitle: 'Select pocket configuration and styling details',
         options: jeansOptions.details,
@@ -260,11 +241,13 @@ const CustomizeJeansScreen = ({ route }) => {
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+    } else {
+      navigation.goBack(); // Go back to shop if on first step
     }
   };
 
   const handleAddToCart = () => {
-    if (!selections.wash || !selections.fit || !selections.rise || !selections.length || !selections.details) {
+    if (!selections.wash || !selections.fit || !selections.rise || !selections.details) {
       Alert.alert('Incomplete Selection', 'Please complete all customization steps.');
       return;
     }
@@ -293,7 +276,7 @@ const CustomizeJeansScreen = ({ route }) => {
     <View style={styles.container}>
       {/* Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={prevStep} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
@@ -333,7 +316,25 @@ const CustomizeJeansScreen = ({ route }) => {
                 </View>
               )}
               
-              <Image source={option.img} style={styles.optionImage} />
+              {currentStep === 1 && option.color ? (
+                <View style={[styles.colorBlock, { backgroundColor: option.color }]}>
+                  <Text style={styles.washTypeText}>{option.type ? option.type.toUpperCase() : 'WASH'}</Text>
+                </View>
+              ) : (
+                <View style={styles.imageContainer}>
+                  <Image source={option.img} style={styles.optionImage} />
+                  {currentStep === 2 && option.fitType && (
+                    <View style={styles.fitOverlay}>
+                      <Text style={styles.fitTypeText}>{option.fitType}</Text>
+                    </View>
+                  )}
+                  {currentStep === 3 && option.riseType && (
+                    <View style={styles.fitOverlay}>
+                      <Text style={styles.fitTypeText}>{option.riseType} RISE</Text>
+                    </View>
+                  )}
+                </View>
+              )}
               
               <View style={styles.optionContent}>
                 <Text style={styles.optionName}>{option.name}</Text>
@@ -507,10 +508,49 @@ const styles = StyleSheet.create({
     fontSize: 12,
     fontWeight: 'bold',
   },
+  imageContainer: {
+    position: 'relative',
+  },
   optionImage: {
     width: '100%',
-    height: 200,
-    resizeMode: 'cover',
+    height: 600,
+    resizeMode: 'contain',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  fitOverlay: {
+    position: 'absolute',
+    bottom: 0,
+    left: 0,
+    right: 0,
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
+    padding: 12,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
+  },
+  fitTypeText: {
+    color: 'white',
+    fontSize: 18,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    letterSpacing: 1,
+  },
+  colorBlock: {
+    width: '100%',
+    height: 400,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderTopLeftRadius: 12,
+    borderTopRightRadius: 12,
+  },
+  washTypeText: {
+    color: 'white',
+    fontSize: 24,
+    fontWeight: 'bold',
+    textShadowColor: 'rgba(0, 0, 0, 0.5)',
+    textShadowOffset: { width: 1, height: 1 },
+    textShadowRadius: 2,
+    letterSpacing: 2,
   },
   optionContent: {
     padding: 16,

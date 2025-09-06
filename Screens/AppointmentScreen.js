@@ -24,9 +24,9 @@ export default function AppointmentScreen({ navigation }) {
 
   const services = [
     { id: 'consultation', name: 'Design Consultation', duration: '45 min', price: 'Free' },
-    { id: 'fitting', name: 'Measurement & Fitting', duration: '30 min', price: '$50' },
+    { id: 'measurement', name: 'Measurement & Design', duration: '60 min', price: 'Free' },
     { id: 'alteration', name: 'Alterations', duration: '20 min', price: '$25' },
-    { id: 'follow-up', name: 'Follow-up Fitting', duration: '15 min', price: 'Free' }
+    { id: 'bulk-planning', name: 'Bulk Order Planning', duration: '60 min', price: 'Free' }
   ];
 
   const timeSlots = [

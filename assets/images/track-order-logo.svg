@@ -1,0 +1,38 @@
+<svg width="200" height="200" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="90" fill="#007AFF" opacity="0.1"/>
+  
+  <!-- Main Package Box -->
+  <rect x="75" y="85" width="50" height="35" fill="#007AFF" rx="3"/>
+  <rect x="75" y="85" width="50" height="8" fill="#0056CC"/>
+  
+  <!-- Package Lines -->
+  <line x1="85" y1="85" x2="85" y2="120" stroke="#0056CC" stroke-width="2"/>
+  <line x1="115" y1="85" x2="115" y2="120" stroke="#0056CC" stroke-width="2"/>
+  <line x1="75" y1="102" x2="125" y2="102" stroke="#0056CC" stroke-width="2"/>
+  
+  <!-- Progress Dots -->
+  <circle cx="60" cy="65" r="6" fill="#4CAF50"/>
+  <circle cx="100" cy="55" r="6" fill="#4CAF50"/>
+  <circle cx="140" cy="65" r="6" fill="#FF9800"/>
+  <circle cx="120" cy="140" r="5" fill="#E0E0E0"/>
+  
+  <!-- Progress Lines -->
+  <line x1="66" y1="65" x2="94" y2="55" stroke="#4CAF50" stroke-width="3" opacity="0.8"/>
+  <line x1="106" y1="55" x2="134" y2="65" stroke="#4CAF50" stroke-width="3" opacity="0.8"/>
+  <line x1="135" y1="70" x2="122" y2="135" stroke="#E0E0E0" stroke-width="2" opacity="0.6"/>
+  
+  <!-- Location Pin -->
+  <path d="M140 60 L145 70 L140 72 L135 70 Z" fill="#FF9800"/>
+  
+  <!-- Checkmark in first dot -->
+  <path d="M57 65 L59 67 L63 62" stroke="white" stroke-width="2" fill="none" stroke-linecap="round"/>
+  
+  <!-- Clock in current dot -->
+  <circle cx="140" cy="65" r="3" fill="none" stroke="white" stroke-width="1"/>
+  <line x1="140" y1="65" x2="140" y2="62" stroke="white" stroke-width="1"/>
+  <line x1="140" y1="65" x2="142" y2="66" stroke="white" stroke-width="1"/>
+  
+  <!-- Text -->
+  <text x="100" y="180" text-anchor="middle" fill="#007AFF" font-family="Arial, sans-serif" font-size="16" font-weight="bold">Track Order</text>
+</svg>

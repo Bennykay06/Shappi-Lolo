@@ -30,7 +30,7 @@ export default function HomeScreen({ navigation }) {
       id: 2,
       name: 'Track Your Order',
       subtitle: 'Monitor outfit progress',
-      image: require('../assets/images/login.jpg'),
+      image: require('../assets/images/track-order-icon.png'),
       description: 'See real-time updates on your custom clothing',
       route: 'OrderTracking',
       featured: true,
@@ -40,7 +40,7 @@ export default function HomeScreen({ navigation }) {
       id: 3,
       name: 'Bulk Orders',
       subtitle: 'Group & event attire',
-      image: require('../assets/images/suits.jpg'),
+      image: require('../assets/images/bulk-orders-icon.png'),
       description: 'Wedding parties, corporate events, funeral attire',
       route: 'BulkOrders',
       icon: 'people'
@@ -49,7 +49,7 @@ export default function HomeScreen({ navigation }) {
       id: 4,
       name: 'Custom Clothing',
       subtitle: 'Browse our collection',
-      image: require('../assets/images/men shirt.jpg'),
+      image: require('../assets/images/custom-clothing-icon.png'),
       description: 'Shirts, suits, pants, blazers & more',
       route: 'ShopTab',
       icon: 'shirt'

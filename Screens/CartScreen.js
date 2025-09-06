@@ -19,7 +19,8 @@ export default function CartScreen({ navigation }) {
     return cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0).toFixed(2);
   };
 
-  const renderCustomizationDetails = (selections = {}) => {
+  const renderCustomizationDetails = (item) => {
+    const selections = item.customizations || {};
     const getLapelValue = () => {
       if (selections.lapel === 1) return 'Notch Slim';
       if (selections.lapel === 2) return 'Notch';
@@ -58,22 +59,48 @@ export default function CartScreen({ navigation }) {
       return 'Navy Performance Blend';
     };
 
-    const options = [
-      { label: 'FABRIC', value: getFabricValue() },
-      { label: 'LAPEL', value: getLapelValue() },
-      { label: 'Lining Fabric', value: 'Navy' },
-      { label: 'BUTTONS', value: getButtonValue() },
-      { label: 'VENTS', value: getVentValue() },
-      { label: 'SLEEVE BUTTONHOLES', value: selections.functionalButtonholes ? 'Yes' : 'No' },
-      { label: 'MONOGRAM', value: selections.monogram?.enabled ? 'Yes' : 'No' },
-      { label: 'MONOGRAM COLOR', value: selections.monogram?.enabled ? getMonogramColorValue() : 'N/A' },
-      { label: 'PANT PLEATS', value: selections.pleatedPants ? 'Yes' : 'No' },
-      { label: 'PANT CUFFS', value: selections.cuffedHem ? 'Yes' : 'No' },
-      { label: 'SUSPENDER BUTTONS', value: selections.suspenderButtons ? 'Yes' : 'No' },
-      { label: 'BELT LOOPS REMOVED', value: 'No' },
-      { label: 'CELL PHONE POCKET', value: selections.phonePocket ? 'Yes' : 'No' },
-      { label: 'INVISISTRETCH™ WAIST', value: 'No' }
-    ];
+    let options = [];
+
+    // Handle different item types
+    if (item.type === 'jeans') {
+      options = [
+        { label: 'WASH', value: selections.wash?.name || 'Classic Blue' },
+        { label: 'FIT', value: selections.fit?.name || 'Slim Fit' },
+        { label: 'RISE', value: selections.rise?.name || 'Mid Rise' },
+        { label: 'POCKET STYLE', value: selections.details?.name || 'Classic 5-Pocket' }
+      ];
+    } else if (item.category === 'shirt') {
+      options = [
+        { label: 'FABRIC', value: selections.fabric?.name || 'Cotton' },
+        { label: 'COLLAR', value: selections.collar?.name || 'Point Collar' },
+        { label: 'CUFFS', value: selections.cuffs?.name || 'Barrel Cuff' },
+        { label: 'SHIRT LENGTH', value: selections.shirtLength?.name || 'Regular' },
+        { label: 'CHEST POCKET', value: selections.pocket ? 'Yes' : 'No' },
+        { label: 'BUTTON COLOR', value: selections.buttonColor || 'Standard' },
+        { label: 'CONTRAST COLLAR', value: selections.contrastCollar ? 'Yes' : 'No' },
+        { label: 'CONTRAST CUFFS', value: selections.contrastCuff ? 'Yes' : 'No' },
+        { label: 'MONOGRAM', value: selections.monogram?.text || 'None' },
+        { label: 'MONOGRAM COLOR', value: selections.monogram?.color || 'N/A' }
+      ];
+    } else {
+      // Default to suit customizations for other items
+      options = [
+        { label: 'FABRIC', value: getFabricValue() },
+        { label: 'LAPEL', value: getLapelValue() },
+        { label: 'Lining Fabric', value: 'Navy' },
+        { label: 'BUTTONS', value: getButtonValue() },
+        { label: 'VENTS', value: getVentValue() },
+        { label: 'SLEEVE BUTTONHOLES', value: selections.functionalButtonholes ? 'Yes' : 'No' },
+        { label: 'MONOGRAM', value: selections.monogram?.enabled ? 'Yes' : 'No' },
+        { label: 'MONOGRAM COLOR', value: selections.monogram?.enabled ? getMonogramColorValue() : 'N/A' },
+        { label: 'PANT PLEATS', value: selections.pleatedPants ? 'Yes' : 'No' },
+        { label: 'PANT CUFFS', value: selections.cuffedHem ? 'Yes' : 'No' },
+        { label: 'SUSPENDER BUTTONS', value: selections.suspenderButtons ? 'Yes' : 'No' },
+        { label: 'BELT LOOPS REMOVED', value: 'No' },
+        { label: 'CELL PHONE POCKET', value: selections.phonePocket ? 'Yes' : 'No' },
+        { label: 'INVISISTRETCH™ WAIST', value: 'No' }
+      ];
+    }
 
     return (
       <View style={styles.detailsContainer}>
@@ -137,7 +164,7 @@ export default function CartScreen({ navigation }) {
                 </TouchableOpacity>
 
                 {expandedItem === item.id && (
-                  renderCustomizationDetails(item.customizations || item.selections)
+                  renderCustomizationDetails(item)
                 )}
               </View>
             )}

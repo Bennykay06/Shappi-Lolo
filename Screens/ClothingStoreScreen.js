@@ -2,90 +2,102 @@ import React, { useState } from 'react';
 import { View, FlatList, TouchableOpacity, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const africanMaterials = [
+const ghanaianFabrics = [
   {
     id: '1',
-    name: 'Ankara Print',
-    price: 25.99,
-    description: 'Vibrant wax print cotton fabric',
-    pattern: 'Geometric & Floral',
-    origin: 'West Africa',
-    image: require('../assets/images/jeans.jpg'), // Replace with ankara fabric image
+    name: 'Stool',
+    price: 45.99,
+    description: 'Traditional Ghanaian pattern representing leadership and authority',
+    pattern: 'Stool Design',
+    origin: 'Ghana',
+    image: require('../assets/images/stool.jpg'),
     popular: true
   },
   {
     id: '2',
-    name: 'Kente Cloth',
-    price: 45.99,
-    description: 'Traditional handwoven silk & cotton',
-    pattern: 'Colorful Strips',
+    name: 'Sugarcane',
+    price: 32.99,
+    description: 'Pattern symbolizing sweetness and prosperity',
+    pattern: 'Sugarcane Motif',
     origin: 'Ghana',
-    image: require('../assets/images/jeans.jpg'), // Replace with kente fabric image
+    image: require('../assets/images/sugarcane.jpg'),
     popular: true
   },
   {
     id: '3',
-    name: 'Dashiki Cotton',
-    price: 19.99,
-    description: 'Soft cotton with embroidered neckline',
-    pattern: 'Traditional Dashiki',
-    origin: 'West Africa',
-    image: require('../assets/images/jeans.jpg'), // Replace with dashiki fabric image
+    name: 'Sika wo Ntaban',
+    price: 55.99,
+    description: 'Pattern meaning "Money has wings" - symbolizing wealth',
+    pattern: 'Traditional Kente',
+    origin: 'Ghana',
+    image: require('../assets/images/sika wo ntaban.jpg'),
   },
   {
     id: '4',
-    name: 'Mudcloth (Bogolan)',
-    price: 35.99,
-    description: 'Hand-dyed cotton with natural pigments',
-    pattern: 'Earth Tones',
-    origin: 'Mali',
-    image: require('../assets/images/jeans.jpg'), // Replace with mudcloth image
+    name: 'Akyekyede3 Akyi',
+    price: 42.99,
+    description: 'Traditional pattern representing unity and togetherness',
+    pattern: 'Unity Design',
+    origin: 'Ghana',
+    image: require('../assets/images/akyekyede3 akyi.jpg'),
   },
   {
     id: '5',
-    name: 'Kitenge Fabric',
-    price: 22.99,
-    description: 'Colorful cotton fabric with African motifs',
-    pattern: 'Bold Prints',
-    origin: 'East Africa',
-    image: require('../assets/images/jeans.jpg'), // Replace with kitenge fabric image
+    name: 'Nsubra',
+    price: 38.99,
+    description: 'Pattern symbolizing abundance and fertility',
+    pattern: 'Fertility Symbol',
+    origin: 'Ghana',
+    image: require('../assets/images/nsubra.jpg'),
   },
   {
     id: '6',
-    name: 'Adinkra Cloth',
+    name: 'Ansan',
     price: 29.99,
-    description: 'Symbolic cotton fabric with stamped designs',
-    pattern: 'Adinkra Symbols',
+    description: 'Traditional pattern representing strength and resilience',
+    pattern: 'Strength Motif',
     origin: 'Ghana',
-    image: require('../assets/images/jeans.jpg'), // Replace with adinkra fabric image
+    image: require('../assets/images/ansan.jpg'),
   },
   {
     id: '7',
-    name: 'Shweshwe Cotton',
-    price: 24.99,
-    description: 'Indigo-dyed cotton with geometric patterns',
-    pattern: 'Geometric',
-    origin: 'South Africa',
-    image: require('../assets/images/jeans.jpg'), // Replace with shweshwe fabric image
+    name: 'Highlife',
+    price: 35.99,
+    description: 'Modern Ghanaian pattern inspired by highlife music culture',
+    pattern: 'Musical Heritage',
+    origin: 'Ghana',
+    image: require('../assets/images/highlife.jpg'),
   },
   {
     id: '8',
-    name: 'Aso Oke Fabric',
-    price: 39.99,
-    description: 'Traditional handwoven Yoruba cloth',
-    pattern: 'Striped Weave',
-    origin: 'Nigeria',
-    image: require('../assets/images/jeans.jpg'), // Replace with aso oke fabric image
+    name: 'Pl3te',
+    price: 33.99,
+    description: 'Contemporary Ghanaian pattern with modern aesthetic',
+    pattern: 'Modern Ghana',
+    origin: 'Ghana',
+    image: require('../assets/images/pl3te.jpg'),
+  },
+  {
+    id: '9',
+    name: 'Kente',
+    price: 48.99,
+    description: 'Classic traditional handwoven Kente cloth',
+    pattern: 'Royal Kente',
+    origin: 'Ghana',
+    image: require('../assets/images/kente.jpg'),
+    popular: true
   }
 ];
 
-const africanStyles = [
-  { id: 1, name: 'Dashiki Shirt', icon: 'shirt-outline' },
-  { id: 2, name: 'Agbada Robe', icon: 'person-outline' },
-  { id: 3, name: 'Boubou Dress', icon: 'person-outline' },
-  { id: 4, name: 'Kaftan Top', icon: 'shirt-outline' },
-  { id: 5, name: 'Wrapper Skirt', icon: 'person-outline' },
-  { id: 6, name: 'African Suit', icon: 'business-outline' }
+const ghanaianStyles = [
+  { id: 1, name: 'Kaba and Slit', icon: 'person-outline' },
+  { id: 2, name: 'Agbada', icon: 'person-outline' },
+  { id: 3, name: 'Kente Stole', icon: 'shirt-outline' },
+  { id: 4, name: 'Smock (Fugu)', icon: 'shirt-outline' },
+  { id: 5, name: 'Dansinkran', icon: 'person-outline' },
+  { id: 6, name: 'Ntama Wrapper', icon: 'person-outline' },
+  { id: 7, name: 'Kente Suit', icon: 'business-outline' },
+  { id: 8, name: 'Batakari', icon: 'shirt-outline' }
 ];
 
 const ClothingStoreScreen = ({ navigation, route }) => {
@@ -164,7 +176,7 @@ const ClothingStoreScreen = ({ navigation, route }) => {
           <Text style={styles.sectionSubtitle}>Select from authentic African fabrics</Text>
           
           <FlatList
-            data={africanMaterials}
+            data={ghanaianFabrics}
             renderItem={renderMaterial}
             keyExtractor={item => item.id}
             contentContainerStyle={styles.materialsContent}
@@ -179,7 +191,7 @@ const ClothingStoreScreen = ({ navigation, route }) => {
           <Text style={styles.sectionSubtitle}>Select the outfit style you want</Text>
           
           <View style={styles.stylesGrid}>
-            {africanStyles.map((style) => (
+            {ghanaianStyles.map((style) => (
               <TouchableOpacity
                 key={style.id}
                 style={[

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" fill="#007AFF" rx="60"/>
+  
+  <!-- Package Box -->
+  <rect x="180" y="200" width="152" height="100" fill="#FFFFFF" rx="8" stroke="#E5E5E5" stroke-width="2"/>
+  
+  <!-- Box Top -->
+  <rect x="180" y="200" width="152" height="20" fill="#F0F0F0" rx="8"/>
+  
+  <!-- Box Lines (tape) -->
+  <line x1="200" y1="200" x2="200" y2="300" stroke="#E5E5E5" stroke-width="3"/>
+  <line x1="312" y1="200" x2="312" y2="300" stroke="#E5E5E5" stroke-width="3"/>
+  <line x1="180" y1="240" x2="332" y2="240" stroke="#E5E5E5" stroke-width="3"/>
+  
+  <!-- Progress Track -->
+  <line x1="80" y1="150" x2="432" y2="150" stroke="#FFFFFF" stroke-width="6" opacity="0.3"/>
+  
+  <!-- Progress Steps -->
+  <!-- Step 1 - Completed -->
+  <circle cx="120" cy="150" r="20" fill="#4CAF50"/>
+  <path d="M110 150 L116 156 L130 142" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Step 2 - Completed -->
+  <circle cx="220" cy="150" r="20" fill="#4CAF50"/>
+  <path d="M210 150 L216 156 L230 142" stroke="#FFFFFF" stroke-width="4" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Step 3 - Current -->
+  <circle cx="320" cy="150" r="20" fill="#FF9800"/>
+  <circle cx="320" cy="150" r="8" fill="#FFFFFF"/>
+  
+  <!-- Step 4 - Pending -->
+  <circle cx="420" cy="150" r="20" fill="#FFFFFF" stroke="#E5E5E5" stroke-width="3"/>
+  
+  <!-- Connecting Lines -->
+  <line x1="140" y1="150" x2="200" y2="150" stroke="#4CAF50" stroke-width="6"/>
+  <line x1="240" y1="150" x2="300" y2="150" stroke="#4CAF50" stroke-width="6"/>
+  <line x1="340" y1="150" x2="400" y2="150" stroke="#E5E5E5" stroke-width="6"/>
+  
+  <!-- GPS Pin (location indicator) -->
+  <path d="M320 320 L335 345 L320 350 L305 345 Z" fill="#FF9800"/>
+  <circle cx="320" cy="330" r="8" fill="#FFFFFF"/>
+  
+  <!-- Status Labels -->
+  <text x="120" y="120" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="bold">1</text>
+  <text x="220" y="120" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="bold">2</text>
+  <text x="320" y="120" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="bold">3</text>
+  <text x="420" y="120" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="24" font-weight="bold">4</text>
+  
+  <!-- Bottom Text -->
+  <text x="256" y="420" text-anchor="middle" fill="#FFFFFF" font-family="Arial, sans-serif" font-size="32" font-weight="bold">TRACK ORDER</text>
+</svg>

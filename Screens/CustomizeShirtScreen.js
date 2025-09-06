@@ -7,7 +7,7 @@ import { useCart } from '../Context/CartContext';
 const CustomizeShirtScreen = ({ route }) => {
   const navigation = useNavigation();
   const { addToCart } = useCart();
-  const { shirt, item, viewOnly } = route.params || {};
+  const { shirt, item, viewOnly } = route?.params || {};
   const product = shirt || item;
   console.log('Customizing shirt:', product);
   console.log('View only mode:', viewOnly);
@@ -21,7 +21,6 @@ const CustomizeShirtScreen = ({ route }) => {
     collar: null,        // Step 2: Choose collar
     cuffs: null,         // Step 3: Choose cuff
     shirtLength: null,   // Step 4: Tucked vs untucked
-    shirtCut: null,      // Step 5: Shirt cut/fit
     
     // Additional options - Step 6
     pocket: null,
@@ -46,8 +45,8 @@ const CustomizeShirtScreen = ({ route }) => {
         id: 1, 
         name: 'White Oxford', 
         desc: 'Classic solid - perfect for any occasion', 
-        img: require('../assets/images/shirt11.jpg'),
-        preview: require('../assets/images/shirt12.jpg'),
+        img: require('../assets/images/shirt5.jpg'),
+        preview: require('../assets/images/shirt5.jpg'),
         price: '$79',
         type: 'solid',
         popular: true
@@ -196,33 +195,6 @@ const CustomizeShirtScreen = ({ route }) => {
         style: 'casual'
       }
     ],
-    shirtCut: [
-      { 
-        id: 1, 
-        name: 'Slim Cut', 
-        desc: 'Fitted silhouette - modern tailored look', 
-        img: require('../assets/images/shirt11.jpg'),
-        preview: require('../assets/images/shirt12.jpg'),
-        measurements: 'Fitted through chest and waist',
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Classic Cut', 
-        desc: 'Traditional fit - comfortable with room to move', 
-        img: require('../assets/images/shirt13.jpg'),
-        preview: require('../assets/images/shirt14.jpg'),
-        measurements: 'Relaxed fit through body'
-      },
-      { 
-        id: 3, 
-        name: 'Athletic Cut', 
-        desc: 'Room in shoulders - tapered at waist', 
-        img: require('../assets/images/shirt15.jpg'),
-        preview: require('../assets/images/shirt16.jpg'),
-        measurements: 'Extra room in chest and shoulders'
-      }
-    ]
   };
 
   // Monogram customization options
@@ -280,15 +252,7 @@ const CustomizeShirtScreen = ({ route }) => {
         type: 'image',
         field: 'shirtLength'
       };
-      case 5: return { 
-        title: 'Shirt Cut', 
-        subtitle: 'Choose your preferred fit',
-        options: shirtOptions.shirtCut,
-        selected: selections.shirtCut,
-        type: 'image',
-        field: 'shirtCut'
-      };
-      case 6: return {
+      case 5: return {
         title: 'Additional Options',
         subtitle: 'Customize extra details',
         options: [
@@ -299,7 +263,7 @@ const CustomizeShirtScreen = ({ route }) => {
         ],
         type: 'additional'
       };
-      case 7: return {
+      case 6: return {
         title: 'Monogram Options',
         subtitle: 'Add personal initials (optional)',
         type: 'monogram'
@@ -310,9 +274,10 @@ const CustomizeShirtScreen = ({ route }) => {
 
   // Handle image selection
   const handleImageSelect = (id) => {
-    const { field } = getCurrentOptions();
-    if (field) {
-      setSelections(prev => ({ ...prev, [field]: id }));
+    const { field, options } = getCurrentOptions();
+    if (field && options) {
+      const selectedOption = options.find(option => option.id === id);
+      setSelections(prev => ({ ...prev, [field]: selectedOption }));
     }
   };
 
@@ -354,9 +319,21 @@ const CustomizeShirtScreen = ({ route }) => {
     return false;
   };
 
+  // Handle navigation to previous step
+  const handlePrev = () => {
+    console.log('handlePrev called, currentStep:', currentStep);
+    if (currentStep > 1) {
+      console.log('Going to previous step:', currentStep - 1);
+      setCurrentStep(currentStep - 1);
+    } else {
+      console.log('Going back to shop');
+      navigation.goBack(); // Go back to shop if on first step
+    }
+  };
+
   // Handle navigation to next step
   const handleNext = () => {
-    if (currentStep < 7) {
+    if (currentStep < 6) {
       setCurrentStep(currentStep + 1);
     } else {
       // Submit all selections and add to cart
@@ -425,7 +402,7 @@ const CustomizeShirtScreen = ({ route }) => {
     return (
       <View style={styles.container}>
         <View style={styles.headerContainer}>
-          <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+          <TouchableOpacity onPress={handlePrev} style={styles.backButton}>
             <Ionicons name="arrow-back" size={24} color="black" />
           </TouchableOpacity>
           <View style={styles.headerContent}>
@@ -471,7 +448,7 @@ const CustomizeShirtScreen = ({ route }) => {
     <View style={styles.container}>
       {/* Header with Back Button */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={handlePrev} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
@@ -504,17 +481,30 @@ const CustomizeShirtScreen = ({ route }) => {
           <View style={styles.divider} />
 
           {/* Selected option preview */}
-          {selected && (
+          {selected ? (
             <>
               <Image 
-                source={options.find(opt => opt.id === selected).img}
+                source={selected.img}
                 style={styles.previewImage}
               />
               <Text style={styles.optionName}>
-                {options.find(opt => opt.id === selected).name}
+                {selected.name}
               </Text>
               <Text style={styles.optionDesc}>
-                {options.find(opt => opt.id === selected).desc}
+                {selected.desc}
+              </Text>
+            </>
+          ) : (
+            <>
+              <Image 
+                source={options[0]?.img}
+                style={styles.previewImage}
+              />
+              <Text style={styles.optionName}>
+                {options[0]?.name}
+              </Text>
+              <Text style={styles.optionDesc}>
+                {options[0]?.desc}
               </Text>
             </>
           )}
@@ -528,7 +518,7 @@ const CustomizeShirtScreen = ({ route }) => {
                 key={option.id}
                 style={[
                   styles.optionButton,
-                  selected === option.id && styles.selectedOption,
+                  selected?.id === option.id && styles.selectedOption,
                   option.popular && styles.popularOption
                 ]}
                 onPress={() => handleImageSelect(option.id)}
@@ -560,24 +550,45 @@ const CustomizeShirtScreen = ({ route }) => {
           <View style={styles.divider} />
 
           {/* Selected fabric preview */}
-          {selected && (
+          {selected ? (
             <>
               <Image 
-                source={options.find(opt => opt.id === selected).img}
+                source={selected.img}
                 style={styles.previewImage}
               />
               <Text style={styles.optionName}>
-                {options.find(opt => opt.id === selected).name}
+                {selected.name}
               </Text>
               <Text style={styles.optionDesc}>
-                {options.find(opt => opt.id === selected).desc}
+                {selected.desc}
               </Text>
               <View style={styles.fabricDetails}>
                 <Text style={styles.fabricComposition}>
-                  {options.find(opt => opt.id === selected).composition}
+                  {selected.composition}
                 </Text>
                 <Text style={styles.fabricPrice}>
-                  {options.find(opt => opt.id === selected).price}
+                  {selected.price}
+                </Text>
+              </View>
+            </>
+          ) : (
+            <>
+              <Image 
+                source={options[0]?.img}
+                style={styles.previewImage}
+              />
+              <Text style={styles.optionName}>
+                {options[0]?.name}
+              </Text>
+              <Text style={styles.optionDesc}>
+                {options[0]?.desc}
+              </Text>
+              <View style={styles.fabricDetails}>
+                <Text style={styles.fabricComposition}>
+                  {options[0]?.composition}
+                </Text>
+                <Text style={styles.fabricPrice}>
+                  {options[0]?.price}
                 </Text>
               </View>
             </>
@@ -592,7 +603,7 @@ const CustomizeShirtScreen = ({ route }) => {
                 key={option.id}
                 style={[
                   styles.fabricOption,
-                  selected === option.id && styles.selectedOption,
+                  selected?.id === option.id && styles.selectedOption,
                   option.popular && styles.popularOption
                 ]}
                 onPress={() => handleImageSelect(option.id)}
@@ -608,7 +619,7 @@ const CustomizeShirtScreen = ({ route }) => {
                     )}
                   </View>
                   <Text style={styles.optionSubtext}>{option.desc}</Text>
-                  <Text style={styles.fabricComposition}>{option.composition}</Text>
+                  <Text style={styles.fabricComposition}>{option?.composition}</Text>
                   <Text style={styles.fabricPrice}>{option.price}</Text>
                 </View>
               </TouchableOpacity>
@@ -644,7 +655,7 @@ const CustomizeShirtScreen = ({ route }) => {
                 key={option.id}
                 style={[
                   styles.colorOptionCard,
-                  selected === option.id && styles.selectedColorOption
+                  selected?.id === option.id && styles.selectedColorOption
                 ]}
                 onPress={() => handleImageSelect(option.id)}
               >
@@ -872,7 +883,7 @@ const CustomizeShirtScreen = ({ route }) => {
         disabled={isNextDisabled()}
       >
         <Text style={styles.nextButtonText}>
-          {currentStep === 7 ? 'DONE' : 'NEXT'}
+          {currentStep === 6 ? 'DONE' : 'NEXT'}
         </Text>
       </TouchableOpacity>
       </View>

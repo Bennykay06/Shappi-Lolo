@@ -38,20 +38,13 @@ const AppointmentBookingScreen = () => {
     },
     {
       id: 2,
-      name: 'Fitting Session',
-      duration: '30 min',
-      description: 'Try on and adjust your custom clothing',
-      price: 'Included with order'
-    },
-    {
-      id: 3,
       name: 'Consultation',
       duration: '30 min',
       description: 'Discuss fabrics, styles, and design options',
       price: 'Free consultation'
     },
     {
-      id: 4,
+      id: 3,
       name: 'Bulk Order Planning',
       duration: '60 min',
       description: 'Plan wedding, corporate, or event attire',

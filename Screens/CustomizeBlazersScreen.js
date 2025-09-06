@@ -206,6 +206,15 @@ const CustomizeBlazersScreen = ({ route }) => {
     return false;
   };
 
+  // Handle navigation to previous step
+  const handlePrev = () => {
+    if (currentStep > 1) {
+      setCurrentStep(currentStep - 1);
+    } else {
+      navigation.goBack(); // Go back to shop if on first step
+    }
+  };
+
   // Handle navigation to next step
   const handleNext = () => {
     const maxSteps = currentConfig.steps;
@@ -250,7 +259,7 @@ const CustomizeBlazersScreen = ({ route }) => {
     <View style={styles.container}>
       {/* Header with Back Button */}
       <View style={styles.headerContainer}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={handlePrev} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="black" />
         </TouchableOpacity>
         <Text style={styles.header}>{title}</Text>

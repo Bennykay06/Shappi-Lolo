@@ -2,48 +2,54 @@ import React from 'react';
 import { View, FlatList, TouchableOpacity, Text, Image, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
-const africaWear = [
+const ghanaianWear = [
   {
     id: '1',
-    name: 'Traditional Dashiki',
-    price: 89.99,
+    name: 'Kaba and Slit',
+    price: 129.99,
     sizes: ['S', 'M', 'L', 'XL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual dashiki image
+    image: require('../assets/images/jeans.jpg'), // Replace with actual kaba and slit image
+    description: 'Traditional Ghanaian women\'s outfit with fitted blouse and wrap skirt'
   },
   {
     id: '2',
-    name: 'Ankara Print Shirt',
-    price: 75.99,
+    name: 'Smock (Fugu)',
+    price: 89.99,
     sizes: ['M', 'L', 'XL', 'XXL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual ankara image
+    image: require('../assets/images/jeans.jpg'), // Replace with actual smock image
+    description: 'Traditional Northern Ghanaian shirt with embroidered neckline'
   },
   {
     id: '3',
-    name: 'Kente Cloth Vest',
-    price: 125.99,
-    sizes: ['S', 'M', 'L'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual kente image
+    name: 'Kente Grand Boubou',
+    price: 199.99,
+    sizes: ['L', 'XL', 'XXL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual kente boubou image
+    description: 'Elegant flowing robe made from authentic Ghanaian Kente cloth'
   },
   {
     id: '4',
-    name: 'Agbada Robe',
-    price: 199.99,
-    sizes: ['M', 'L', 'XL', 'XXL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual agbada image
+    name: 'Batakari Shirt',
+    price: 75.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual batakari image
+    description: 'Traditional Ghanaian cotton shirt with ethnic patterns'
   },
   {
     id: '5',
-    name: 'Boubou Grand Robe',
-    price: 179.99,
-    sizes: ['L', 'XL', 'XXL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual boubou image
+    name: 'Dansinkran Dress',
+    price: 149.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual dansinkran image
+    description: 'Traditional Ghanaian dance dress with colorful Kente accents'
   },
   {
     id: '6',
-    name: 'Kitenge Shirt',
-    price: 69.99,
-    sizes: ['S', 'M', 'L', 'XL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual kitenge image
+    name: 'Agbada (Ghanaian Style)',
+    price: 179.99,
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    image: require('../assets/images/jeans.jpg'), // Replace with actual ghanaian agbada image
+    description: 'Flowing robe with traditional Ghanaian embroidery and Kente trim'
   }
 ];
 
@@ -90,7 +96,7 @@ const AfricaWearScreen = ({ navigation, route }) => {
       </View>
 
       <FlatList
-        data={africaWear}
+        data={ghanaianWear}
         renderItem={renderItem}
         keyExtractor={item => item.id}
         contentContainerStyle={styles.listContent}

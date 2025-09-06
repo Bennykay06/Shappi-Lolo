@@ -277,6 +277,8 @@ const CustomizePantsScreen = ({ route }) => {
   const prevStep = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
+    } else {
+      navigation.goBack(); // Go back to shop if on first step
     }
   };
 
@@ -311,7 +313,7 @@ const CustomizePantsScreen = ({ route }) => {
     <View style={styles.container}>
       {/* MTailor-style Header */}
       <View style={styles.header}>
-        <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
+        <TouchableOpacity onPress={prevStep} style={styles.backButton}>
           <Ionicons name="arrow-back" size={24} color="#333" />
         </TouchableOpacity>
         <View style={styles.headerContent}>
