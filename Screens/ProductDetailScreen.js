@@ -5,12 +5,14 @@ import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../Context/CartContext';
 
 export default function ProductDetailScreen({ route }) {
-  const { product } = route?.params || {};
+  const { product, material } = route?.params || {};
   const navigation = useNavigation();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
 
-  if (!product) {
+  const item = product || material;
+
+  if (!item) {
     return (
       <View style={styles.container}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -23,18 +25,18 @@ export default function ProductDetailScreen({ route }) {
 
   const handleAddToCart = () => {
     const cartItem = {
-      id: product.id,
-      name: product.name,
-      price: typeof product.price === 'number' ? product.price : parseFloat(product.price.replace(/[^0-9.]/g, '')), // Handle both number and string prices
-      image: product.image,
+      id: item.id,
+      name: item.name,
+      price: typeof item.price === 'number' ? item.price : parseFloat(item.price.toString().replace(/[^0-9.]/g, '')),
+      image: item.image,
       quantity: quantity,
-      type: 'ready-made'
+      type: material ? 'fabric' : 'ready-made'
     };
 
     addToCart(cartItem);
     Alert.alert(
       'Added to Cart',
-      `${product.name} has been added to your cart.`,
+      `${item.name} has been added to your cart.`,
       [
         { text: 'Continue Shopping', style: 'cancel' },
         { text: 'View Cart', onPress: () => navigation.navigate('MainTabs', { screen: 'CartTab' }) }
@@ -55,12 +57,19 @@ export default function ProductDetailScreen({ route }) {
       </View>
 
       <ScrollView style={styles.scrollContainer} showsVerticalScrollIndicator={false}>
-        <Image source={product.image} style={styles.productImage} />
+        <Image source={item.image} style={styles.productImage} />
         <View style={styles.detailsContainer}>
-          <Text style={styles.productName}>{product.name}</Text>
-          <Text style={styles.productSubtitle}>{product.subtitle}</Text>
-          <Text style={styles.productPrice}>{typeof product.price === 'number' ? `$${product.price}` : product.price}</Text>
-          <Text style={styles.productDescription}>{product.description || 'Premium quality garment made with the finest materials and craftsmanship.'}</Text>
+          <Text style={styles.productName}>{item.name}</Text>
+          <Text style={styles.productSubtitle}>{item.subtitle || item.pattern}</Text>
+          <Text style={styles.productPrice}>${item.price.toFixed(2)}{material ? ' per yard' : ''}</Text>
+          <Text style={styles.productDescription}>{item.description || 'Premium quality garment made with the finest materials and craftsmanship.'}</Text>
+          
+          {material && (
+            <View style={styles.fabricDetails}>
+              <Text style={styles.detailLabel}>Pattern: <Text style={styles.detailValue}>{material.pattern}</Text></Text>
+              <Text style={styles.detailLabel}>Origin: <Text style={styles.detailValue}>{material.origin}</Text></Text>
+            </View>
+          )}
           
           {/* Quantity Selector */}
           <View style={styles.quantityContainer}>
@@ -136,11 +145,12 @@ const styles = StyleSheet.create({
   },
   productImage: {
     width: '100%',
-    height: 500,
+    height: 400,
     resizeMode: 'contain',
   },
   detailsContainer: {
     padding: 20,
+    marginTop: -20,
   },
   productName: {
     fontSize: 26,
@@ -164,6 +174,22 @@ const styles = StyleSheet.create({
     lineHeight: 24,
     color: '#666',
     marginBottom: 24,
+  },
+  fabricDetails: {
+    backgroundColor: '#f8f9fa',
+    padding: 16,
+    borderRadius: 8,
+    marginBottom: 24,
+  },
+  detailLabel: {
+    fontSize: 14,
+    color: '#333',
+    fontWeight: '600',
+    marginBottom: 8,
+  },
+  detailValue: {
+    fontWeight: 'normal',
+    color: '#666',
   },
   quantityContainer: {
     flexDirection: 'row',

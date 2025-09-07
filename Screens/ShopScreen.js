@@ -65,7 +65,7 @@ const categories = [
   { 
     id: 6, 
     name: 'African Wear', 
-    image: require('../assets/images/jeans.jpg'), 
+    image: require('../assets/images/a10.jpg'), 
     route: 'AfricaWearScreen',
     price: 'Starting at $69',
     subtitle: 'Traditional & modern styles',
@@ -75,7 +75,7 @@ const categories = [
   { 
     id: 7, 
     name: 'Clothing Store', 
-    image: require('../assets/images/men short.jpg'), 
+    image: require('../assets/images/kente1.jpg'), 
     route: 'ClothingStoreScreen',
     price: 'Starting at $29',
     subtitle: 'Everyday essentials',
@@ -145,13 +145,15 @@ export default function ShopScreen({ navigation }) {
                     <Ionicons name="bag" size={14} color="white" />
                   </TouchableOpacity>
                   
-                  <TouchableOpacity 
-                    style={styles.customizeButton}
-                    onPress={() => handleCategoryPress(category)}
-                  >
-                    <Text style={styles.customizeButtonText}>Customize</Text>
-                    <Ionicons name="arrow-forward" size={14} color="#007AFF" />
-                  </TouchableOpacity>
+                  {category.name !== 'African Wear' && (
+                    <TouchableOpacity 
+                      style={styles.customizeButton}
+                      onPress={() => handleCategoryPress(category)}
+                    >
+                      <Text style={styles.customizeButtonText}>Customize</Text>
+                      <Ionicons name="arrow-forward" size={14} color="#007AFF" />
+                    </TouchableOpacity>
+                  )}
                 </View>
               </View>
             </View>

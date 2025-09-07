@@ -5,51 +5,99 @@ import { Ionicons } from '@expo/vector-icons';
 const ghanaianWear = [
   {
     id: '1',
-    name: 'Kaba and Slit',
-    price: 129.99,
-    sizes: ['S', 'M', 'L', 'XL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual kaba and slit image
-    description: 'Traditional Ghanaian women\'s outfit with fitted blouse and wrap skirt'
+    name: 'Traditional Kente Suit',
+    price: 189.99,
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    image: require('../assets/images/a1.jpg'),
+    description: 'Elegant three-piece suit made from authentic Kente fabric'
   },
   {
     id: '2',
-    name: 'Smock (Fugu)',
-    price: 89.99,
-    sizes: ['M', 'L', 'XL', 'XXL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual smock image
-    description: 'Traditional Northern Ghanaian shirt with embroidered neckline'
+    name: 'Dashiki Shirt',
+    price: 69.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/a2.jpg'),
+    description: 'Classic African print shirt with traditional Dashiki design'
   },
   {
     id: '3',
-    name: 'Kente Grand Boubou',
-    price: 199.99,
+    name: 'Agbada Robe',
+    price: 159.99,
     sizes: ['L', 'XL', 'XXL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual kente boubou image
-    description: 'Elegant flowing robe made from authentic Ghanaian Kente cloth'
+    image: require('../assets/images/a3.jpg'),
+    description: 'Flowing traditional West African ceremonial robe'
   },
   {
     id: '4',
-    name: 'Batakari Shirt',
-    price: 75.99,
+    name: 'Batakari Traditional Shirt',
+    price: 79.99,
     sizes: ['S', 'M', 'L', 'XL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual batakari image
-    description: 'Traditional Ghanaian cotton shirt with ethnic patterns'
+    image: require('../assets/images/a4.jpg'),
+    description: 'Northern Ghanaian cotton shirt with ethnic embroidery'
   },
   {
     id: '5',
-    name: 'Dansinkran Dress',
-    price: 149.99,
-    sizes: ['S', 'M', 'L', 'XL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual dansinkran image
-    description: 'Traditional Ghanaian dance dress with colorful Kente accents'
+    name: 'Smock (Fugu)',
+    price: 89.99,
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    image: require('../assets/images/a5.jpg'),
+    description: 'Traditional Northern Ghanaian shirt with embroidered neckline'
   },
   {
     id: '6',
-    name: 'Agbada (Ghanaian Style)',
-    price: 179.99,
-    sizes: ['M', 'L', 'XL', 'XXL'],
-    image: require('../assets/images/jeans.jpg'), // Replace with actual ghanaian agbada image
-    description: 'Flowing robe with traditional Ghanaian embroidery and Kente trim'
+    name: 'Kente Kaftan',
+    price: 129.99,
+    sizes: ['L', 'XL', 'XXL'],
+    image: require('../assets/images/a6.jpg'),
+    description: 'Comfortable loose-fitting robe with Kente patterns'
+  },
+  {
+    id: '7',
+    name: 'African Print Blazer',
+    price: 149.99,
+    sizes: ['M', 'L', 'XL'],
+    image: require('../assets/images/a7.jpg'),
+    description: 'Modern blazer with traditional African print fabric'
+  },
+  {
+    id: '8',
+    name: 'Ceremonial Robe',
+    price: 219.99,
+    sizes: ['L', 'XL', 'XXL'],
+    image: require('../assets/images/a8.jpg'),
+    description: 'Luxurious ceremonial robe for special occasions'
+  },
+  {
+    id: '9',
+    name: 'Traditional Vest',
+    price: 59.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/a9.jpg'),
+    description: 'Sleeveless traditional African vest with ethnic patterns'
+  },
+  {
+    id: '10',
+    name: 'Embroidered Tunic',
+    price: 99.99,
+    sizes: ['M', 'L', 'XL'],
+    image: require('../assets/images/a10.jpg'),
+    description: 'Hand-embroidered traditional tunic with intricate designs'
+  },
+  {
+    id: '11',
+    name: 'Kente Stole Set',
+    price: 169.99,
+    sizes: ['One Size'],
+    image: require('../assets/images/a11.jpg'),
+    description: 'Traditional Kente stole with matching accessories'
+  },
+  {
+    id: '12',
+    name: 'African Print Shirt',
+    price: 64.99,
+    sizes: ['S', 'M', 'L', 'XL'],
+    image: require('../assets/images/a12.jpg'),
+    description: 'Modern African-inspired shirt with vibrant prints'
   }
 ];
 
@@ -65,21 +113,12 @@ const AfricaWearScreen = ({ navigation, route }) => {
         <Text style={styles.sizes}>Sizes: {item.sizes.join(', ')}</Text>
         
         <View style={styles.buttonRow}>
-          {viewOnly ? (
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('ProductDetailScreen', { product: item, category: 'africa-wear' })}
-              style={styles.detailsButtonFull}
-            >
-              <Text style={styles.buttonText}>View Details</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity 
-              onPress={() => navigation.navigate('CustomizeAfricaWearScreen', { item, category: 'africa-wear' })}
-              style={styles.customizeButtonFull}
-            >
-              <Text style={styles.buttonText}>Customize</Text>
-            </TouchableOpacity>
-          )}
+          <TouchableOpacity 
+            onPress={() => navigation.navigate('ProductDetailScreen', { product: item, category: 'africa-wear' })}
+            style={styles.detailsButtonFull}
+          >
+            <Text style={styles.buttonText}>View Details</Text>
+          </TouchableOpacity>
         </View>
       </View>
     </View>
@@ -169,30 +208,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     gap: 10,
   },
-  detailsButton: {
-    flex: 1,
-    backgroundColor: '#6200ee',
-    padding: 10,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
   detailsButtonFull: {
     width: '100%',
     backgroundColor: '#6200ee',
-    padding: 10,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
-  customizeButton: {
-    flex: 1,
-    backgroundColor: '#03dac6',
-    padding: 10,
-    borderRadius: 6,
-    alignItems: 'center',
-  },
-  customizeButtonFull: {
-    width: '100%',
-    backgroundColor: '#03dac6',
     padding: 10,
     borderRadius: 6,
     alignItems: 'center',

@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { View, FlatList, TouchableOpacity, Text, Image, StyleSheet, ScrollView } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import React, { useState } from 'react';
+import { FlatList, Image, ImageBackground, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const ghanaianFabrics = [
   {
@@ -89,15 +89,15 @@ const ghanaianFabrics = [
   }
 ];
 
-const ghanaianStyles = [
-  { id: 1, name: 'Kaba and Slit', icon: 'person-outline' },
-  { id: 2, name: 'Agbada', icon: 'person-outline' },
-  { id: 3, name: 'Kente Stole', icon: 'shirt-outline' },
-  { id: 4, name: 'Smock (Fugu)', icon: 'shirt-outline' },
-  { id: 5, name: 'Dansinkran', icon: 'person-outline' },
-  { id: 6, name: 'Ntama Wrapper', icon: 'person-outline' },
-  { id: 7, name: 'Kente Suit', icon: 'business-outline' },
-  { id: 8, name: 'Batakari', icon: 'shirt-outline' }
+const ghanaianMenStyles = [
+  { id: 1, name: 'Short Sleeve', icon: 'shirt-outline', price: 25 },
+  { id: 2, name: 'Long Sleeve', icon: 'shirt-outline', price: 30 },
+  { id: 3, name: 'Smock (Fugu)', icon: 'shirt-outline', price: 45 },
+  { id: 4, name: 'Kente Suit', icon: 'business-outline', price: 120 },
+  { id: 5, name: 'Batakari', icon: 'shirt-outline', price: 35 },
+  { id: 6, name: 'Kaftan', icon: 'shirt-outline', price: 40 },
+  { id: 7, name: 'Dashiki', icon: 'shirt-outline', price: 32 },
+  { id: 8, name: 'African Print Shirt', icon: 'shirt-outline', price: 38 }
 ];
 
 const ClothingStoreScreen = ({ navigation, route }) => {
@@ -155,12 +155,17 @@ const ClothingStoreScreen = ({ navigation, route }) => {
             <Text style={styles.selectedText}>Selected</Text>
           </View>
         )}
+        
       </View>
     </TouchableOpacity>
   );
 
   return (
-    <View style={styles.container}>
+    <ImageBackground 
+      source={require('../assets/images/kente1.jpg')} 
+      style={styles.container}
+      imageStyle={styles.backgroundImage}
+    >
       {/* Header */}
       <View style={styles.header}>
         <TouchableOpacity onPress={() => navigation.goBack()} style={styles.backButton}>
@@ -191,7 +196,7 @@ const ClothingStoreScreen = ({ navigation, route }) => {
           <Text style={styles.sectionSubtitle}>Select the outfit style you want</Text>
           
           <View style={styles.stylesGrid}>
-            {ghanaianStyles.map((style) => (
+            {ghanaianMenStyles.map((style) => (
               <TouchableOpacity
                 key={style.id}
                 style={[
@@ -210,6 +215,12 @@ const ClothingStoreScreen = ({ navigation, route }) => {
                   selectedStyle?.id === style.id && styles.selectedStyleText
                 ]}>
                   {style.name}
+                </Text>
+                <Text style={[
+                  styles.stylePrice,
+                  selectedStyle?.id === style.id && styles.selectedStyleText
+                ]}>
+                  ${style.price}
                 </Text>
                 {selectedStyle?.id === style.id && (
                   <Ionicons name="checkmark-circle" size={16} color="#fff" style={styles.styleCheckmark} />
@@ -232,10 +243,10 @@ const ClothingStoreScreen = ({ navigation, route }) => {
             
             {selectedMaterial && selectedStyle && (
               <TouchableOpacity 
-                style={styles.proceedButton}
+                style={styles.customizeButton}
                 onPress={handleProceedToCustomization}
               >
-                <Text style={styles.proceedButtonText}>Proceed to Customization</Text>
+                <Text style={styles.customizeButtonText}>Customize</Text>
                 <Ionicons name="arrow-forward" size={16} color="#fff" />
               </TouchableOpacity>
             )}
@@ -244,7 +255,7 @@ const ClothingStoreScreen = ({ navigation, route }) => {
 
         <View style={styles.bottomPadding} />
       </ScrollView>
-    </View>
+    </ImageBackground>
   );
 };
 
@@ -252,6 +263,10 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#f8f8f8',
+  },
+  backgroundImage: {
+    opacity: 0.1,
+    resizeMode: 'cover',
   },
   header: {
     paddingTop: 50,
@@ -417,6 +432,13 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     marginTop: 8,
   },
+  stylePrice: {
+    fontSize: 12,
+    fontWeight: 'bold',
+    color: '#4CAF50',
+    textAlign: 'center',
+    marginTop: 4,
+  },
   selectedStyleText: {
     color: '#fff',
   },
@@ -449,7 +471,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  proceedButton: {
+  customizeButton: {
     backgroundColor: '#4CAF50',
     flexDirection: 'row',
     alignItems: 'center',
@@ -458,7 +480,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     marginTop: 15,
   },
-  proceedButtonText: {
+  customizeButtonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',

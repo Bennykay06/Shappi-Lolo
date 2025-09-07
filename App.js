@@ -50,6 +50,7 @@ import PantsScreen from './Screens/PantsScreen';
 import JeansScreen from './Screens/JeansScreen';
 import AfricaWearScreen from './Screens/AfricaWearScreen';
 import ClothingStoreScreen from './Screens/ClothingStoreScreen';
+import CustomizeAfricanOutfitScreen from './Screens/CustomizeAfricanOutfitScreen';
 import AppointmentBookingScreen from './Screens/AppointmentBookingScreen';
 import AppointmentsListScreen from './Screens/AppointmentsListScreen';
 import BookedItemsScreen from './Screens/BookedItemsScreen';
@@ -311,6 +312,11 @@ function ShopStackNavigator() {
       <ShopStack.Screen 
         name="ClothingStoreScreen" 
         component={ClothingStoreScreen}
+        options={{ headerShown: false }}
+      />
+      <ShopStack.Screen 
+        name="CustomizeAfricanOutfitScreen" 
+        component={CustomizeAfricanOutfitScreen}
         options={{ headerShown: false }}
       />
     </ShopStack.Navigator>

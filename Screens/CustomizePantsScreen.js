@@ -11,221 +11,160 @@ const CustomizePantsScreen = ({ route }) => {
   const product = pants || item;
   console.log('Customizing pants:', product);
   
-  // MTailor-style pants customization - 6 step process
+  // Pants customization - 4 step process (matching jeans format)
   const [currentStep, setCurrentStep] = useState(1);
-  const totalSteps = 6;
+  const totalSteps = 4;
   
   const [selections, setSelections] = useState({
     fabric: null,
-    fit: null,
     waist: null,
     length: null,
-    details: null,
-    finishing: null
+    details: null
   });
 
-  // MTailor's pants customization options
+  // MTailor's pants customization options using logo colors for fabrics
   const pantsOptions = {
     fabric: [
       { 
         id: 1, 
-        name: 'Wool Blend', 
-        desc: 'Classic business - wrinkle resistant and durable', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Navy Blue Wool', 
+        desc: 'Premium wool blend - wrinkle resistant and durable', 
+        color: '#1e3a8a',
+        fabricTexture: 'Wool Herringbone',
         price: '$149',
         type: 'wool',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Cotton Chino', 
-        desc: 'Versatile casual - perfect for everyday wear', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        price: '$129',
+        name: 'Charcoal Grey Cotton', 
+        desc: 'Modern tailored fit - perfect for business', 
+        color: '#374151',
+        fabricTexture: 'Cotton Twill',
+        price: '$159',
         type: 'cotton',
         popular: true
       },
       { 
         id: 3, 
-        name: 'Stretch Denim', 
-        desc: 'Modern comfort - flexible and stylish', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
+        name: 'Jet Black Premium', 
+        desc: 'Versatile everyday wear - comfortable and stylish', 
+        color: '#111827',
+        fabricTexture: 'Performance Stretch',
         price: '$139',
-        type: 'denim'
+        type: 'business'
       },
       { 
         id: 4, 
-        name: 'Performance Fabric', 
-        desc: 'Athletic comfort - moisture-wicking technology', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        price: '$159',
-        type: 'performance'
+        name: 'Light Grey Formal', 
+        desc: 'Professional grade tailoring - exceptional quality', 
+        color: '#9ca3af',
+        fabricTexture: 'Wool Gabardine',
+        price: '$169',
+        type: 'formal'
       },
       { 
         id: 5, 
-        name: 'Linen Blend', 
-        desc: 'Summer comfort - breathable and lightweight', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        price: '$169',
-        type: 'linen'
-      }
-    ],
-    fit: [
-      { 
-        id: 1, 
-        name: 'Slim Fit', 
-        desc: 'Modern tailored - fitted through hip and thigh', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        measurements: 'Fitted silhouette',
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Classic Fit', 
-        desc: 'Traditional comfort - relaxed through hip and thigh', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
-        measurements: 'Comfortable fit'
-      },
-      { 
-        id: 3, 
-        name: 'Athletic Fit', 
-        desc: 'Room for muscle - accommodates larger thighs', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
-        measurements: 'Extra room in thigh'
+        name: 'Deep Brown Luxury', 
+        desc: 'Luxury comfort - precision fit technology', 
+        color: '#78350f',
+        fabricTexture: 'Italian Wool',
+        price: '$189',
+        type: 'luxury'
       }
     ],
     waist: [
       { 
         id: 1, 
-        name: 'Flat Front', 
-        desc: 'Clean modern look - no pleats', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Luxury Dress Pants', 
+        desc: 'Flat front - clean modern look with no pleats', 
+        img: require('../assets/images/pa9.jpg'),
+        preview: require('../assets/images/pa9.jpg'),
         style: 'modern',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Single Pleat', 
-        desc: 'Traditional style - one pleat for comfort', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
+        name: 'Contemporary Fit Pants', 
+        desc: 'Single pleat - traditional style with comfort', 
+        img: require('../assets/images/pa10.jpg'),
+        preview: require('../assets/images/pa10.jpg'),
         style: 'classic'
       },
       { 
         id: 3, 
-        name: 'Double Pleat', 
-        desc: 'Formal traditional - two pleats for extra room', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
+        name: 'Designer Formal Pants', 
+        desc: 'Double pleat - formal traditional with extra room', 
+        img: require('../assets/images/pa11.jpg'),
+        preview: require('../assets/images/pa11.jpg'),
         style: 'formal'
       }
     ],
     length: [
       { 
         id: 1, 
-        name: 'No Break', 
-        desc: 'Modern length - hem just touches shoe', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Classic Navy Dress Pants', 
+        desc: 'No break - modern length, hem just touches shoe', 
+        img: require('../assets/images/pa1.jpg'),
+        preview: require('../assets/images/pa1.jpg'),
         style: 'modern',
         popular: true
       },
       { 
         id: 2, 
-        name: 'Quarter Break', 
-        desc: 'Slight bend - classic professional length', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg'),
+        name: 'Charcoal Slim Fit Trousers', 
+        desc: 'Quarter break - classic professional length', 
+        img: require('../assets/images/pa2.jpg'),
+        preview: require('../assets/images/pa2.jpg'),
         style: 'classic'
       },
       { 
         id: 3, 
-        name: 'Half Break', 
-        desc: 'Traditional length - moderate fold at shoe', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg'),
+        name: 'Black Business Casual Pants', 
+        desc: 'Half break - traditional length with fold', 
+        img: require('../assets/images/pa3.jpg'),
+        preview: require('../assets/images/pa3.jpg'),
         style: 'traditional'
       }
     ],
     details: [
       { 
         id: 1, 
-        name: 'Side Pockets', 
-        desc: 'Standard pockets - clean and functional', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
+        name: 'Grey Formal Dress Pants', 
+        desc: 'Side pockets - standard clean and functional', 
+        img: require('../assets/images/pa4.jpg'),
+        preview: require('../assets/images/pa4.jpg'),
         popular: true
       },
       { 
         id: 2, 
-        name: 'Back Pockets', 
-        desc: 'Added back pockets - extra functionality', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg')
+        name: 'Premium Tailored Pants', 
+        desc: 'Back pockets - added extra functionality', 
+        img: require('../assets/images/pa5.jpg'),
+        preview: require('../assets/images/pa5.jpg')
       },
       { 
         id: 3, 
-        name: 'Coin Pocket', 
-        desc: 'Small coin pocket - traditional detail', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg')
-      }
-    ],
-    finishing: [
-      { 
-        id: 1, 
-        name: 'Hemmed', 
-        desc: 'Standard hem - clean finished edge', 
-        img: require('../assets/images/dress pant.webp'),
-        preview: require('../assets/images/dress pant.webp'),
-        popular: true
-      },
-      { 
-        id: 2, 
-        name: 'Cuffed', 
-        desc: 'Traditional cuff - formal appearance', 
-        img: require('../assets/images/jeans.jpg'),
-        preview: require('../assets/images/jeans.jpg')
-      },
-      { 
-        id: 3, 
-        name: 'Raw Edge', 
-        desc: 'Unfinished hem - casual contemporary', 
-        img: require('../assets/images/men short.jpg'),
-        preview: require('../assets/images/men short.jpg')
+        name: 'Executive Dress Pants', 
+        desc: 'Coin pocket - traditional detail styling', 
+        img: require('../assets/images/pa6.jpg'),
+        preview: require('../assets/images/pa6.jpg')
       }
     ]
   };
 
-  // MTailor's exact customization flow - Get configuration for current step
+  // Pants customization flow - Get configuration for current step (matching jeans format)
   const getCurrentOptions = () => {
     switch(currentStep) {
       case 1: return { 
         title: 'Choose Your Fabric', 
-        subtitle: 'Select from wool, cotton, denim, and performance fabrics',
+        subtitle: 'Select from premium fabric colors and textures',
         options: pantsOptions.fabric,
         selected: selections.fabric,
         type: 'fabric',
         field: 'fabric'
       };
       case 2: return { 
-        title: 'Select Fit Style', 
-        subtitle: 'Choose your preferred fit through hip and thigh',
-        options: pantsOptions.fit,
-        selected: selections.fit,
-        type: 'image',
-        field: 'fit'
-      };
-      case 3: return { 
         title: 'Choose Waist Style', 
         subtitle: 'Select flat front or pleated style',
         options: pantsOptions.waist,
@@ -233,7 +172,7 @@ const CustomizePantsScreen = ({ route }) => {
         type: 'image',
         field: 'waist'
       };
-      case 4: return { 
+      case 3: return { 
         title: 'Select Length', 
         subtitle: 'Choose your preferred hem length and break',
         options: pantsOptions.length,
@@ -241,21 +180,13 @@ const CustomizePantsScreen = ({ route }) => {
         type: 'image',
         field: 'length'
       };
-      case 5: return { 
+      case 4: return { 
         title: 'Choose Details', 
         subtitle: 'Select pocket configuration and additional details',
         options: pantsOptions.details,
         selected: selections.details,
         type: 'image',
         field: 'details'
-      };
-      case 6: return { 
-        title: 'Select Finishing', 
-        subtitle: 'Choose your hem finishing style',
-        options: pantsOptions.finishing,
-        selected: selections.finishing,
-        type: 'image',
-        field: 'finishing'
       };
       default: return null;
     }
@@ -283,7 +214,7 @@ const CustomizePantsScreen = ({ route }) => {
   };
 
   const handleAddToCart = () => {
-    if (!selections.fabric || !selections.fit || !selections.waist || !selections.length || !selections.details || !selections.finishing) {
+    if (!selections.fabric || !selections.waist || !selections.length || !selections.details) {
       Alert.alert('Incomplete Selection', 'Please complete all customization steps.');
       return;
     }
@@ -353,7 +284,13 @@ const CustomizePantsScreen = ({ route }) => {
                 </View>
               )}
               
-              <Image source={option.img} style={styles.optionImage} />
+              {currentConfig.type === 'fabric' && option.color ? (
+                <View style={[styles.fabricSwatch, { backgroundColor: option.color }]}>
+                  <View style={styles.fabricPattern} />
+                </View>
+              ) : (
+                <Image source={option.img} style={styles.optionImage} />
+              )}
               
               <View style={styles.optionContent}>
                 <Text style={styles.optionName}>{option.name}</Text>
@@ -369,6 +306,10 @@ const CustomizePantsScreen = ({ route }) => {
                 
                 {option.style && (
                   <Text style={styles.optionStyle}>{option.style} style</Text>
+                )}
+                
+                {option.fabricTexture && (
+                  <Text style={styles.optionTexture}>{option.fabricTexture}</Text>
                 )}
 
                 {currentConfig.selected?.id === option.id && (
@@ -635,6 +576,28 @@ const styles = StyleSheet.create({
   },
   disabledButton: {
     backgroundColor: '#ccc',
+  },
+  fabricSwatch: {
+    width: '100%',
+    height: 200,
+    borderRadius: 8,
+    position: 'relative',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  fabricPattern: {
+    width: '80%',
+    height: '80%',
+    borderRadius: 6,
+    opacity: 0.1,
+    backgroundColor: 'rgba(255, 255, 255, 0.3)',
+  },
+  optionTexture: {
+    fontSize: 14,
+    color: '#666',
+    fontStyle: 'italic',
+    marginBottom: 8,
+    fontWeight: '500',
   },
 });
 

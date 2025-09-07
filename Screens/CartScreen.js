@@ -82,6 +82,16 @@ export default function CartScreen({ navigation }) {
         { label: 'MONOGRAM', value: selections.monogram?.text || 'None' },
         { label: 'MONOGRAM COLOR', value: selections.monogram?.color || 'N/A' }
       ];
+    } else if (item.type === 'custom-african') {
+      options = [
+        { label: 'MATERIAL', value: selections.material || 'N/A' },
+        { label: 'STYLE', value: selections.style || 'N/A' },
+        { label: 'SIZE', value: selections.size || 'N/A' },
+        { label: 'SLEEVE LENGTH', value: selections[1]?.name || 'N/A' },
+        { label: 'NECKLINE', value: selections[2]?.name || 'N/A' },
+        { label: 'FIT', value: selections[3]?.name || 'N/A' },
+        { label: 'LENGTH', value: selections[4]?.name || 'N/A' }
+      ];
     } else {
       // Default to suit customizations for other items
       options = [

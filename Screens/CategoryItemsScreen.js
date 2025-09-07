@@ -102,26 +102,90 @@ const categoryData = {
   'DRESS PANTS': [
     {
       id: 1,
-      name: 'Classic Black Dress Pants',
-      price: 89,
+      name: 'Classic Navy Dress Pants',
+      price: 149,
       sizes: ['S', 'M', 'L', 'XL'],
-      image: require('../assets/images/dress pant.webp'),
+      image: require('../assets/images/pa1.jpg'),
       category: 'DRESS PANTS'
     },
     {
       id: 2,
-      name: 'Navy Blue Dress Pants',
-      price: 95,
+      name: 'Charcoal Slim Fit Trousers',
+      price: 159,
       sizes: ['M', 'L', 'XL'],
-      image: require('../assets/images/dress pant.webp'),
+      image: require('../assets/images/pa2.jpg'),
       category: 'DRESS PANTS'
     },
     {
       id: 3,
-      name: 'Charcoal Grey Dress Pants',
-      price: 92,
+      name: 'Black Business Casual Pants',
+      price: 139,
       sizes: ['S', 'M', 'L'],
-      image: require('../assets/images/dress pant.webp'),
+      image: require('../assets/images/pa3.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 4,
+      name: 'Grey Formal Dress Pants',
+      price: 169,
+      sizes: ['M', 'L', 'XL'],
+      image: require('../assets/images/pa4.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 5,
+      name: 'Premium Tailored Pants',
+      price: 189,
+      sizes: ['S', 'M', 'L', 'XL'],
+      image: require('../assets/images/pa5.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 6,
+      name: 'Executive Dress Pants',
+      price: 179,
+      sizes: ['M', 'L', 'XL', 'XXL'],
+      image: require('../assets/images/pa6.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 7,
+      name: 'Modern Fit Trousers',
+      price: 155,
+      sizes: ['S', 'M', 'L'],
+      image: require('../assets/images/pa7.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 8,
+      name: 'Professional Chinos',
+      price: 129,
+      sizes: ['S', 'M', 'L', 'XL'],
+      image: require('../assets/images/pa8.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 9,
+      name: 'Luxury Dress Pants',
+      price: 199,
+      sizes: ['M', 'L', 'XL'],
+      image: require('../assets/images/pa9.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 10,
+      name: 'Contemporary Fit Pants',
+      price: 165,
+      sizes: ['S', 'M', 'L', 'XL'],
+      image: require('../assets/images/pa10.jpg'),
+      category: 'DRESS PANTS'
+    },
+    {
+      id: 11,
+      name: 'Designer Formal Pants',
+      price: 219,
+      sizes: ['M', 'L', 'XL', 'XXL'],
+      image: require('../assets/images/pa11.jpg'),
       category: 'DRESS PANTS'
     },
   ],
@@ -353,6 +417,10 @@ export default function CategoryItemsScreen({ route, navigation }) {
                   onPress={() => {
                     if (categoryName === 'SHIRTS') {
                       navigation.navigate('CustomizeShirtScreen', { shirt: item });
+                    } else if (categoryName === 'DRESS PANTS') {
+                      navigation.navigate('CustomizePantsScreen', { pants: item });
+                    } else if (categoryName === 'BLAZERS') {
+                      navigation.navigate('CustomizeBlazersScreen', { blazer: item });
                     } else {
                       navigation.navigate('CustomizeSuitScreen', { 
                         item, 
