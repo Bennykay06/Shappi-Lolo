@@ -3,10 +3,11 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Platform } from 'react-native';
+import { Platform, View, ActivityIndicator, StyleSheet } from 'react-native';
 import { CartProvider, useCart } from './Context/CartContext';
 import { AppointmentProvider } from './Context/AppointmentContext';
 import { MeasurementProvider } from './Context/MeasurementContext';
+import { AuthProvider, useAuth } from './Context/AuthContext';
 
 // Auth Screens
 import SplashScreen from './Screens/SplashScreen';
@@ -495,40 +496,66 @@ function MainAppStack() {
   );
 }
 
+function AppNavigator() {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#6200ee" />
+      </View>
+    );
+  }
+
+  return (
+    <NavigationContainer>
+      {isAuthenticated ? (
+        <MainAppStack />
+      ) : (
+        <AuthStack.Navigator 
+          initialRouteName="Splash"
+          screenOptions={{ 
+            headerShown: false,
+            gestureEnabled: false,
+          }}
+        >
+          <AuthStack.Screen 
+            name="Splash" 
+            component={SplashScreen} 
+          />
+          <AuthStack.Screen 
+            name="Login" 
+            component={LoginScreen} 
+          />
+          <AuthStack.Screen 
+            name="SignUp" 
+            component={SignUpScreen} 
+          />
+        </AuthStack.Navigator>
+      )}
+    </NavigationContainer>
+  );
+}
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#fff',
+  },
+});
+
 export default function App() {
   return (
-    <MeasurementProvider>
-      <AppointmentProvider>
-        <CartProvider>
-          <NavigationContainer>
-            <AuthStack.Navigator 
-              initialRouteName="Splash"
-              screenOptions={{ 
-                headerShown: false,
-                gestureEnabled: false,
-              }}
-            >
-              <AuthStack.Screen 
-                name="Splash" 
-                component={SplashScreen} 
-              />
-              <AuthStack.Screen 
-                name="Login" 
-                component={LoginScreen} 
-              />
-              <AuthStack.Screen 
-                name="SignUp" 
-                component={SignUpScreen} 
-              />
-              <AuthStack.Screen 
-                name="App" 
-                component={MainAppStack}
-                options={{ gestureEnabled: false }}
-              />
-            </AuthStack.Navigator>
-          </NavigationContainer>
-        </CartProvider>
-      </AppointmentProvider>
-    </MeasurementProvider>
+    <AuthProvider>
+      <MeasurementProvider>
+        <AppointmentProvider>
+          <CartProvider>
+            <AppNavigator />
+          </CartProvider>
+        </AppointmentProvider>
+      </MeasurementProvider>
+    </AuthProvider>
   );
 }

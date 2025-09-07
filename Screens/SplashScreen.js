@@ -8,10 +8,12 @@ import {
   StatusBar,
   Image
 } from 'react-native';
+import { useAuth } from '../Context/AuthContext';
 
 const { width, height } = Dimensions.get('window');
 
 export default function SplashScreen({ navigation }) {
+  const { isAuthenticated, isLoading } = useAuth();
   const fadeAnim = useRef(new Animated.Value(0)).current;
   const scaleAnim = useRef(new Animated.Value(0.8)).current;
   const slideAnim = useRef(new Animated.Value(50)).current;
@@ -26,17 +28,25 @@ export default function SplashScreen({ navigation }) {
     // Start animations
     startAnimations();
     
-    // Navigate to Login after 3 seconds
+    // Navigate after 3 seconds based on auth state
     const timer = setTimeout(() => {
       StatusBar.setHidden(false);
-      navigation.replace('Login');
+      if (!isLoading) {
+        if (isAuthenticated) {
+          // User is authenticated, navigation will be handled by AppNavigator
+          return;
+        } else {
+          // User is not authenticated, go to login
+          navigation.replace('Login');
+        }
+      }
     }, 3000);
 
     return () => {
       clearTimeout(timer);
       StatusBar.setHidden(false);
     };
-  }, [navigation]);
+  }, [navigation, isAuthenticated, isLoading]);
 
   const startAnimations = () => {
     // Logo fade in and scale

@@ -10,19 +10,21 @@ import {
   Switch
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { useAuth } from '../Context/AuthContext';
 
 const AccountScreen = ({ navigation }) => {
+  const { user, logout } = useAuth();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [emailNotifications, setEmailNotifications] = useState(false);
 
-  // Mock user data - replace with actual user context/state
-  const user = {
-    name: 'John Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    memberSince: '2023',
-    avatar: require('../assets/images/login.jpg') // placeholder
+  // Use real user data from auth context
+  const displayUser = user || {
+    name: 'Guest User',
+    email: 'guest@example.com',
+    createdAt: new Date().toISOString()
   };
+
+  const memberSince = displayUser.createdAt ? new Date(displayUser.createdAt).getFullYear().toString() : '2024';
 
   const handleEditProfile = () => {
     navigation.navigate('EditProfile');
@@ -56,13 +58,24 @@ const AccountScreen = ({ navigation }) => {
     navigation.navigate('BookedItems');
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     Alert.alert(
       'Logout',
       'Are you sure you want to logout?',
       [
         { text: 'Cancel', style: 'cancel' },
-        { text: 'Logout', onPress: () => navigation.navigate('Login') }
+        { 
+          text: 'Logout', 
+          onPress: async () => {
+            try {
+              await logout();
+              // Navigation will be handled automatically by AppNavigator
+            } catch (error) {
+              console.error('Logout error:', error);
+              Alert.alert('Error', 'Failed to logout. Please try again.');
+            }
+          }
+        }
       ]
     );
   };
@@ -95,11 +108,13 @@ const AccountScreen = ({ navigation }) => {
 
       {/* Profile Section */}
       <View style={styles.profileSection}>
-        <Image source={user.avatar} style={styles.avatar} />
+        <View style={styles.avatarPlaceholder}>
+          <Ionicons name="person" size={40} color="#666" />
+        </View>
         <View style={styles.profileInfo}>
-          <Text style={styles.userName}>{user.name}</Text>
-          <Text style={styles.userEmail}>{user.email}</Text>
-          <Text style={styles.memberSince}>Member since {user.memberSince}</Text>
+          <Text style={styles.userName}>{displayUser.name}</Text>
+          <Text style={styles.userEmail}>{displayUser.email}</Text>
+          <Text style={styles.memberSince}>Member since {memberSince}</Text>
         </View>
         <TouchableOpacity style={styles.editButton} onPress={handleEditProfile}>
           <Ionicons name="pencil" size={20} color="#6200ee" />
@@ -225,11 +240,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 20,
   },
-  avatar: {
+  avatarPlaceholder: {
     width: 80,
     height: 80,
     borderRadius: 40,
     marginRight: 15,
+    backgroundColor: '#f0f0f0',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#e0e0e0',
   },
   profileInfo: {
     flex: 1,

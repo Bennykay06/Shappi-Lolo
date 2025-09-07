@@ -13,6 +13,7 @@ import {
   Keyboard,
   ActivityIndicator
 } from 'react-native';
+import { useAuth } from '../Context/AuthContext';
 
 export default function SignUpScreen({ navigation }) {
   const [name, setName] = useState('');
@@ -20,15 +21,17 @@ export default function SignUpScreen({ navigation }) {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  
+  const { register } = useAuth();
 
-  const handleSignUp = () => {
+  const handleSignUp = async () => {
     if (!name || !email || !password) {
       Alert.alert('Error', 'Please fill in all fields');
       return;
     }
 
     if (!email.includes('@')) {
-      Alert.alert('Error', 'Please enter a valid email');
+      Alert.alert('Error', 'Please enter a valid email address');
       return;
     }
 
@@ -39,12 +42,22 @@ export default function SignUpScreen({ navigation }) {
 
     setIsLoading(true);
     
-    // Simulate API call
-    setTimeout(() => {
+    try {
+      const result = await register(name.trim(), email.toLowerCase().trim(), password);
+      
+      if (result.success) {
+        Alert.alert('Success', `Welcome ${result.user.name}! Your account has been created.`);
+        // Navigation will be handled by the AppNavigator in App.js
+        // The authentication context will automatically redirect to main app
+      } else {
+        Alert.alert('Registration Failed', result.error || 'Unable to create account');
+      }
+    } catch (error) {
+      Alert.alert('Error', 'Registration failed. Please try again.');
+      console.error('Registration error:', error);
+    } finally {
       setIsLoading(false);
-      Alert.alert('Success', `Account created for ${name}`);
-      navigation.replace('App'); // Changed from navigate('MainApp') to replace('App')
-    }, 1500);
+    }
   };
 
   return (
