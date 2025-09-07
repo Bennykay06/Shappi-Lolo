@@ -11,7 +11,6 @@ const ghanaianFabrics = [
     pattern: 'Stool Design',
     origin: 'Ghana',
     image: require('../assets/images/stool.jpg'),
-    popular: true
   },
   {
     id: '2',
@@ -21,7 +20,6 @@ const ghanaianFabrics = [
     pattern: 'Sugarcane Motif',
     origin: 'Ghana',
     image: require('../assets/images/sugarcane.jpg'),
-    popular: true
   },
   {
     id: '3',
@@ -85,7 +83,6 @@ const ghanaianFabrics = [
     pattern: 'Royal Kente',
     origin: 'Ghana',
     image: require('../assets/images/kente.jpg'),
-    popular: true
   }
 ];
 
@@ -131,15 +128,9 @@ const ClothingStoreScreen = ({ navigation, route }) => {
       style={[
         styles.materialCard,
         selectedMaterial?.id === item.id && styles.selectedCard,
-        item.popular && styles.popularCard
       ]}
       onPress={() => handleMaterialSelect(item)}
     >
-      {item.popular && (
-        <View style={styles.popularBadge}>
-          <Text style={styles.popularText}>POPULAR</Text>
-        </View>
-      )}
       <Image source={item.image} style={styles.materialImage} />
       <View style={styles.materialInfo}>
         <Text style={styles.materialName}>{item.name}</Text>
@@ -331,24 +322,6 @@ const styles = StyleSheet.create({
     borderColor: '#4CAF50',
     shadowColor: '#4CAF50',
     shadowOpacity: 0.3,
-  },
-  popularCard: {
-    borderColor: '#FF9800',
-  },
-  popularBadge: {
-    position: 'absolute',
-    top: 10,
-    right: 10,
-    backgroundColor: '#FF9800',
-    paddingHorizontal: 8,
-    paddingVertical: 4,
-    borderRadius: 10,
-    zIndex: 1,
-  },
-  popularText: {
-    color: '#fff',
-    fontSize: 10,
-    fontWeight: 'bold',
   },
   materialImage: {
     width: '100%',

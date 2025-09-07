@@ -5,7 +5,7 @@ import { useNavigation } from '@react-navigation/native';
 import { useCart } from '../Context/CartContext';
 
 export default function ProductDetailScreen({ route }) {
-  const { product, material } = route?.params || {};
+  const { product, material, category } = route?.params || {};
   const navigation = useNavigation();
   const { addToCart } = useCart();
   const [quantity, setQuantity] = useState(1);
@@ -24,13 +24,20 @@ export default function ProductDetailScreen({ route }) {
   }
 
   const handleAddToCart = () => {
+    // Determine item type - check if it's African wear material or from African wear category
+    let itemType = 'ready-made';
+    if (material || category === 'africa-wear') {
+      // If it's a material (fabric) from African wear store OR from AfricaWearScreen
+      itemType = 'custom-african';
+    }
+    
     const cartItem = {
       id: item.id,
       name: item.name,
       price: typeof item.price === 'number' ? item.price : parseFloat(item.price.toString().replace(/[^0-9.]/g, '')),
       image: item.image,
       quantity: quantity,
-      type: material ? 'fabric' : 'ready-made'
+      type: itemType
     };
 
     addToCart(cartItem);

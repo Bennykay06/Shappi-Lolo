@@ -23,7 +23,6 @@ export default function HomeScreen({ navigation }) {
       image: require('../assets/images/sewing.png'),
       description: 'Book a consultation with our expert tailors',
       route: 'AppointmentBooking',
-      featured: true,
       icon: 'calendar'
     },
     {
@@ -33,7 +32,6 @@ export default function HomeScreen({ navigation }) {
       image: require('../assets/images/track-order-icon.png'),
       description: 'See real-time updates on your custom clothing',
       route: 'OrderTracking',
-      featured: true,
       icon: 'trending-up'
     },
     {
@@ -95,7 +93,7 @@ export default function HomeScreen({ navigation }) {
         {services.map((service) => (
           <TouchableOpacity
             key={service.id}
-            style={[styles.categoryCard, service.featured && styles.featuredCard]}
+            style={[styles.categoryCard]}
             onPress={() => {
               if (service.route === 'ShopTab') {
                 navigation.navigate('MainTabs', { screen: 'ShopTab' });
@@ -114,11 +112,6 @@ export default function HomeScreen({ navigation }) {
                 <Text style={styles.categorySubtitle}>{service.subtitle}</Text>
                 <Text style={styles.serviceDescription}>{service.description}</Text>
               </View>
-              {service.featured && (
-                <View style={styles.featuredBadge}>
-                  <Text style={styles.featuredText}>POPULAR</Text>
-                </View>
-              )}
             </View>
           </TouchableOpacity>
         ))}
@@ -287,10 +280,6 @@ const styles = StyleSheet.create({
     elevation: 4,
     position: 'relative',
   },
-  featuredCard: {
-    borderWidth: 2,
-    borderColor: '#007AFF',
-  },
   categoryImage: {
     width: '100%',
     height: 200,
@@ -323,20 +312,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
     color: '#333',
-  },
-  featuredBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  featuredText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   processSection: {
     padding: 20,

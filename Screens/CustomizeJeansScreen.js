@@ -34,7 +34,6 @@ const CustomizeJeansScreen = ({ route }) => {
         preview: require('../assets/images/jeans.jpg'),
         price: '$89',
         type: 'indigo',
-        popular: true,
         color: '#4169E1'
       },
       { 
@@ -45,7 +44,6 @@ const CustomizeJeansScreen = ({ route }) => {
         preview: require('../assets/images/jeans.jpg'),
         price: '$89',
         type: 'light',
-        popular: true,
         color: '#87CEEB'
       },
       { 
@@ -87,7 +85,6 @@ const CustomizeJeansScreen = ({ route }) => {
         img: require('../assets/images/skinny-jeans.jpg'),
         preview: require('../assets/images/skinny-jeans.jpg'),
         measurements: 'Tight fit',
-        popular: true,
         fitType: 'SKINNY'
       },
       { 
@@ -97,7 +94,6 @@ const CustomizeJeansScreen = ({ route }) => {
         img: require('../assets/images/slim-jeans.jpg'),
         preview: require('../assets/images/slim-jeans.jpg'),
         measurements: 'Fitted silhouette',
-        popular: true,
         fitType: 'SLIM'
       },
       { 
@@ -127,7 +123,6 @@ const CustomizeJeansScreen = ({ route }) => {
         img: require('../assets/images/low-rise.png'),
         preview: require('../assets/images/low-rise.png'),
         style: 'modern',
-        popular: true,
         riseType: 'LOW'
       },
       { 
@@ -156,7 +151,6 @@ const CustomizeJeansScreen = ({ route }) => {
         desc: 'Two front, two back, plus coin pocket - traditional styling', 
         img: require('../assets/images/slim-jeans.jpg'),
         preview: require('../assets/images/slim-jeans.jpg'),
-        popular: true,
         pocketType: 'CLASSIC'
       },
       { 
@@ -306,15 +300,9 @@ const CustomizeJeansScreen = ({ route }) => {
               style={[
                 styles.optionCard,
                 currentConfig.selected?.id === option.id && styles.selectedOption,
-                option.popular && styles.popularOption
               ]}
               onPress={() => handleSelection(option, currentConfig.field)}
             >
-              {option.popular && (
-                <View style={styles.popularBadge}>
-                  <Text style={styles.popularText}>POPULAR</Text>
-                </View>
-              )}
               
               {currentStep === 1 && option.color ? (
                 <View style={[styles.colorBlock, { backgroundColor: option.color }]}>
@@ -489,24 +477,6 @@ const styles = StyleSheet.create({
     borderColor: '#007AFF',
     shadowColor: '#007AFF',
     shadowOpacity: 0.3,
-  },
-  popularOption: {
-    borderColor: '#FF3B30',
-  },
-  popularBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    zIndex: 1,
-  },
-  popularText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   imageContainer: {
     position: 'relative',

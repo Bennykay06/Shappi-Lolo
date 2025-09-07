@@ -49,7 +49,6 @@ const CustomizeShirtScreen = ({ route }) => {
         preview: require('../assets/images/shirt5.jpg'),
         price: '$79',
         type: 'solid',
-        popular: true
       },
       { 
         id: 2, 
@@ -59,7 +58,6 @@ const CustomizeShirtScreen = ({ route }) => {
         preview: require('../assets/images/shirt14.jpg'),
         price: '$79',
         type: 'solid',
-        popular: true
       },
       { 
         id: 3, 
@@ -105,7 +103,6 @@ const CustomizeShirtScreen = ({ route }) => {
         desc: 'Casual American style - great for no tie', 
         img: require('../assets/images/button down.jpg'),
         preview: require('../assets/images/button down.jpg'),
-        popular: true
       },
       { 
         id: 2, 
@@ -113,7 +110,6 @@ const CustomizeShirtScreen = ({ route }) => {
         desc: 'Modern professional - perfect for wider ties', 
         img: require('../assets/images/widespread.jpg'),
         preview: require('../assets/images/widespread.jpg'),
-        popular: true
       },
       { 
         id: 3, 
@@ -158,7 +154,6 @@ const CustomizeShirtScreen = ({ route }) => {
         desc: 'Classic everyday style - comfortable fit', 
         img: require('../assets/images/one button round.jpg'),
         preview: require('../assets/images/one button round.jpg'),
-        popular: true
       },
       { 
         id: 2, 
@@ -166,7 +161,6 @@ const CustomizeShirtScreen = ({ route }) => {
         desc: 'Traditional formal - secure and refined', 
         img: require('../assets/images/two buttons angled.jpg'),
         preview: require('../assets/images/two buttons angled.jpg'),
-        popular: true
       },
       { 
         id: 3, 
@@ -184,7 +178,6 @@ const CustomizeShirtScreen = ({ route }) => {
         img: require('../assets/images/tucked.jpg'),
         preview: require('../assets/images/tucked.jpg'),
         style: 'formal',
-        popular: true
       },
       { 
         id: 2, 
@@ -419,11 +412,6 @@ const CustomizeShirtScreen = ({ route }) => {
               <View style={styles.viewOnlyInfo}>
                 <View style={styles.viewOnlyHeader}>
                   <Text style={styles.viewOnlyName}>{shirtOption.name}</Text>
-                  {shirtOption.popular && (
-                    <View style={styles.popularBadge}>
-                      <Text style={styles.popularText}>POPULAR</Text>
-                    </View>
-                  )}
                 </View>
                 <Text style={styles.viewOnlyDesc}>{shirtOption.desc}</Text>
                 <Text style={styles.viewOnlyPrice}>{shirtOption.price}</Text>
@@ -519,7 +507,6 @@ const CustomizeShirtScreen = ({ route }) => {
                 style={[
                   styles.optionButton,
                   selected?.id === option.id && styles.selectedOption,
-                  option.popular && styles.popularOption
                 ]}
                 onPress={() => handleImageSelect(option.id)}
               >
@@ -527,11 +514,6 @@ const CustomizeShirtScreen = ({ route }) => {
                 <View style={styles.optionInfo}>
                   <View style={styles.optionHeader}>
                     <Text style={styles.optionText}>{option.name}</Text>
-                    {option.popular && (
-                      <View style={styles.popularBadge}>
-                        <Text style={styles.popularText}>POPULAR</Text>
-                      </View>
-                    )}
                   </View>
                   <Text style={styles.optionSubtext}>{option.desc}</Text>
                   {option.measurements && (
@@ -604,7 +586,6 @@ const CustomizeShirtScreen = ({ route }) => {
                 style={[
                   styles.fabricOption,
                   selected?.id === option.id && styles.selectedOption,
-                  option.popular && styles.popularOption
                 ]}
                 onPress={() => handleImageSelect(option.id)}
               >
@@ -612,11 +593,6 @@ const CustomizeShirtScreen = ({ route }) => {
                 <View style={styles.fabricInfo}>
                   <View style={styles.fabricHeader}>
                     <Text style={styles.optionText}>{option.name}</Text>
-                    {option.popular && (
-                      <View style={styles.popularBadge}>
-                        <Text style={styles.popularText}>POPULAR</Text>
-                      </View>
-                    )}
                   </View>
                   <Text style={styles.optionSubtext}>{option.desc}</Text>
                   <Text style={styles.fabricComposition}>{option?.composition}</Text>
@@ -662,11 +638,6 @@ const CustomizeShirtScreen = ({ route }) => {
                 <View style={styles.colorImageContainer}>
                   <Image source={option.img} style={styles.colorShirtImage} />
                   <View style={[styles.colorOverlay, { backgroundColor: option.color }]} />
-                  {option.popular && (
-                    <View style={styles.colorPopularBadge}>
-                      <Text style={styles.popularText}>POPULAR</Text>
-                    </View>
-                  )}
                 </View>
                 <View style={styles.colorInfo}>
                   <Text style={styles.colorName}>{option.name}</Text>
@@ -1011,21 +982,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginBottom: 4,
   },
-  popularBadge: {
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 10,
-  },
-  popularText: {
-    color: 'white',
-    fontSize: 10,
-    fontWeight: 'bold',
-  },
-  popularOption: {
-    borderColor: '#FF3B30',
-    borderWidth: 2,
-  },
   measurementText: {
     fontSize: 12,
     color: '#007AFF',
@@ -1121,15 +1077,6 @@ const styles = StyleSheet.create({
     right: 0,
     bottom: 0,
     opacity: 0.7,
-  },
-  colorPopularBadge: {
-    position: 'absolute',
-    top: 8,
-    right: 8,
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 6,
-    paddingVertical: 2,
-    borderRadius: 8,
   },
   colorInfo: {
     padding: 12,

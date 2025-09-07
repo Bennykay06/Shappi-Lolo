@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, Image, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { useCart } from '../Context/CartContext';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export default function CartScreen({ navigation }) {
-  const { cartItems, setCartItems, clearCart } = useCart();
+  const { cartItems, setCartItems, clearCart, isLoading } = useCart();
   const [expandedItem, setExpandedItem] = useState(null);
 
   const toggleExpand = (id) => {
@@ -83,15 +83,8 @@ export default function CartScreen({ navigation }) {
         { label: 'MONOGRAM COLOR', value: selections.monogram?.color || 'N/A' }
       ];
     } else if (item.type === 'custom-african') {
-      options = [
-        { label: 'MATERIAL', value: selections.material || 'N/A' },
-        { label: 'STYLE', value: selections.style || 'N/A' },
-        { label: 'SIZE', value: selections.size || 'N/A' },
-        { label: 'SLEEVE LENGTH', value: selections[1]?.name || 'N/A' },
-        { label: 'NECKLINE', value: selections[2]?.name || 'N/A' },
-        { label: 'FIT', value: selections[3]?.name || 'N/A' },
-        { label: 'LENGTH', value: selections[4]?.name || 'N/A' }
-      ];
+      // African wear items should not show customization details
+      options = [];
     } else {
       // Default to suit customizations for other items
       options = [
@@ -142,6 +135,15 @@ export default function CartScreen({ navigation }) {
     );
   };
 
+  if (isLoading) {
+    return (
+      <View style={[styles.container, styles.loadingContainer]}>
+        <ActivityIndicator size="large" color="#000" />
+        <Text style={styles.loadingText}>Loading cart...</Text>
+      </View>
+    );
+  }
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>My Cart</Text>
@@ -157,24 +159,48 @@ export default function CartScreen({ navigation }) {
             keyExtractor={(item) => item.id}
             renderItem={({ item }) => (
               <View style={styles.itemContainer}>
-                <TouchableOpacity 
-                  style={styles.itemHeader}
-                  onPress={() => toggleExpand(item.id)}
-                >
-                  <Image source={item.image} style={styles.itemImage} />
-                  <View style={styles.itemInfo}>
-                    <Text style={styles.itemName}>{item.name}</Text>
-                    <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+                {(item.type === 'custom-african' || 
+                  item.name?.toLowerCase().includes('kente') || 
+                  item.name?.toLowerCase().includes('african') ||
+                  item.name?.toLowerCase().includes('dashiki') ||
+                  item.name?.toLowerCase().includes('traditional')) ? (
+                  // Simple view for African wear items - no expansion
+                  <View style={styles.itemHeader}>
+                    <Image source={item.image} style={styles.itemImage} />
+                    <View style={styles.itemInfo}>
+                      <Text style={styles.itemName}>{item.name}</Text>
+                      <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+                    </View>
+                    <TouchableOpacity 
+                      style={styles.removeButton}
+                      onPress={() => handleRemove(item.id)}
+                    >
+                      <Icon name="close" size={20} color="#d32f2f" />
+                    </TouchableOpacity>
                   </View>
-                  <Icon 
-                    name={expandedItem === item.id ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} 
-                    size={24} 
-                    color="#666" 
-                  />
-                </TouchableOpacity>
+                ) : (
+                  // Expandable view for other items
+                  <>
+                    <TouchableOpacity 
+                      style={styles.itemHeader}
+                      onPress={() => toggleExpand(item.id)}
+                    >
+                      <Image source={item.image} style={styles.itemImage} />
+                      <View style={styles.itemInfo}>
+                        <Text style={styles.itemName}>{item.name}</Text>
+                        <Text style={styles.itemPrice}>${item.price.toFixed(2)}</Text>
+                      </View>
+                      <Icon 
+                        name={expandedItem === item.id ? 'keyboard-arrow-up' : 'keyboard-arrow-down'} 
+                        size={24} 
+                        color="#666" 
+                      />
+                    </TouchableOpacity>
 
-                {expandedItem === item.id && (
-                  renderCustomizationDetails(item)
+                    {expandedItem === item.id && (
+                      renderCustomizationDetails(item)
+                    )}
+                  </>
                 )}
               </View>
             )}
@@ -324,5 +350,21 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontWeight: 'bold',
     fontSize: 16
+  },
+  removeButton: {
+    padding: 8,
+    borderRadius: 20,
+    backgroundColor: '#f5f5f5',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  loadingText: {
+    marginTop: 10,
+    fontSize: 16,
+    color: '#666'
   }
 });

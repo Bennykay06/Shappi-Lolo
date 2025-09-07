@@ -33,7 +33,6 @@ const CustomizePantsScreen = ({ route }) => {
         fabricTexture: 'Wool Herringbone',
         price: '$149',
         type: 'wool',
-        popular: true
       },
       { 
         id: 2, 
@@ -43,7 +42,6 @@ const CustomizePantsScreen = ({ route }) => {
         fabricTexture: 'Cotton Twill',
         price: '$159',
         type: 'cotton',
-        popular: true
       },
       { 
         id: 3, 
@@ -81,7 +79,6 @@ const CustomizePantsScreen = ({ route }) => {
         img: require('../assets/images/pa9.jpg'),
         preview: require('../assets/images/pa9.jpg'),
         style: 'modern',
-        popular: true
       },
       { 
         id: 2, 
@@ -108,7 +105,6 @@ const CustomizePantsScreen = ({ route }) => {
         img: require('../assets/images/pa1.jpg'),
         preview: require('../assets/images/pa1.jpg'),
         style: 'modern',
-        popular: true
       },
       { 
         id: 2, 
@@ -134,7 +130,6 @@ const CustomizePantsScreen = ({ route }) => {
         desc: 'Side pockets - standard clean and functional', 
         img: require('../assets/images/pa4.jpg'),
         preview: require('../assets/images/pa4.jpg'),
-        popular: true
       },
       { 
         id: 2, 
@@ -274,15 +269,9 @@ const CustomizePantsScreen = ({ route }) => {
               style={[
                 styles.optionCard,
                 currentConfig.selected?.id === option.id && styles.selectedOption,
-                option.popular && styles.popularOption
               ]}
               onPress={() => handleSelection(option, currentConfig.field)}
             >
-              {option.popular && (
-                <View style={styles.popularBadge}>
-                  <Text style={styles.popularText}>POPULAR</Text>
-                </View>
-              )}
               
               {currentConfig.type === 'fabric' && option.color ? (
                 <View style={[styles.fabricSwatch, { backgroundColor: option.color }]}>
@@ -449,24 +438,6 @@ const styles = StyleSheet.create({
     borderColor: '#007AFF',
     shadowColor: '#007AFF',
     shadowOpacity: 0.3,
-  },
-  popularOption: {
-    borderColor: '#FF3B30',
-  },
-  popularBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-    zIndex: 1,
-  },
-  popularText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   optionImage: {
     width: '100%',

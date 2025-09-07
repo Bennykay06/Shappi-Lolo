@@ -18,7 +18,6 @@ const categories = [
     route: 'ShirtsScreen',
     price: 'Starting at $79',
     subtitle: 'Perfect fit, every time',
-    popular: true,
     description: '16 measurements for the perfect fit',
     height: 320
   },
@@ -118,18 +117,12 @@ export default function ShopScreen({ navigation }) {
           <View
             key={category.id}
             style={[
-              styles.categoryCard, 
-              category.popular && styles.popularCard,
+              styles.categoryCard,
               { height: category.height }
             ]}
           >
             <Image source={category.image} style={styles.categoryImage} />
             <View style={styles.cardOverlay}>
-              {category.popular && (
-                <View style={styles.popularBadge}>
-                  <Text style={styles.popularText}>MOST POPULAR</Text>
-                </View>
-              )}
               <View style={styles.cardContent}>
                 <Text style={styles.categoryName}>{category.name}</Text>
                 <Text style={styles.categorySubtitle}>{category.subtitle}</Text>
@@ -206,10 +199,6 @@ const styles = StyleSheet.create({
     elevation: 8,
     position: 'relative',
   },
-  popularCard: {
-    borderWidth: 3,
-    borderColor: '#007AFF',
-  },
   categoryImage: {
     width: '100%',
     height: '100%',
@@ -223,20 +212,6 @@ const styles = StyleSheet.create({
     background: 'linear-gradient(transparent, rgba(0,0,0,0.8))',
     backgroundColor: 'rgba(0,0,0,0.7)',
     padding: 12,
-  },
-  popularBadge: {
-    position: 'absolute',
-    top: -60,
-    right: 0,
-    backgroundColor: '#FF3B30',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  popularText: {
-    color: 'white',
-    fontSize: 12,
-    fontWeight: 'bold',
   },
   cardContent: {
     alignItems: 'flex-start',
